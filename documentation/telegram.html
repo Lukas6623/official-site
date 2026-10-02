@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ServerGuard Telegram Bot — module documentation.">
+    <meta name="theme-color" content="#080b12">
+    <title>ServerGuard — Telegram Bot</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/module.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <a href="../index.html" class="brand">
+            <div class="brand-icon">🛡</div>
+            <div>Server<span>Guard</span></div>
+        </a>
+        <div class="topbar-title">Documentation / Telegram Bot</div>
+        <div class="topbar-actions">
+            <a href="https://t.me/ServerGuardSupport" class="help-button" target="_blank" rel="noopener noreferrer">? Help</a>
+            <a href="index.html" class="back-button">← Test Guide</a>
+        </div>
+    </div>
+</header>
+
+<button class="mobile-menu-button" id="mobileMenuButton" aria-label="Open documentation menu">☰</button>
+
+<div class="module-layout">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-label">SERVERGUARD</div>
+            <div class="sidebar-title">Modules</div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html"><span>←</span>Test Guide</a>
+            <div class="sidebar-group">MODULES</div>
+            <a href="security.html"><span>01</span>Security</a>
+            <a href="telegram.html" class="current"><span>02</span>Telegram Bot</a>
+            <a href="hardening.html"><span>03</span>SSH Hardening</a>
+            <a href="sshkeys.html"><span>04</span>SSH Key Guard</a>
+            <a href="fileguard.html"><span>05</span>FileGuard</a>
+        </nav>
+        <div class="sidebar-footer"><div class="status-dot"></div>ServerGuard Documentation</div>
+    </aside>
+
+    <main class="module-content">
+
+        <div class="module-head">
+            <div class="eyebrow">MODULE 02 / TELEGRAM BOT</div>
+            <h1>Telegram Bot</h1>
+            <p>Уведомления о безопасности и управление защитой из Telegram.</p>
+        </div>
+
+        <!-- ================= ВСТАВЬТЕ ДОКУМЕНТАЦИЮ НИЖЕ =================
+             Допустимые теги: h2, h3, p, ul/ol, pre>code, blockquote, table, img, hr.
+             Оглавление справа строится автоматически из h2 и h3. -->
+        <article class="doc-article">
+<p><strong>Telegram Bot</strong> — модуль ServerGuard, который присылает вам в Telegram уведомления о событиях безопасности на сервере и позволяет управлять защитой прямо из чата: блокировать и разблокировать IP, менять настройки, смотреть статистику и состояние сервера.</p>
+<blockquote>
+<p>Бот работает на вашем Linux-сервере и обращается к данным других модулей ServerGuard. Приложение на компьютере для этого открывать не нужно.</p>
+</blockquote>
+<hr />
+<h2>1. Что умеет бот</h2>
+<ul>
+<li>уведомления о <strong>блокировке и разблокировке IP</strong>;</li>
+<li>уведомления о <strong>входах по SSH</strong>, включая вход с нового IP;</li>
+<li>уведомления о <strong>неудачных попытках входа</strong> (по желанию);</li>
+<li>уведомления об <strong>изменении SSH-ключей</strong> (SSH Key Guard);</li>
+<li>уведомления об <strong>изменении системных служб</strong>;</li>
+<li><strong>ежедневный отчёт</strong>;</li>
+<li>управление блокировками и белым списком (whitelist);</li>
+<li>настройка порога и срока блокировки;</li>
+<li>состояние сервера и последние строки журнала SSH;</li>
+<li>кнопочное меню и команды.</li>
+</ul>
+<hr />
+<h2>2. Как это работает</h2>
+<pre><code class="language-text">Модули ServerGuard на сервере
+(защита от brute-force, SSH Key Guard, мониторинг служб)
+              |
+              v
+       записывают события
+              |
+              v
+        Telegram Bot
+              |
+              v
+   фильтрует, объединяет, отправляет
+              |
+              v
+      ваш чат в Telegram
+              |
+              v
+  вы нажимаете кнопку → бот выполняет действие на сервере
+</code></pre>
+<p>Бот проверяет новые события каждые несколько секунд. Старые события при запуске бота повторно не отправляются.</p>
+<hr />
+<h2>3. Подключение</h2>
+<p>Бот привязывается к вашему аккаунту Telegram с помощью одноразового кода.</p>
+<ol>
+<li>В ServerGuard откройте <strong>Telegram bot</strong> и установите/настройте бота (потребуется токен, который выдаёт <code>@BotFather</code>).</li>
+<li>Выберите пункт <strong>Generate verification code</strong> и скопируйте код.</li>
+<li>Откройте своего бота в Telegram и отправьте:</li>
+</ol>
+<pre><code class="language-text">/start КОД
+</code></pre>
+<ol start="4">
+<li>Бот удалит сообщение с кодом из чата и подтвердит регистрацию.</li>
+</ol>
+<p>После этого вы увидите главное меню.</p>
+<p><strong>Важно:</strong>
+- код действует <strong>5 минут</strong>; если он истёк, создайте новый;
+- при нескольких неверных кодах подряд бот временно перестаёт принимать попытки;
+- бот работает только в <strong>личном чате</strong>.</p>
+<hr />
+<h2>4. Доступ: один владелец</h2>
+<p>Бот обслуживает <strong>только одного владельца</strong> — того, кто зарегистрировался с кодом.</p>
+<ul>
+<li>Сообщения и кнопки от других пользователей игнорируются или отклоняются.</li>
+<li>Если вы сгенерируете новый код и его активирует другой аккаунт, доступ <strong>переходит</strong> к новому аккаунту. Прежний владелец получит уведомление об этом.</li>
+<li>Настройки и список известных IP при смене владельца сохраняются.</li>
+</ul>
+<p>Никому не передавайте токен бота и коды подтверждения.</p>
+<hr />
+<h2>5. Главное меню</h2>
+<p>Откройте меню командой <code>/menu</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Кнопка</th>
+<th>Что показывает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>📊 Status</td>
+<td>Состояние защиты и статистика за 24 часа и за всё время</td>
+</tr>
+<tr>
+<td>🚫 Blocks</td>
+<td>Активные блокировки, кнопки разблокировки</td>
+</tr>
+<tr>
+<td>📜 Events</td>
+<td>Последние события SSH</td>
+</tr>
+<tr>
+<td>🔑 Logins</td>
+<td>Последние успешные входы</td>
+</tr>
+<tr>
+<td>🏴‍☠️ Top attackers</td>
+<td>Самые активные IP за 24 часа или 7 дней</td>
+</tr>
+<tr>
+<td>🖥 Server</td>
+<td>Нагрузка, память, диск, uptime</td>
+</tr>
+<tr>
+<td>🛡 Protection</td>
+<td>Настройки защиты</td>
+</tr>
+<tr>
+<td>✅ Whitelist</td>
+<td>Список доверенных IP</td>
+</tr>
+<tr>
+<td>🔔 Notifications</td>
+<td>Настройка уведомлений</td>
+</tr>
+<tr>
+<td>🧾 SSH logs</td>
+<td>Последние строки журнала SSH</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>6. Какие уведомления приходят</h2>
+<table>
+<thead>
+<tr>
+<th>Событие</th>
+<th>Когда приходит</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🚫 IP blocked</td>
+<td>IP заблокирован автоматически или вручную</td>
+</tr>
+<tr>
+<td>✅ IP unblocked</td>
+<td>Блокировка истекла или снята</td>
+</tr>
+<tr>
+<td>🔑 SSH login</td>
+<td>Успешный вход (если включено) или вход с нового IP</td>
+</tr>
+<tr>
+<td>⚠️ Failed SSH attempts</td>
+<td>Неудачные попытки входа (по умолчанию выключено)</td>
+</tr>
+<tr>
+<td>🔐 SSH key added / removed / changed</td>
+<td>Изменился <code>authorized_keys</code></td>
+</tr>
+<tr>
+<td>🔧 Service changed</td>
+<td>Служба запущена, остановлена или изменена</td>
+</tr>
+<tr>
+<td>📅 Daily report</td>
+<td>Ежедневная сводка</td>
+</tr>
+</tbody>
+</table>
+<p>Многие уведомления содержат <strong>кнопки действий</strong> — например, заблокировать IP или добавить его в whitelist одним нажатием.</p>
+<hr />
+<h2>7. Уведомление о блокировке</h2>
+<p>Показывает:</p>
+<ul>
+<li>заблокированный IP и его геолокацию (если включена);</li>
+<li>количество неудачных попыток;</li>
+<li>срок блокировки и время окончания;</li>
+<li>причину.</li>
+</ul>
+<p>Кнопки: <strong>🔓 Unblock</strong>, <strong>✅ Add to whitelist</strong>, <strong>🔎 Info</strong>.</p>
+<hr />
+<h2>8. Уведомление о входе по SSH</h2>
+<p>Содержит пользователя, IP, геолокацию, способ аутентификации и время.</p>
+<p>Если вход выполнен с <strong>IP, с которого раньше успешных входов не было</strong>, бот помечает его как <strong>🆕 New IP</strong>. Такое уведомление приходит с повышенным приоритетом. Если это были не вы — сразу нажмите <strong>🚫 Block</strong>.</p>
+<p>Кнопки: <strong>🚫 Block</strong>, <strong>✅ Add to whitelist</strong>, <strong>🔎 Info</strong>.</p>
+<hr />
+<h2>9. Изменения SSH-ключей</h2>
+<p>Эти уведомления формирует модуль <strong>SSH Key Guard</strong>. Бот сообщает:</p>
+<ul>
+<li>что именно произошло: ключ <strong>добавлен</strong>, <strong>удалён</strong> или <strong>изменён</strong>;</li>
+<li>аккаунт и файл <code>authorized_keys</code>;</li>
+<li>тип ключа, fingerprint и комментарий;</li>
+<li>кто изменил: пользователь, процесс, команда (если доступен <code>auditd</code>);</li>
+<li>IP-адрес источника, если удалось определить.</li>
+</ul>
+<p>Удаление ключа считается критичным событием. Если вы не вносили изменений — проверьте сервер немедленно.</p>
+<hr />
+<h2>10. Уведомления о службах</h2>
+<p>Бот сообщает об изменении системных служб: запуск, остановка, изменение состояния.</p>
+<ul>
+<li>Служебные и шумные процессы (сессии, обновления, таймеры и т.п.) отфильтровываются.</li>
+<li>Одинаковые события по одной службе не повторяются в течение 10 минут.</li>
+<li>Остановка важных служб — SSH, фаервола, <code>fail2ban</code>, <code>auditd</code>, ServerGuard — приходит как <strong>критическое</strong> уведомление.</li>
+</ul>
+<hr />
+<h2>11. Ежедневный отчёт</h2>
+<p>Раз в день (по умолчанию в <strong>9:00 по времени сервера</strong>) бот присылает сводку за 24 часа:</p>
+<ul>
+<li>число неудачных попыток и уникальных IP-атакующих;</li>
+<li>число успешных входов;</li>
+<li>изменения SSH-ключей;</li>
+<li>новые и активные блокировки;</li>
+<li>топ атакующих и список входов.</li>
+</ul>
+<p>Час отправки можно выбрать: <strong>6, 9, 18 или 22</strong>. Отчёт можно выключить.</p>
+<hr />
+<h2>12. Настройка уведомлений</h2>
+<p>Откройте <strong>🔔 Notifications</strong> и нажимайте на пункты — ✅ включено, ❌ выключено.</p>
+<table>
+<thead>
+<tr>
+<th>Пункт</th>
+<th>Что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>⭐ Important only</td>
+<td>Скрывает второстепенные события</td>
+</tr>
+<tr>
+<td>🚫 Blocks</td>
+<td>Уведомления о блокировках</td>
+</tr>
+<tr>
+<td>✅ Unblocks</td>
+<td>Уведомления о разблокировках</td>
+</tr>
+<tr>
+<td>🔑 All successful logins</td>
+<td>Каждый успешный вход</td>
+</tr>
+<tr>
+<td>🆕 Login from a new IP</td>
+<td>Вход с неизвестного IP</td>
+</tr>
+<tr>
+<td>⚠️ Failed attempts</td>
+<td>Неудачные попытки</td>
+</tr>
+<tr>
+<td>🔧 Service changes</td>
+<td>События служб</td>
+</tr>
+<tr>
+<td>🔐 SSH key changes</td>
+<td>Изменения SSH-ключей</td>
+</tr>
+<tr>
+<td>🌍 IP geolocation</td>
+<td>Показывать страну и провайдера</td>
+</tr>
+<tr>
+<td>📅 Daily report</td>
+<td>Ежедневный отчёт</td>
+</tr>
+</tbody>
+</table>
+<p>Режим <strong>Important only</strong> включён по умолчанию: разблокировки, неудачные попытки и запуск служб скрываются, чтобы не отвлекать. Выключите его, если хотите видеть всё.</p>
+<hr />
+<h2>13. Тишина и критические уведомления</h2>
+<p>Чтобы временно отключить уведомления:</p>
+<pre><code class="language-text">/mute 60      — на 60 минут (по умолчанию 60, максимум 7 суток)
+/unmute       — включить обратно
+</code></pre>
+<p>Также можно нажать <strong>🔕 1h</strong>, <strong>🔕 8h</strong> или <strong>🔔 Unmute</strong> в меню уведомлений.</p>
+<p><strong>Критические уведомления приходят всегда</strong>, даже в режиме тишины: вход с нового IP, удаление SSH-ключа, остановка важной службы.</p>
+<hr />
+<h2>14. Защита от потока сообщений</h2>
+<p>Если событий очень много (например, идёт массовая атака), бот не засыпает вас сообщениями: часть уведомлений подавляется, а затем приходит короткое сообщение <strong>🌊 Flood protection</strong> с количеством пропущенных. Полные данные при этом остаются в журналах и в разделах <strong>Events</strong> и <strong>Status</strong>.</p>
+<hr />
+<h2>15. Управление защитой</h2>
+<p>Раздел <strong>🛡 Protection</strong> позволяет менять параметры защиты от подбора паролей прямо из Telegram:</p>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Варианты</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Включить / выключить защиту</td>
+<td>кнопка</td>
+</tr>
+<tr>
+<td>Порог неудачных попыток</td>
+<td>3, 5, 10, 20</td>
+</tr>
+<tr>
+<td>Срок блокировки</td>
+<td>10 минут, 1 час, 6 часов, 24 часа, 7 дней</td>
+</tr>
+<tr>
+<td>Постоянная блокировка</td>
+<td>ON / OFF</td>
+</tr>
+</tbody>
+</table>
+<p>Изменения применяются примерно в течение 5 секунд. Выбранный пункт отмечается значком ●.</p>
+<p>Ослабляйте защиту осознанно: слишком высокий порог или выключенная защита облегчают подбор паролей.</p>
+<hr />
+<h2>16. Блокировка и разблокировка IP</h2>
+<p><strong>Карточка IP.</strong> Отправьте боту любой IP-адрес — он покажет карточку:</p>
+<ul>
+<li>геолокацию и провайдера;</li>
+<li>статус (заблокирован ли, сколько осталось);</li>
+<li>находится ли в whitelist;</li>
+<li>число неудачных попыток и входов за 7 дней;</li>
+<li>какие имена пользователей пробовали;</li>
+<li>кнопки <strong>Block / Unblock</strong> и <strong>Add to / Remove from whitelist</strong>.</li>
+</ul>
+<p><strong>Команды:</strong></p>
+<pre><code class="language-text">/ip 1.2.3.4              — карточка IP
+/block 1.2.3.4           — блокировка с параметрами по умолчанию
+/block 1.2.3.4 60        — на 60 минут
+/block 1.2.3.4 perm      — навсегда
+/unblock 1.2.3.4         — разблокировать
+</code></pre>
+<p>В разделе <strong>🚫 Blocks</strong> видны активные блокировки со сроком; кнопка <strong>Unblock all</strong> снимает все блокировки после подтверждения.</p>
+<p><strong>Нельзя заблокировать:</strong> IP из whitelist и собственный IP сервера.</p>
+<hr />
+<h2>17. Whitelist</h2>
+<p>Whitelist — доверенные IP, которые не блокируются автоматически.</p>
+<pre><code class="language-text">/whitelist                 — показать список
+/whitelist add 1.2.3.4     — добавить
+/whitelist del 1.2.3.4     — удалить
+</code></pre>
+<p>Добавлять и удалять можно и кнопками в карточках и уведомлениях. Если IP уже был заблокирован, при добавлении в whitelist блокировка снимается.</p>
+<p>Добавляйте только адреса, которым действительно доверяете.</p>
+<hr />
+<h2>18. Все команды</h2>
+<table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Назначение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/start КОД</code></td>
+<td>Регистрация владельца</td>
+</tr>
+<tr>
+<td><code>/menu</code></td>
+<td>Главное меню</td>
+</tr>
+<tr>
+<td><code>/status</code></td>
+<td>Статус и статистика</td>
+</tr>
+<tr>
+<td><code>/blocks</code></td>
+<td>Активные блокировки</td>
+</tr>
+<tr>
+<td><code>/events</code></td>
+<td>Последние события</td>
+</tr>
+<tr>
+<td><code>/top</code></td>
+<td>Топ атакующих</td>
+</tr>
+<tr>
+<td><code>/server</code></td>
+<td>Состояние сервера</td>
+</tr>
+<tr>
+<td><code>/ip IP</code></td>
+<td>Информация об IP</td>
+</tr>
+<tr>
+<td><code>/block IP [минуты \| perm]</code></td>
+<td>Заблокировать IP</td>
+</tr>
+<tr>
+<td><code>/unblock IP</code></td>
+<td>Разблокировать IP</td>
+</tr>
+<tr>
+<td><code>/whitelist [add \| del IP]</code></td>
+<td>Управление whitelist</td>
+</tr>
+<tr>
+<td><code>/mute [минуты]</code></td>
+<td>Отключить некритичные уведомления</td>
+</tr>
+<tr>
+<td><code>/unmute</code></td>
+<td>Включить уведомления</td>
+</tr>
+<tr>
+<td><code>/help</code></td>
+<td>Справка</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>19. Геолокация и приватность</h2>
+<p>Для публичных IP бот может показывать страну, город и провайдера (а также пометку «hosting / VPN / proxy»). Для этого IP-адрес отправляется <strong>внешнему сервису геолокации</strong>. Для локальных адресов запрос не выполняется.</p>
+<ul>
+<li>Геолокация примерная и не определяет реальное местоположение человека.</li>
+<li>Если не хотите передавать IP третьим сторонам — выключите <strong>🌍 IP geolocation</strong> в настройках уведомлений.</li>
+</ul>
+<p>Помните, что уведомления проходят через серверы Telegram. Не отправляйте через бота данные, которые не должны покидать сервер.</p>
+<hr />
+<h2>20. Чего бот не делает</h2>
+<ul>
+<li>не заменяет защиту сервера — он <strong>информирует</strong> и <strong>выполняет ваши команды</strong>;</li>
+<li>не блокирует IP без модуля защиты ServerGuard или без вашей команды;</li>
+<li>не видит событий, которые не фиксируют другие модули;</li>
+<li>не работает в группах и каналах, только в личном чате с владельцем;</li>
+<li>не гарантирует доставку при проблемах с сетью или Telegram.</li>
+</ul>
+<hr />
+<h2>21. Если что-то не работает</h2>
+<table>
+<thead>
+<tr>
+<th>Проблема</th>
+<th>Что проверить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Бот не отвечает</td>
+<td>Запущена ли служба бота (раздел Telegram bot в ServerGuard → <strong>Check status</strong>, <strong>Show logs</strong>)</td>
+</tr>
+<tr>
+<td>«Нет активного кода»</td>
+<td>Сгенерируйте новый код в ServerGuard</td>
+</tr>
+<tr>
+<td>Код истёк или неверный</td>
+<td>Код действует 5 минут; создайте новый и отправьте точно как в ServerGuard</td>
+</tr>
+<tr>
+<td>«Too many wrong attempts»</td>
+<td>Подождите указанное время и повторите</td>
+</tr>
+<tr>
+<td>Нет уведомлений</td>
+<td>Не включён ли режим тишины <code>/mute</code>; включены ли нужные пункты в 🔔 Notifications; не включён ли Important only</td>
+</tr>
+<tr>
+<td>Нет уведомлений о ключах</td>
+<td>Работает ли SSH Key Guard</td>
+</tr>
+<tr>
+<td>Не выполняется блокировка</td>
+<td>Бот должен работать от root; на сервере должен быть доступен <code>ufw</code></td>
+</tr>
+<tr>
+<td>Ошибка «This is the server's own IP»</td>
+<td>Нельзя заблокировать собственный IP сервера</td>
+</tr>
+<tr>
+<td>Доступ получил другой аккаунт</td>
+<td>Любой, у кого был действующий код, мог зарегистрироваться; создайте новый код и зарегистрируйтесь снова</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>22. Рекомендации</h2>
+<ul>
+<li>держите включёнными <strong>вход с нового IP</strong>, <strong>блокировки</strong> и <strong>изменения SSH-ключей</strong>;</li>
+<li>оставьте <strong>Important only</strong>, пока не привыкнете к потоку событий;</li>
+<li>включите <strong>ежедневный отчёт</strong> в удобное время;</li>
+<li>добавьте в whitelist свои постоянные адреса, чтобы не заблокировать себя;</li>
+<li>не публикуйте токен бота и коды подтверждения (в том числе на скриншотах);</li>
+<li>включите двухфакторную аутентификацию в Telegram — доступ к вашему аккаунту даёт доступ к управлению блокировками;</li>
+<li>используйте бота вместе с остальными модулями: Security, SSH Hardening, SSH Key Guard, FileGuard.</li>
+</ul>
+<hr />
+<p><em>Документация описывает работу Telegram Bot на пользовательском уровне. Внутренние детали реализации относятся к технической документации разработчиков.</em></p>
+        </article>
+        <!-- ================= КОНЕЦ ДОКУМЕНТАЦИИ ================= -->
+
+        <nav class="pager">
+            <a href="security.html" class="prev"><small>← Previous</small><strong>Security</strong></a>
+            <a href="hardening.html" class="next"><small>Next →</small><strong>SSH Hardening</strong></a>
+        </nav>
+
+    </main>
+
+    <aside class="page-toc" id="pageToc"></aside>
+
+</div>
+
+<footer>
+    <div class="footer-inner">
+        <span>© 2026 ServerGuard</span>
+        <span>Telegram Bot</span>
+        <a href="../index.html">serverguard.site ↗</a>
+    </div>
+</footer>
+
+<script src="js/module.js"></script>
+</body>
+</html>

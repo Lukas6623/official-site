@@ -1,0 +1,13 @@
+
+[
+    {
+        "id": "2026-09-21-ssh-key-guard",
+        "title": "SSH Key Guard successfully tested",
+        "text": "ServerGuard has completed a real-world test of the SSH Key Guard module. The system successfully detected a newly added SSH key in authorized_keys and generated a security event.",
+        "date": "September 21, 2026",
+        "dateISO": "2026-09-21",
+        "category": "Security",
+        "image": "",
+        "link": ""
+    }
+]
