@@ -1,19 +1,6 @@
-/* =====================================================
-   SERVERGUARD MAIN.JS
-===================================================== */
-
-
-/* =====================================================
-   CONFIGURATION
-===================================================== */
 
 const MANIFEST_URL =
     "https://raw.githubusercontent.com/Lukas6623/ServerGuard/main/updates/manifest.json";
-
-
-/* =====================================================
-   LOAD SERVERGUARD MANIFEST
-===================================================== */
 
 async function loadServerGuardManifest() {
 
@@ -26,7 +13,6 @@ async function loadServerGuardManifest() {
             }
         );
 
-
         if (!response.ok) {
 
             throw new Error(
@@ -35,43 +21,16 @@ async function loadServerGuardManifest() {
 
         }
 
-
         const manifest = await response.json();
-
-
-        /* =================================================
-           SERVERGUARD VERSION
-
-           Example:
-           1.0.6
-        ================================================= */
 
         const version =
             manifest.version || "Unknown";
 
-
-        /* =================================================
-           INSTALLER VERSION
-
-           Example:
-           0.0.1
-        ================================================= */
-
         const installerVersion =
             manifest.installer_version || "Unknown";
 
-
-        /* =================================================
-           INSTALLER URL
-
-           IMPORTANT:
-           Website Download button uses
-           installer_url, NOT url.
-        ================================================= */
-
         const installerUrl =
             manifest.installer_url;
-
 
         if (!installerUrl) {
 
@@ -80,13 +39,6 @@ async function loadServerGuardManifest() {
             );
 
         }
-
-
-        /* =================================================
-           DOWNLOAD BUTTONS
-
-           Download button downloads the INSTALLER.
-        ================================================= */
 
         document
             .querySelectorAll(".download-installer")
@@ -103,22 +55,10 @@ async function loadServerGuardManifest() {
                     "download-unavailable"
                 );
 
-
                 button.textContent =
                     "↓ Download ServerGuard";
 
-
             });
-
-
-        /* =================================================
-           LATEST INSTALLER VERSION
-
-           IMPORTANT:
-           This uses installer_version,
-           because the Download button downloads
-           the installer.
-        ================================================= */
 
         document
             .querySelectorAll(".latest-version")
@@ -129,11 +69,6 @@ async function loadServerGuardManifest() {
 
             });
 
-
-        /* =================================================
-           INSTALLER VERSION
-        ================================================= */
-
         document
             .querySelectorAll(".installer-version")
             .forEach((element) => {
@@ -142,17 +77,6 @@ async function loadServerGuardManifest() {
                     `Installer v${installerVersion}`;
 
             });
-
-
-        /* =================================================
-           SERVERGUARD VERSION
-
-           Elements with:
-           data-serverguard-version
-
-           will receive:
-           1.0.6
-        ================================================= */
 
         document
             .querySelectorAll(
@@ -165,17 +89,6 @@ async function loadServerGuardManifest() {
 
             });
 
-
-        /* =================================================
-           INSTALLER VERSION
-
-           Elements with:
-           data-installer-version
-
-           will receive:
-           0.0.1
-        ================================================= */
-
         document
             .querySelectorAll(
                 "[data-installer-version]"
@@ -187,14 +100,6 @@ async function loadServerGuardManifest() {
 
             });
 
-
-        /* =================================================
-           OPTIONAL DATA ATTRIBUTES
-
-           Makes the URLs available in HTML
-           if needed in the future.
-        ================================================= */
-
         document
             .querySelectorAll(
                 "[data-installer-url]"
@@ -205,7 +110,6 @@ async function loadServerGuardManifest() {
                     installerUrl;
 
             });
-
 
         document
             .querySelectorAll(
@@ -222,22 +126,8 @@ async function loadServerGuardManifest() {
 
             });
 
-
-        /* =================================================
-           SAVE MANIFEST GLOBALLY
-
-           Other JS modules can access:
-
-           window.serverGuardManifest
-        ================================================= */
-
         window.serverGuardManifest =
             manifest;
-
-
-        /* =================================================
-           DEBUG INFORMATION
-        ================================================= */
 
         console.log(
             "ServerGuard manifest loaded."
@@ -258,19 +148,12 @@ async function loadServerGuardManifest() {
             installerUrl
         );
 
-
     } catch (error) {
-
 
         console.error(
             "ServerGuard manifest error:",
             error
         );
-
-
-        /* =================================================
-           DISABLE DOWNLOAD BUTTONS
-        ================================================= */
 
         document
             .querySelectorAll(
@@ -299,11 +182,6 @@ async function loadServerGuardManifest() {
 
             });
 
-
-        /* =================================================
-           VERSION FALLBACK
-        ================================================= */
-
         document
             .querySelectorAll(
                 ".latest-version"
@@ -314,11 +192,6 @@ async function loadServerGuardManifest() {
                     "Unavailable";
 
             });
-
-
-        /* =================================================
-           INSTALLER VERSION FALLBACK
-        ================================================= */
 
         document
             .querySelectorAll(
@@ -334,11 +207,6 @@ async function loadServerGuardManifest() {
     }
 
 }
-
-
-/* =====================================================
-   SCROLL REVEAL
-===================================================== */
 
 const revealObserver =
     new IntersectionObserver(
@@ -366,7 +234,6 @@ const revealObserver =
         }
     );
 
-
 document
     .querySelectorAll(".reveal")
     .forEach((el) => {
@@ -374,11 +241,6 @@ document
         revealObserver.observe(el);
 
     });
-
-
-/* =====================================================
-   SMOOTH NAVIGATION
-===================================================== */
 
 document
     .querySelectorAll('a[href^="#"]')
@@ -391,9 +253,6 @@ document
                 const targetId =
                     link.getAttribute("href");
 
-
-                /* Ignore empty "#" */
-
                 if (
                     !targetId ||
                     targetId === "#"
@@ -403,14 +262,10 @@ document
 
                 }
 
-
                 const target =
                     document.querySelector(
                         targetId
                     );
-
-
-                /* Target does not exist */
 
                 if (!target) {
 
@@ -418,9 +273,7 @@ document
 
                 }
 
-
                 event.preventDefault();
-
 
                 target.scrollIntoView({
                     behavior: "smooth",
@@ -431,11 +284,6 @@ document
         );
 
     });
-
-
-/* =====================================================
-   INITIALIZE
-===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
