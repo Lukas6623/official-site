@@ -1,19 +1,5 @@
 
-/* =========================================================
-   SERVERGUARD NEWS SYSTEM
-========================================================= */
-
-
-/* =========================================================
-   CONFIGURATION
-========================================================= */
-
 const NEWS_URL = "news/news.json";
-
-
-/* =========================================================
-   LOAD NEWS
-========================================================= */
 
 async function loadServerGuardNews() {
 
@@ -22,11 +8,6 @@ async function loadServerGuardNews() {
 
     const errorElement =
         document.getElementById("news-error");
-
-
-    /*
-     * Make sure the news container exists.
-     */
 
     if (!container) {
 
@@ -37,20 +18,10 @@ async function loadServerGuardNews() {
         return;
     }
 
-
-    /*
-     * Hide previous error.
-     */
-
     if (errorElement) {
 
         errorElement.hidden = true;
     }
-
-
-    /*
-     * Loading state.
-     */
 
     container.innerHTML = `
         <div class="news-loading">
@@ -64,12 +35,7 @@ async function loadServerGuardNews() {
         </div>
     `;
 
-
     try {
-
-        /*
-         * Add timestamp to prevent browser/CDN cache.
-         */
 
         const response = await fetch(
             `${NEWS_URL}?t=${Date.now()}`,
@@ -79,11 +45,6 @@ async function loadServerGuardNews() {
             }
         );
 
-
-        /*
-         * HTTP error.
-         */
-
         if (!response.ok) {
 
             throw new Error(
@@ -91,18 +52,8 @@ async function loadServerGuardNews() {
             );
         }
 
-
-        /*
-         * Parse JSON.
-         */
-
         const news =
             await response.json();
-
-
-        /*
-         * Validate response.
-         */
 
         if (!Array.isArray(news)) {
 
@@ -110,11 +61,6 @@ async function loadServerGuardNews() {
                 "news.json must contain an array."
             );
         }
-
-
-        /*
-         * No news.
-         */
 
         if (news.length === 0) {
 
@@ -139,14 +85,6 @@ async function loadServerGuardNews() {
             return;
         }
 
-
-        /*
-         * Sort newest first.
-         *
-         * The news file can technically be in
-         * any order.
-         */
-
         const sortedNews = [...news].sort(
             (a, b) => {
 
@@ -160,30 +98,17 @@ async function loadServerGuardNews() {
             }
         );
 
-
-        /*
-         * Generate cards.
-         */
-
         container.innerHTML =
             sortedNews
                 .map(createServerGuardNewsCard)
                 .join("");
 
-
-        /*
-         * Start reveal animation for newly
-         * generated news cards.
-         */
-
         initializeNewsReveal();
-
 
         console.log(
             "ServerGuard News loaded:",
             sortedNews
         );
-
 
     } catch (error) {
 
@@ -192,17 +117,7 @@ async function loadServerGuardNews() {
             error
         );
 
-
-        /*
-         * Clear loading state.
-         */
-
         container.innerHTML = "";
-
-
-        /*
-         * Show error.
-         */
 
         if (errorElement) {
 
@@ -213,49 +128,30 @@ async function loadServerGuardNews() {
 
 }
 
-
-/* =========================================================
-   CREATE NEWS CARD
-========================================================= */
-
 function createServerGuardNewsCard(news, index) {
-
-    /*
-     * Safe values.
-     */
 
     const title =
         escapeNewsHtml(news.title || "ServerGuard Update");
 
-
     const text =
         escapeNewsHtml(news.text || "");
-
 
     const date =
         escapeNewsHtml(
             news.date || "Unknown date"
         );
 
-
     const category =
         escapeNewsHtml(
             news.category || "ServerGuard News"
         );
 
-
-    /*
-     * Image.
-     */
-
     let imageHtml = "";
-
 
     if (news.image) {
 
         const image =
             escapeNewsHtml(news.image);
-
 
         imageHtml = `
             <div class="news-image">
@@ -274,19 +170,12 @@ function createServerGuardNewsCard(news, index) {
 
     }
 
-
-    /*
-     * Optional link.
-     */
-
     let linkHtml = "";
-
 
     if (news.link) {
 
         const link =
             escapeNewsHtml(news.link);
-
 
         linkHtml = `
             <a
@@ -302,19 +191,10 @@ function createServerGuardNewsCard(news, index) {
 
     }
 
-
-    /*
-     * Featured news.
-     *
-     * The first news item can automatically
-     * become larger.
-     */
-
     const featuredClass =
         index === 0
             ? "news-card-featured"
             : "";
-
 
     return `
         <article
@@ -373,11 +253,6 @@ function createServerGuardNewsCard(news, index) {
     `;
 }
 
-
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
-
 function escapeNewsHtml(value) {
 
     return String(value ?? "")
@@ -388,23 +263,12 @@ function escapeNewsHtml(value) {
         .replace(/'/g, "&#039;");
 }
 
-
-/* =========================================================
-   NEWS REVEAL ANIMATION
-========================================================= */
-
 function initializeNewsReveal() {
 
     const cards =
         document.querySelectorAll(
             "#news-list .news-card"
         );
-
-
-    /*
-     * If IntersectionObserver isn't available,
-     * simply display cards.
-     */
 
     if (!("IntersectionObserver" in window)) {
 
@@ -416,7 +280,6 @@ function initializeNewsReveal() {
 
         return;
     }
-
 
     const observer =
         new IntersectionObserver(
@@ -432,7 +295,6 @@ function initializeNewsReveal() {
                             "visible"
                         );
 
-
                         observer.unobserve(
                             entry.target
                         );
@@ -447,7 +309,6 @@ function initializeNewsReveal() {
             }
         );
 
-
     cards.forEach((card) => {
 
         observer.observe(card);
@@ -455,11 +316,6 @@ function initializeNewsReveal() {
     });
 
 }
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
