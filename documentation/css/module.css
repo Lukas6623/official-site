@@ -1,4 +1,4 @@
-/* Module pages: подключать ПОСЛЕ style.css */
+
 .module-layout{width:min(1500px,calc(100% - 40px));margin:0 auto;display:grid;grid-template-columns:245px minmax(0,1fr) 210px;gap:45px;padding-top:72px}
 .sidebar-group{margin:18px 10px 6px;color:#454e60;font-size:9px;font-weight:800;letter-spacing:2px}
 .sidebar-nav a.current{color:#fff;background:rgba(79,140,255,.09)}
