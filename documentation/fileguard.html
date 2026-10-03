@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -17,7 +18,9 @@
             <div class="brand-icon">🛡</div>
             <div>Server<span>Guard</span></div>
         </a>
+
         <div class="topbar-title">Documentation / FileGuard</div>
+
         <div class="topbar-actions">
             <a href="https://t.me/ServerGuardSupport" class="help-button" target="_blank" rel="noopener noreferrer">? Help</a>
             <a href="index.html" class="back-button">← Test Guide</a>
@@ -25,7 +28,11 @@
     </div>
 </header>
 
-<button class="mobile-menu-button" id="mobileMenuButton" aria-label="Open documentation menu">☰</button>
+<button
+    class="mobile-menu-button"
+    id="mobileMenuButton"
+    aria-label="Open documentation menu"
+>☰</button>
 
 <div class="module-layout">
 
@@ -34,16 +41,23 @@
             <div class="sidebar-label">SERVERGUARD</div>
             <div class="sidebar-title">Modules</div>
         </div>
+
         <nav class="sidebar-nav">
             <a href="index.html"><span>←</span>Test Guide</a>
+
             <div class="sidebar-group">MODULES</div>
+
             <a href="security.html"><span>01</span>Security</a>
             <a href="telegram.html"><span>02</span>Telegram Bot</a>
             <a href="hardening.html"><span>03</span>SSH Hardening</a>
             <a href="sshkeys.html"><span>04</span>SSH Key Guard</a>
             <a href="fileguard.html" class="current"><span>05</span>FileGuard</a>
         </nav>
-        <div class="sidebar-footer"><div class="status-dot"></div>ServerGuard Documentation</div>
+
+        <div class="sidebar-footer">
+            <div class="status-dot"></div>
+            ServerGuard Documentation
+        </div>
     </aside>
 
     <main class="module-content">
@@ -54,54 +68,64 @@
             <p>Контроль целостности важных файлов Linux-сервера.</p>
         </div>
 
-        <!-- ================= ВСТАВЬТЕ ДОКУМЕНТАЦИЮ НИЖЕ =================
-             Допустимые теги: h2, h3, p, ul/ol, pre>code, blockquote, table, img, hr.
-             Оглавление справа строится автоматически из h2 и h3. -->
         <article class="doc-article">
-<p><strong>FileGuard</strong> — модуль ServerGuard для контроля целостности важных файлов Linux-сервера. Он следит за конфигурацией, от которой зависит безопасность системы, и фиксирует любое изменение как событие безопасности.</p>
-<blockquote>
-<p>обнаружить изменение, классифицировать его и зарегистрировать событие.</p>
-</blockquote>
-<hr />
-<h2>1. Зачем нужен FileGuard</h2>
-<p>Многие атаки и ошибки администрирования заканчиваются изменением системных файлов: появляется новый пользователь, меняются правила <code>sudo</code>, добавляется systemd-служба или cron-задача, ослабляется настройка SSH.</p>
-<p>Без контроля такие изменения могут долго оставаться незамеченными. FileGuard работает постоянно и сообщает о них сразу.</p>
-<p>Этот тип защиты называется <strong>File Integrity Monitoring (FIM)</strong>.</p>
-<hr />
-<h2>2. Что контролирует FileGuard</h2>
-<p>Модуль наблюдает за каталогами конфигурации и отдельными критичными файлами.</p>
-<table>
-<thead>
-<tr>
-<th>Область</th>
-<th>Почему важна</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>/etc/ssh</code></td>
-<td>Настройки SSH-сервера</td>
-</tr>
-<tr>
-<td><code>/etc/sudoers.d</code></td>
-<td>Права на выполнение команд с повышенными привилегиями</td>
-</tr>
-<tr>
-<td><code>/etc/systemd/system</code></td>
-<td>Службы, которые запускаются системой</td>
-</tr>
-<tr>
-<td><code>/etc/cron.d</code>, <code>/var/spool/cron</code></td>
-<td>Задачи, выполняемые по расписанию</td>
-</tr>
-<tr>
-<td><code>/etc/pam.d</code></td>
-<td>Конфигурация аутентификации Linux</td>
-</tr>
-</tbody>
-</table>
-<p>Дополнительно контролируются критичные файлы:</p>
-<pre><code class="language-text">/etc/passwd
+
+            <p><strong>FileGuard</strong> — модуль ServerGuard для контроля целостности важных файлов Linux-сервера. Он следит за конфигурацией, от которой зависит безопасность системы, и фиксирует любое изменение как событие безопасности.</p>
+
+            <blockquote>
+                <p>обнаружить изменение, классифицировать его и зарегистрировать событие.</p>
+            </blockquote>
+
+            <hr />
+
+            <h2>1. Зачем нужен FileGuard</h2>
+
+            <p>Многие атаки и ошибки администрирования заканчиваются изменением системных файлов: появляется новый пользователь, меняются правила <code>sudo</code>, добавляется systemd-служба или cron-задача, ослабляется настройка SSH.</p>
+
+            <p>Без контроля такие изменения могут долго оставаться незамеченными. FileGuard работает постоянно и сообщает о них сразу.</p>
+
+            <p>Этот тип защиты называется <strong>File Integrity Monitoring (FIM)</strong>.</p>
+
+            <hr />
+
+            <h2>2. Что контролирует FileGuard</h2>
+
+            <p>Модуль наблюдает за каталогами конфигурации и отдельными критичными файлами.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Область</th>
+                        <th>Почему важна</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>/etc/ssh</code></td>
+                        <td>Настройки SSH-сервера</td>
+                    </tr>
+                    <tr>
+                        <td><code>/etc/sudoers.d</code></td>
+                        <td>Права на выполнение команд с повышенными привилегиями</td>
+                    </tr>
+                    <tr>
+                        <td><code>/etc/systemd/system</code></td>
+                        <td>Службы, которые запускаются системой</td>
+                    </tr>
+                    <tr>
+                        <td><code>/etc/cron.d</code>, <code>/var/spool/cron</code></td>
+                        <td>Задачи, выполняемые по расписанию</td>
+                    </tr>
+                    <tr>
+                        <td><code>/etc/pam.d</code></td>
+                        <td>Конфигурация аутентификации Linux</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Дополнительно контролируются критичные файлы:</p>
+
+            <pre><code class="language-text">/etc/passwd
 /etc/shadow
 /etc/group
 /etc/gshadow
@@ -109,39 +133,47 @@
 /etc/crontab
 /etc/ssh/sshd_config
 </code></pre>
-<p>FileGuard защищает конфигурацию <strong>сервера</strong>. Он не создаёт события из-за собственной работы ServerGuard.</p>
-<hr />
-<h2>3. Какие события фиксируются</h2>
-<table>
-<thead>
-<tr>
-<th>Событие</th>
-<th>Что означает</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>created</code></td>
-<td>Появился новый файл</td>
-</tr>
-<tr>
-<td><code>deleted</code></td>
-<td>Файл удалён</td>
-</tr>
-<tr>
-<td><code>modified</code></td>
-<td>Изменилось содержимое файла</td>
-</tr>
-<tr>
-<td><code>permissions_changed</code></td>
-<td>Изменились права доступа, при том же содержимом</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2>4. Как работает мониторинг</h2>
-<p>FileGuard использует механизм ядра Linux — <strong>inotify</strong>. Ядро само сообщает об изменении файла, поэтому не нужно постоянно перечитывать файлы.</p>
-<pre><code class="language-text">Изменение файла
+
+            <p>FileGuard защищает конфигурацию <strong>сервера</strong>. Он не создаёт события из-за собственной работы ServerGuard.</p>
+
+            <hr />
+
+            <h2>3. Какие события фиксируются</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Событие</th>
+                        <th>Что означает</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>created</code></td>
+                        <td>Появился новый файл</td>
+                    </tr>
+                    <tr>
+                        <td><code>deleted</code></td>
+                        <td>Файл удалён</td>
+                    </tr>
+                    <tr>
+                        <td><code>modified</code></td>
+                        <td>Изменилось содержимое файла</td>
+                    </tr>
+                    <tr>
+                        <td><code>permissions_changed</code></td>
+                        <td>Изменились права доступа, при том же содержимом</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr />
+
+            <h2>4. Как работает мониторинг</h2>
+
+            <p>FileGuard использует механизм ядра Linux — <strong>inotify</strong>. Ядро само сообщает об изменении файла, поэтому не нужно постоянно перечитывать файлы.</p>
+
+            <pre><code class="language-text">Изменение файла
        |
        v
   Ядро Linux (inotify)
@@ -158,11 +190,16 @@
        v
    Журнал событий
 </code></pre>
-<p>Большую часть времени модуль находится в ожидании и почти не нагружает процессор.</p>
-<hr />
-<h2>5. Baseline — эталонное состояние</h2>
-<p>При первом запуске FileGuard создаёт <strong>baseline</strong>: снимок состояния контролируемых файлов.</p>
-<pre><code class="language-text">Состояние сервера при первом запуске
+
+            <p>Большую часть времени модуль находится в ожидании и почти не нагружает процессор.</p>
+
+            <hr />
+
+            <h2>5. Baseline — эталонное состояние</h2>
+
+            <p>При первом запуске FileGuard создаёт <strong>baseline</strong>: снимок состояния контролируемых файлов.</p>
+
+            <pre><code class="language-text">Состояние сервера при первом запуске
                 |
                 v
             baseline
@@ -170,57 +207,74 @@
                 v
      сравнение с текущим состоянием
 </code></pre>
-<p>Если позже файл отличается от эталона, создаётся событие.</p>
-<hr />
-<h2>6. Что запоминается о каждом файле</h2>
-<pre><code class="language-text">exists   — существует ли файл
+
+            <p>Если позже файл отличается от эталона, создаётся событие.</p>
+
+            <hr />
+
+            <h2>6. Что запоминается о каждом файле</h2>
+
+            <pre><code class="language-text">exists   — существует ли файл
 type     — файл или каталог
 size     — размер
 mode     — права доступа (например 0644)
 uid/gid  — владелец и группа
 sha256   — контрольная сумма содержимого
 </code></pre>
-<p>Содержимое самих файлов в журнал <strong>не записывается</strong> — только метаданные и контрольная сумма. Поэтому конфиденциальные настройки не попадают в события.</p>
-<hr />
-<h2>7. Уровни важности</h2>
-<table>
-<thead>
-<tr>
-<th>Уровень</th>
-<th>Когда применяется</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>CRITICAL</strong></td>
-<td>Изменение особо важных файлов: <code>passwd</code>, <code>shadow</code>, <code>group</code>, <code>gshadow</code>, <code>sudoers</code>, <code>sshd_config</code></td>
-</tr>
-<tr>
-<td><strong>HIGH</strong></td>
-<td>Изменения в каталогах SSH, sudo, systemd, cron и PAM; создание и удаление файлов в них</td>
-</tr>
-<tr>
-<td><strong>MEDIUM</strong></td>
-<td>Остальные изменения в контролируемых областях</td>
-</tr>
-</tbody>
-</table>
-<p>Пример:</p>
-<pre><code class="language-text">[FILEGUARD] CRITICAL
+
+            <p>Содержимое самих файлов в журнал <strong>не записывается</strong> — только метаданные и контрольная сумма. Поэтому конфиденциальные настройки не попадают в события.</p>
+
+            <hr />
+
+            <h2>7. Уровни важности</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Уровень</th>
+                        <th>Когда применяется</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>CRITICAL</strong></td>
+                        <td>Изменение особо важных файлов: <code>passwd</code>, <code>shadow</code>, <code>group</code>, <code>gshadow</code>, <code>sudoers</code>, <code>sshd_config</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>HIGH</strong></td>
+                        <td>Изменения в каталогах SSH, sudo, systemd, cron и PAM; создание и удаление файлов в них</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MEDIUM</strong></td>
+                        <td>Остальные изменения в контролируемых областях</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Пример:</p>
+
+            <pre><code class="language-text">[FILEGUARD] CRITICAL
 Event: modified
 File:  /etc/ssh/sshd_config
 </code></pre>
-<hr />
-<h2>8. Защита от лишних событий</h2>
-<p>Чтобы журнал оставался полезным, FileGuard:</p>
-<ul>
-<li>игнорирует временные и резервные файлы (<code>.tmp</code>, <code>.swp</code>, <code>.bak</code> и подобные);</li>
-<li>объединяет повторяющиеся события, например когда редактор сохраняет файл несколькими операциями;</li>
-<li>различает изменение содержимого и изменение только прав.</li>
-</ul>
-<hr />
-<h2>9. Пример события</h2>
-<pre><code class="language-json">{
+
+            <hr />
+
+            <h2>8. Защита от лишних событий</h2>
+
+            <p>Чтобы журнал оставался полезным, FileGuard:</p>
+
+            <ul>
+                <li>игнорирует временные и резервные файлы (<code>.tmp</code>, <code>.swp</code>, <code>.bak</code> и подобные);</li>
+                <li>объединяет повторяющиеся события, например когда редактор сохраняет файл несколькими операциями;</li>
+                <li>различает изменение содержимого и изменение только прав.</li>
+            </ul>
+
+            <hr />
+
+            <h2>9. Пример события</h2>
+
+            <pre><code class="language-json">{
   &quot;timestamp&quot;: &quot;2026-09-30T19:20:11+00:00&quot;,
   &quot;type&quot;: &quot;modified&quot;,
   &quot;severity&quot;: &quot;CRITICAL&quot;,
@@ -229,10 +283,14 @@ File:  /etc/ssh/sshd_config
   &quot;new_state&quot;: { &quot;sha256&quot;: &quot;…&quot;, &quot;mode&quot;: &quot;0o644&quot; }
 }
 </code></pre>
-<p>Время записывается в UTC. Журнал хранит ограниченное число последних событий.</p>
-<hr />
-<h2>10. Сценарий: изменение SSH-конфигурации</h2>
-<pre><code class="language-text">Кто-то редактирует /etc/ssh/sshd_config
+
+            <p>Время записывается в UTC. Журнал хранит ограниченное число последних событий.</p>
+
+            <hr />
+
+            <h2>10. Сценарий: изменение SSH-конфигурации</h2>
+
+            <pre><code class="language-text">Кто-то редактирует /etc/ssh/sshd_config
               |
               v
    inotify сообщает об изменении
@@ -246,96 +304,136 @@ File:  /etc/ssh/sshd_config
               v
  запись в журнал + уведомление администратору
 </code></pre>
-<hr />
-<h2>11. Работа в фоновом режиме</h2>
-<p>FileGuard работает на самом Linux-сервере как системная служба и не зависит от того, открыто ли приложение ServerGuard на вашем компьютере.</p>
-<p>Состояние сохраняется между перезапусками, поэтому после перезагрузки сервера мониторинг продолжается с прежними данными.</p>
-<p>Модуль корректно завершается при остановке службы.</p>
-<hr />
-<h2>12. Уведомления</h2>
-<p>FileGuard только <strong>обнаруживает и записывает</strong> события. Дальше их могут использовать другие модули ServerGuard, например Telegram Bot отправляет уведомление администратору.</p>
-<pre><code class="language-text">FileGuard  →  журнал событий  →  Telegram / ServerGuard
+
+            <hr />
+
+            <h2>11. Работа в фоновом режиме</h2>
+
+            <p>FileGuard работает на самом Linux-сервере как системная служба и не зависит от того, открыто ли приложение ServerGuard на вашем компьютере.</p>
+
+            <p>Состояние сохраняется между перезапусками, поэтому после перезагрузки сервера мониторинг продолжается с прежними данными.</p>
+
+            <p>Модуль корректно завершается при остановке службы.</p>
+
+            <hr />
+
+            <h2>12. Уведомления</h2>
+
+            <p>FileGuard только <strong>обнаруживает и записывает</strong> события. Дальше их могут использовать другие модули ServerGuard, например Telegram Bot отправляет уведомление администратору.</p>
+
+            <pre><code class="language-text">FileGuard  →  журнал событий  →  Telegram / ServerGuard
 </code></pre>
-<hr />
-<h2>13. Что FileGuard не делает</h2>
-<p>FileGuard — один из уровней защиты. Он не:</p>
-<ul>
-<li>блокирует изменение файлов;</li>
-<li>автоматически восстанавливает изменённые файлы;</li>
-<li>удаляет вредоносные файлы;</li>
-<li>блокирует пользователей или IP-адреса;</li>
-<li>является антивирусом;</li>
-<li>анализирует, опасна ли конкретная строка в конфигурации.</li>
-</ul>
-<p>Он сообщает, <strong>что и когда изменилось</strong>. Решение о дальнейших действиях принимает администратор или другие компоненты безопасности.</p>
-<hr />
-<h2>14. Как проверить работу</h2>
-<p>Проверять рекомендуется на <strong>тестовом сервере</strong>.</p>
-<ol>
-<li>Убедитесь, что служба запущена:</li>
-</ol>
-<pre><code class="language-bash">sudo systemctl status serverguard-fileguard.service
+
+            <hr />
+
+            <h2>13. Что FileGuard не делает</h2>
+
+            <p>FileGuard — один из уровней защиты. Он не:</p>
+
+            <ul>
+                <li>блокирует изменение файлов;</li>
+                <li>автоматически восстанавливает изменённые файлы;</li>
+                <li>удаляет вредоносные файлы;</li>
+                <li>блокирует пользователей или IP-адреса;</li>
+                <li>является антивирусом;</li>
+                <li>анализирует, опасна ли конкретная строка в конфигурации.</li>
+            </ul>
+
+            <p>Он сообщает, <strong>что и когда изменилось</strong>. Решение о дальнейших действиях принимает администратор или другие компоненты безопасности.</p>
+
+            <hr />
+
+            <h2>14. Как проверить работу</h2>
+
+            <p>Проверять рекомендуется на <strong>тестовом сервере</strong>.</p>
+
+            <ol>
+                <li>Убедитесь, что служба запущена:</li>
+            </ol>
+
+            <pre><code class="language-bash">sudo systemctl status serverguard-fileguard.service
 </code></pre>
-<ol start="2">
-<li>Измените тестовый файл в контролируемом каталоге, например добавьте файл в <code>/etc/cron.d/</code>.</li>
-<li>Просмотрите события:</li>
-</ol>
-<pre><code class="language-bash">sudo journalctl -u serverguard-fileguard.service -n 100 --no-pager
+
+            <ol start="2">
+                <li>Измените тестовый файл в контролируемом каталоге, например добавьте файл в <code>/etc/cron.d/</code>.</li>
+                <li>Просмотрите события:</li>
+            </ol>
+
+            <pre><code class="language-bash">sudo journalctl -u serverguard-fileguard.service -n 100 --no-pager
 </code></pre>
-<p>Непрерывный просмотр:</p>
-<pre><code class="language-bash">sudo journalctl -u serverguard-fileguard.service -f
+
+            <p>Непрерывный просмотр:</p>
+
+            <pre><code class="language-bash">sudo journalctl -u serverguard-fileguard.service -f
 </code></pre>
-<p>Не удаляйте и не изменяйте реальные системные файлы на рабочем сервере ради теста.</p>
-<hr />
-<h2>15. Диагностика</h2>
-<table>
-<thead>
-<tr>
-<th>Проблема</th>
-<th>Что проверить</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Служба не запускается</td>
-<td>Запустите модуль вручную от root и прочитайте сообщение об ошибке</td>
-</tr>
-<tr>
-<td>Событие не появилось</td>
-<td>Находится ли файл в контролируемой области; не временный ли он</td>
-</tr>
-<tr>
-<td>Слишком много событий</td>
-<td>Не изменяет ли файлы постоянно какая-то программа или служба</td>
-</tr>
-<tr>
-<td>Мониторинг не стартует на большой системе</td>
-<td>Лимиты inotify: <code>cat /proc/sys/fs/inotify/max_user_watches</code></td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2>16. Рекомендации</h2>
-<ul>
-<li>запускайте FileGuard как службу systemd от root;</li>
-<li>ограничьте доступ к журналам и файлам состояния только доверенным администраторам;</li>
-<li>не добавляйте для контроля каталоги, где постоянно меняются логи, кэш или временные данные;</li>
-<li>используйте FileGuard вместе с остальными модулями: SSH Hardening, Security, SSH Key Guard и Telegram-уведомлениями;</li>
-<li>регулярно просматривайте события и разбирайте незнакомые изменения.</li>
-</ul>
-<hr />
-<h2>17. Итог</h2>
-<p>FileGuard превращает контроль важных файлов Linux в автоматический процесс:</p>
-<pre><code class="language-text">обнаружить  →  классифицировать  →  сохранить  →  сообщить
+
+            <p>Не удаляйте и не изменяйте реальные системные файлы на рабочем сервере ради теста.</p>
+
+            <hr />
+
+            <h2>15. Диагностика</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Проблема</th>
+                        <th>Что проверить</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Служба не запускается</td>
+                        <td>Запустите модуль вручную от root и прочитайте сообщение об ошибке</td>
+                    </tr>
+                    <tr>
+                        <td>Событие не появилось</td>
+                        <td>Находится ли файл в контролируемой области; не временный ли он</td>
+                    </tr>
+                    <tr>
+                        <td>Слишком много событий</td>
+                        <td>Не изменяет ли файлы постоянно какая-то программа или служба</td>
+                    </tr>
+                    <tr>
+                        <td>Мониторинг не стартует на большой системе</td>
+                        <td>Лимиты inotify: <code>cat /proc/sys/fs/inotify/max_user_watches</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr />
+
+            <h2>16. Рекомендации</h2>
+
+            <ul>
+                <li>запускайте FileGuard как службу systemd от root;</li>
+                <li>ограничьте доступ к журналам и файлам состояния только доверенным администраторам;</li>
+                <li>не добавляйте для контроля каталоги, где постоянно меняются логи, кэш или временные данные;</li>
+                <li>используйте FileGuard вместе с остальными модулями: SSH Hardening, Security, SSH Key Guard и Telegram-уведомлениями;</li>
+                <li>регулярно просматривайте события и разбирайте незнакомые изменения.</li>
+            </ul>
+
+            <hr />
+
+            <h2>17. Итог</h2>
+
+            <p>FileGuard превращает контроль важных файлов Linux в автоматический процесс:</p>
+
+            <pre><code class="language-text">обнаружить  →  классифицировать  →  сохранить  →  сообщить
 </code></pre>
-<p>Он отвечает за отдельный уровень безопасности — <strong>целостность конфигурации сервера</strong> — и вместе с остальными модулями ServerGuard формирует многоуровневую защиту.</p>
-<hr />
-<p><em>Документация описывает назначение и принцип работы FileGuard на пользовательском уровне. Внутренние детали реализации относятся к технической документации разработчиков.</em></p>
+
+            <p>Он отвечает за отдельный уровень безопасности — <strong>целостность конфигурации сервера</strong> — и вместе с остальными модулями ServerGuard формирует многоуровневую защиту.</p>
+
+            <hr />
+
+            <p><em>Документация описывает назначение и принцип работы FileGuard на пользовательском уровне. Внутренние детали реализации относятся к технической документации разработчиков.</em></p>
+
         </article>
-        <!-- ================= КОНЕЦ ДОКУМЕНТАЦИИ ================= -->
 
         <nav class="pager">
-            <a href="sshkeys.html" class="prev"><small>← Previous</small><strong>SSH Key Guard</strong></a>
+            <a href="sshkeys.html" class="prev">
+                <small>← Previous</small>
+                <strong>SSH Key Guard</strong>
+            </a>
         </nav>
 
     </main>

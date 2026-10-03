@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,9 +38,7 @@
                 class="help-button"
                 target="_blank"
                 rel="noopener noreferrer"
-            >
-                ? Help
-            </a>
+            >? Help</a>
 
             <a href="index.html" class="back-button">
                 ← Test Guide
@@ -49,7 +48,6 @@
     </div>
 </header>
 
-
 <button
     class="mobile-menu-button"
     id="mobileMenuButton"
@@ -57,7 +55,6 @@
 >
     ☰
 </button>
-
 
 <div class="module-layout">
 
@@ -122,7 +119,6 @@
 
     </aside>
 
-
     <main class="module-content">
 
         <div class="module-head">
@@ -140,7 +136,6 @@
 
         </div>
 
-
         <article class="doc-article">
 
             <h2>1. Overview</h2>
@@ -156,9 +151,7 @@
                 safety mechanism when applying SSH Hardening.
             </p>
 
-
             <hr>
-
 
             <h2>2. Requirements</h2>
 
@@ -170,9 +163,7 @@
                 <li>Permission to modify the user's SSH configuration.</li>
             </ul>
 
-
             <hr>
-
 
             <h2>3. Check OpenSSH on Windows</h2>
 
@@ -187,9 +178,7 @@
                 OpenSSH version.
             </p>
 
-
             <hr>
-
 
             <h2>4. Generate an SSH key</h2>
 
@@ -211,9 +200,7 @@
                 This is recommended for important servers.
             </p>
 
-
             <hr>
-
 
             <h2>5. Private key and public key</h2>
 
@@ -249,9 +236,7 @@
                 </p>
             </blockquote>
 
-
             <hr>
-
 
             <h2>6. Install the public key on Linux</h2>
 
@@ -287,9 +272,7 @@ chmod 700 ~/.ssh</code></pre>
 
             <pre><code class="language-bash">chmod 600 ~/.ssh/authorized_keys</code></pre>
 
-
             <hr>
-
 
             <h2>7. Test SSH key authentication</h2>
 
@@ -309,9 +292,7 @@ chmod 700 ~/.ssh</code></pre>
                 using the private key.
             </p>
 
-
             <hr>
-
 
             <h2>8. Test password authentication separately</h2>
 
@@ -327,9 +308,7 @@ chmod 700 ~/.ssh</code></pre>
                 for this connection only.
             </p>
 
-
             <hr>
-
 
             <h2>9. Configure ServerGuard</h2>
 
@@ -390,9 +369,7 @@ chmod 700 ~/.ssh</code></pre>
                 as the private authentication key.
             </p>
 
-
             <hr>
-
 
             <h2>10. Authentication verification</h2>
 
@@ -412,9 +389,7 @@ Authenticated successfully.</code></pre>
                 using the SSH private key.
             </p>
 
-
             <hr>
-
 
             <h2>11. SSH Hardening safety mechanism</h2>
 
@@ -451,9 +426,7 @@ Password authentication remains enabled</code></pre>
                 an SSH private key first.
             </p>
 
-
             <hr>
-
 
             <h2>12. SSH key fingerprint</h2>
 
@@ -474,9 +447,7 @@ Password authentication remains enabled</code></pre>
 
             <pre><code class="language-text">256 SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ServerGuard</code></pre>
 
-
             <hr>
-
 
             <h2>13. Using a passphrase</h2>
 
@@ -496,9 +467,7 @@ Password authentication remains enabled</code></pre>
                 enter the passphrase used when the key was created.
             </p>
 
-
             <hr>
-
 
             <h2>14. Troubleshooting</h2>
 
@@ -517,7 +486,6 @@ Password authentication remains enabled</code></pre>
             <pre><code class="language-bash">chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys</code></pre>
 
-
             <h3>Wrong private key selected</h3>
 
             <p>
@@ -532,14 +500,12 @@ chmod 600 ~/.ssh/authorized_keys</code></pre>
 
             <pre><code class="language-text">id_ed25519.pub</code></pre>
 
-
             <h3>Wrong username</h3>
 
             <p>
                 The public key must be installed in the home directory of
                 the account that you are connecting as.
             </p>
-
 
             <h3>Key works in terminal but not in ServerGuard</h3>
 
@@ -548,9 +514,7 @@ chmod 600 ~/.ssh/authorized_keys</code></pre>
                 same private key that was tested with the OpenSSH client.
             </p>
 
-
             <hr>
-
 
             <h2>15. Security recommendations</h2>
 
@@ -564,9 +528,7 @@ chmod 600 ~/.ssh/authorized_keys</code></pre>
                 <li>Use SSH Key Guard to monitor changes to SSH keys.</li>
             </ul>
 
-
             <hr>
-
 
             <h2>16. Complete authentication flow</h2>
 
@@ -593,9 +555,7 @@ ServerGuard modules
    +-- FileGuard
    +-- Telegram Bot</code></pre>
 
-
             <hr>
-
 
             <h2>17. Summary</h2>
 
@@ -620,7 +580,6 @@ ServerGuard modules
 
         </article>
 
-
         <nav class="pager">
 
             <a href="index.html" class="prev">
@@ -637,11 +596,9 @@ ServerGuard modules
 
     </main>
 
-
     <aside class="page-toc" id="pageToc"></aside>
 
 </div>
-
 
 <footer>
 
@@ -658,7 +615,6 @@ ServerGuard modules
     </div>
 
 </footer>
-
 
 <script src="js/module.js"></script>
 
