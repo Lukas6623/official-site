@@ -1,654 +1,208 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="ServerGuard documentation — installation, connection, modules and testing guide."
-    >
-
-    <meta
-        name="theme-color"
-        content="#080b12"
-    >
-
-    <title>ServerGuard — Documentation</title>
-
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ServerGuard documentation — installation, connection, modules and testing guide.">
+<meta name="theme-color" content="#080b12">
+<title>ServerGuard — Documentation</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
 <header class="topbar">
-
-    <div class="topbar-inner">
-
-        <a href="../index.html" class="brand">
-
-            <div class="brand-icon">
-                🛡
-            </div>
-
-            <div>
-                Server<span>Guard</span>
-            </div>
-
-        </a>
-
-        <div class="topbar-title">
-            Documentation
-        </div>
-
-        <div class="topbar-actions">
-
-            <a
-                href="https://t.me/ServerGuardSupport"
-                class="help-button"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                ? Help
-            </a>
-
-            <a
-                href="../index.html"
-                class="back-button"
-            >
-                ← Main website
-            </a>
-
-        </div>
-
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <div class="brand-icon">🛡</div>
+      <div>Server<span>Guard</span></div>
+    </a>
+    <div class="topbar-title">Documentation</div>
+    <div class="topbar-actions">
+      <a href="https://t.me/ServerGuardSupport" class="help-button" target="_blank" rel="noopener noreferrer">? Help</a>
+      <a href="../index.html" class="back-button">← Main website</a>
     </div>
-
+  </div>
 </header>
 
-<button
-    class="mobile-menu-button"
-    id="mobileMenuButton"
-    aria-label="Open documentation menu"
->
-    ☰
-</button>
+<button class="mobile-menu-button" id="mobileMenuButton" aria-label="Open documentation menu">☰</button>
 
 <div class="documentation-layout">
 
-    <aside
-        class="sidebar"
-        id="sidebar"
-    >
-
-        <div class="sidebar-header">
-
-            <div class="sidebar-label">
-                SERVERGUARD
-            </div>
-
-            <div class="sidebar-title">
-                Test Guide
-            </div>
-
-        </div>
-
-        <nav class="sidebar-nav">
-
-            <a
-                href="#introduction"
-                class="active"
-            >
-                <span>01</span>
-                Introduction
-            </a>
-
-            <a href="#requirements">
-                <span>02</span>
-                Requirements
-            </a>
-
-            <a href="#installation">
-                <span>03</span>
-                Installation
-            </a>
-
-            <a href="#connection">
-                <span>04</span>
-                Connection
-            </a>
-
-            <a href="#terminal">
-                <span>05</span>
-                Main Terminal
-            </a>
-
-            <a href="#security">
-                <span>06</span>
-                Security
-            </a>
-
-            <a href="#telegram">
-                <span>07</span>
-                Telegram Bot
-            </a>
-
-            <a href="#hardening">
-                <span>08</span>
-                SSH Hardening
-            </a>
-
-            <a href="#sshkeys">
-                <span>09</span>
-                SSH Key Guard
-            </a>
-
-            <a href="#fileguard">
-                <span>10</span>
-                FileGuard
-            </a>
-
-            <a href="#testing">
-                <span>11</span>
-                Testing
-            </a>
-
-            <a href="#troubleshooting">
-                <span>12</span>
-                Troubleshooting
-            </a>
-
-            <div class="sidebar-group">
-                MODULE DOCS
-            </div>
-
-            <a href="security.html">
-                <span>↗</span>
-                Security
-            </a>
-
-            <a href="telegram.html">
-                <span>↗</span>
-                Telegram Bot
-            </a>
-
-            <a href="hardening.html">
-                <span>↗</span>
-                SSH Hardening
-            </a>
-
-            <a href="sshkeys.html">
-                <span>↗</span>
-                SSH Key Guard
-            </a>
-
-            <a href="fileguard.html">
-                <span>↗</span>
-                FileGuard
-            </a>
-
-        </nav>
-
-        <div class="sidebar-footer">
-
-            <div class="status-dot"></div>
-
-            ServerGuard Documentation
-
-        </div>
-
-    </aside>
-
-    <main class="documentation-content">
-
-        <section
-            id="introduction"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                01 / INTRODUCTION
-            </div>
-
-            <h1>
-                ServerGuard
-                <span>Testing Guide</span>
-            </h1>
-
-            <p class="lead">
-                This documentation provides a step-by-step guide
-                for testing ServerGuard on a Linux server.
-            </p>
-
-            <div class="info-card">
-
-                <div class="info-icon">
-                    🛡
-                </div>
-
-                <div>
-
-                    <h3>
-                        About ServerGuard
-                    </h3>
-
-                    <p>
-                        ServerGuard is a Windows application designed
-                        to manage and protect Linux servers through SSH.
-                        It provides security modules for monitoring,
-                        protection and server administration.
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="architecture">
-
-                <div class="architecture-node user-node">
-
-                    <strong>
-                        Windows
-                    </strong>
-
-                    <span>
-                        ServerGuard
-                    </span>
-
-                </div>
-
-                <div class="architecture-line">
-                    SSH
-                </div>
-
-                <div class="architecture-node server-node">
-
-                    <strong>
-                        Linux Server
-                    </strong>
-
-                    <span>
-                        ServerGuard modules
-                    </span>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <section
-            id="requirements"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                02 / REQUIREMENTS
-            </div>
-
-            <h2>
-                Before you start
-            </h2>
-
-            <p class="section-description">
-                Make sure the following requirements are available
-                before starting the test.
-            </p>
-
-            <div class="requirements-grid">
-
-                <article class="requirement-card">
-
-                    <div class="card-number">
-                        01
-                    </div>
-
-                    <h3>
-                        Windows PC
-                    </h3>
-
-                    <p>
-                        A Windows computer with ServerGuard installed.
-                    </p>
-
-                </article>
-
-                <article class="requirement-card">
-
-                    <div class="card-number">
-                        02
-                    </div>
-
-                    <h3>
-                        Linux server
-                    </h3>
-
-                    <p>
-                        A Linux server accessible through SSH.
-                    </p>
-
-                </article>
-
-                <article class="requirement-card">
-
-                    <div class="card-number">
-                        03
-                    </div>
-
-                    <h3>
-                        SSH access
-                    </h3>
-
-                    <p>
-                        IP address, SSH port, username and password
-                        or another supported authentication method.
-                    </p>
-
-                </article>
-
-                <article class="requirement-card">
-
-                    <div class="card-number">
-                        04
-                    </div>
-
-                    <h3>
-                        Test environment
-                    </h3>
-
-                    <p>
-                        Testing should preferably be performed on
-                        a separate test server rather than production.
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-        <section
-            id="installation"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                03 / INSTALLATION
-            </div>
-
-            <h2>
-                Installing ServerGuard
-            </h2>
-
-            <p class="section-description">
-                Download and install the ServerGuard application
-                on your Windows computer.
-            </p>
-
-            <div class="step-list">
-
-                <div class="instruction-step">
-
-                    <div class="step-badge">
-                        01
-                    </div>
-
-                    <div class="step-content">
-
-                        <h3>
-                            Download the installer
-                        </h3>
-
-                        <p>
-                            Download the latest ServerGuard installer
-                            from the official website.
-                        </p>
-
-                        <a
-                            href="../index.html#download"
-                            class="inline-button"
-                        >
-                            Download ServerGuard ↗
-                        </a>
-
-                    </div>
-
-                </div>
-
-                <div class="instruction-step">
-
-                    <div class="step-badge">
-                        02
-                    </div>
-
-                    <div class="step-content">
-
-                        <h3>
-                            Run the installer
-                        </h3>
-
-                        <p>
-                            Launch the installer and follow the
-                            installation wizard.
-                        </p>
-
-                        <figure class="screenshot">
-
-                            <img
-                                src="images/01-installation.png"
-                                alt="ServerGuard installation"
-                                loading="lazy"
-                            >
-
-                            <figcaption>
-                                ServerGuard installation
-                            </figcaption>
-
-                        </figure>
-
-                    </div>
-
-                </div>
-
-                <div class="instruction-step">
-
-                    <div class="step-badge">
-                        03
-                    </div>
-
-                    <div class="step-content">
-
-                        <h3>
-                            Start ServerGuard
-                        </h3>
-
-                        <p>
-                            After installation, launch ServerGuard
-                            from the desktop or Start Menu.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <section
-            id="connection"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                04 / CONNECTION
-            </div>
-
-            <h2>
-                Connecting to the Linux server
-            </h2>
-
-            <p class="section-description">
-                Enter the connection information for the test server
-                in the main ServerGuard window.
-            </p>
-
-            <div class="connection-fields">
-
-                <div class="field">
-
-                    <code>IP</code>
-
-                    <span>
-                        Linux server IP address
-                    </span>
-
-                </div>
-
-                <div class="field">
-
-                    <code>Port</code>
-
-                    <span>
-                        SSH port, normally 22
-                    </span>
-
-                </div>
-
-                <div class="field">
-
-                    <code>Username</code>
-
-                    <span>
-                        Linux user used for SSH authentication
-                    </span>
-
-                </div>
-
-                <div class="field">
-
-                    <code>Password</code>
-
-                    <span>
-                        Password for the selected Linux account
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="notice">
-
-                <strong>
-                    Test server
-                </strong>
-
-                <p>
-                    Use the temporary test credentials provided
-                    for the evaluation. Do not publish real passwords,
-                    private SSH keys or other sensitive credentials
-                    in screenshots or documentation.
-                </p>
-
-            </div>
-
-            <figure class="screenshot large">
-
-                <img
-                    src="images/02-main-window.png"
-                    alt="ServerGuard main window"
-                    loading="lazy"
-                >
-
-                <figcaption>
-                    ServerGuard main connection window
-                </figcaption>
-
-            </figure>
-
-            <div class="instruction-step compact">
-
-                <div class="step-badge">
-                    01
-                </div>
-
-                <div class="step-content">
-
-                    <h3>
-                        Enter the server information
-                    </h3>
-
-                    <p>
-                        Specify IP, Port, Username and Password
-                        using the credentials supplied for testing.
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="instruction-step compact">
-
-                <div class="step-badge">
-                    02
-                </div>
-
-                <div class="step-content">
-
-                    <h3>
-                        Connect
-                    </h3>
-
-                    <p>
-                        Start the connection and wait for
-                        ServerGuard to authenticate through SSH.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <section
-            id="terminal"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                05 / MAIN TERMINAL
-            </div>
-
-            <h2>
-                ServerGuard terminal
-            </h2>
-
-            <p class="section-description">
-                After connecting, the ServerGuard terminal provides
-                access to server commands and security modules.
-            </p>
-
-            <figure class="screenshot large">
-
-                <img
-                    src="images/04-terminal.png"
-                    alt="ServerGuard terminal"
-                    loading="lazy"
-                >
-
-                <figcaption>
-                    ServerGuard terminal and available commands
-                </figcaption>
-
-            </figure>
-
-            <div class="terminal">
-
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-label">SERVERGUARD</div>
+    <div class="sidebar-title">Test Guide</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="#introduction" class="active"><span>01</span> Introduction</a>
+    <a href="#requirements"><span>02</span> Requirements</a>
+    <a href="#installation"><span>03</span> Installation</a>
+    <a href="#connection"><span>04</span> Connection</a>
+    <a href="#terminal"><span>05</span> Main Terminal</a>
+    <a href="#security"><span>06</span> Security</a>
+    <a href="#telegram"><span>07</span> Telegram Bot</a>
+    <a href="#hardening"><span>08</span> SSH Hardening</a>
+    <a href="#sshkeys"><span>09</span> SSH Key Guard</a>
+    <a href="#fileguard"><span>10</span> FileGuard</a>
+    <a href="#testing"><span>11</span> Testing</a>
+    <a href="#troubleshooting"><span>12</span> Troubleshooting</a>
+
+    <div class="sidebar-group">MODULE DOCS</div>
+
+    <a href="security.html"><span>↗</span> Security</a>
+    <a href="telegram.html"><span>↗</span> Telegram Bot</a>
+    <a href="hardening.html"><span>↗</span> SSH Hardening</a>
+    <a href="sshkeys.html"><span>↗</span> SSH Key Guard</a>
+    <a href="fileguard.html"><span>↗</span> FileGuard</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="status-dot"></div>
+    ServerGuard Documentation
+  </div>
+</aside>
+
+<main class="documentation-content">
+
+<section id="introduction" class="doc-section">
+  <div class="eyebrow">01 / INTRODUCTION</div>
+  <h1>ServerGuard <span>Testing Guide</span></h1>
+  <p class="lead">This documentation provides a step-by-step guide for testing ServerGuard on a Linux server.</p>
+
+  <div class="info-card">
+    <div class="info-icon">🛡</div>
+    <div>
+      <h3>About ServerGuard</h3>
+      <p>ServerGuard is a Windows application designed to manage and protect Linux servers through SSH. It provides security modules for monitoring, protection and server administration.</p>
+    </div>
+  </div>
+
+  <div class="architecture">
+    <div class="architecture-node user-node"><strong>Windows</strong><span>ServerGuard</span></div>
+    <div class="architecture-line">SSH</div>
+    <div class="architecture-node server-node"><strong>Linux Server</strong><span>ServerGuard modules</span></div>
+  </div>
+</section>
+
+<section id="requirements" class="doc-section">
+  <div class="eyebrow">02 / REQUIREMENTS</div>
+  <h2>Before you start</h2>
+  <p class="section-description">Make sure the following requirements are available before starting the test.</p>
+
+  <div class="requirements-grid">
+    <article class="requirement-card">
+      <div class="card-number">01</div>
+      <h3>Windows PC</h3>
+      <p>A Windows computer with ServerGuard installed.</p>
+    </article>
+    <article class="requirement-card">
+      <div class="card-number">02</div>
+      <h3>Linux server</h3>
+      <p>A Linux server accessible through SSH.</p>
+    </article>
+    <article class="requirement-card">
+      <div class="card-number">03</div>
+      <h3>SSH access</h3>
+      <p>IP address, SSH port, username and password or another supported authentication method.</p>
+    </article>
+    <article class="requirement-card">
+      <div class="card-number">04</div>
+      <h3>Test environment</h3>
+      <p>Testing should preferably be performed on a separate test server rather than production.</p>
+    </article>
+  </div>
+</section>
+
+<section id="installation" class="doc-section">
+  <div class="eyebrow">03 / INSTALLATION</div>
+  <h2>Installing ServerGuard</h2>
+  <p class="section-description">Download and install the ServerGuard application on your Windows computer.</p>
+
+  <div class="step-list">
+    <div class="instruction-step">
+      <div class="step-badge">01</div>
+      <div class="step-content">
+        <h3>Download the installer</h3>
+        <p>Download the latest ServerGuard installer from the official website.</p>
+        <a href="../index.html#download" class="inline-button">Download ServerGuard ↗</a>
+      </div>
+    </div>
+
+    <div class="instruction-step">
+      <div class="step-badge">02</div>
+      <div class="step-content">
+        <h3>Run the installer</h3>
+        <p>Launch the installer and follow the installation wizard.</p>
+        <figure class="screenshot">
+          <img src="images/01-installation.png" alt="ServerGuard installation" loading="lazy">
+          <figcaption>ServerGuard installation</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="instruction-step">
+      <div class="step-badge">03</div>
+      <div class="step-content">
+        <h3>Start ServerGuard</h3>
+        <p>After installation, launch ServerGuard from the desktop or Start Menu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="connection" class="doc-section">
+  <div class="eyebrow">04 / CONNECTION</div>
+  <h2>Connecting to the Linux server</h2>
+  <p class="section-description">Enter the connection information for the test server in the main ServerGuard window.</p>
+
+  <div class="connection-fields">
+    <div class="field"><code>IP</code><span>Linux server IP address</span></div>
+    <div class="field"><code>Port</code><span>SSH port, normally 22</span></div>
+    <div class="field"><code>Username</code><span>Linux user used for SSH authentication</span></div>
+    <div class="field"><code>Password</code><span>Password for the selected Linux account</span></div>
+  </div>
+
+  <div class="notice">
+    <strong>Test server</strong>
+    <p>Use the temporary test credentials provided for the evaluation. Do not publish real passwords, private SSH keys or other sensitive credentials in screenshots or documentation.</p>
+  </div>
+
+  <figure class="screenshot large">
+    <img src="images/02-main-window.png" alt="ServerGuard main window" loading="lazy">
+    <figcaption>ServerGuard main connection window</figcaption>
+  </figure>
+
+  <div class="instruction-step compact">
+    <div class="step-badge">01</div>
+    <div class="step-content">
+      <h3>Enter the server information</h3>
+      <p>Specify IP, Port, Username and Password using the credentials supplied for testing.</p>
+    </div>
+  </div>
+
+  <div class="instruction-step compact">
+    <div class="step-badge">02</div>
+    <div class="step-content">
+      <h3>Connect</h3>
+      <p>Start the connection and wait for ServerGuard to authenticate through SSH.</p>
+    </div>
+  </div>
+</section>
+
+<section id="terminal" class="doc-section">
+  <div class="eyebrow">05 / MAIN TERMINAL</div>
+  <h2>ServerGuard terminal</h2>
+  <p class="section-description">After connecting, the ServerGuard terminal provides access to server commands and security modules.</p>
+
+  <figure class="screenshot large">
+    <img src="images/04-terminal.png" alt="ServerGuard terminal" loading="lazy">
+    <figcaption>ServerGuard terminal and available commands</figcaption>
+  </figure>
+
+  <div class="terminal">
 <pre><code>help
 ls
 pwd
@@ -661,100 +215,33 @@ sshkeys
 fileguard
 
 exit</code></pre>
+  </div>
 
-            </div>
+  <div class="command-grid">
+    <div class="command-card"><code>help</code><span>Show available commands.</span></div>
+    <div class="command-card"><code>ls</code><span>List files in the current directory.</span></div>
+    <div class="command-card"><code>pwd</code><span>Show the current directory.</span></div>
+    <div class="command-card"><code>cd</code><span>Change the current directory.</span></div>
+    <div class="command-card"><code>security</code><span>Open the Security module.</span></div>
+    <div class="command-card"><code>telegram</code><span>Open the Telegram Bot module.</span></div>
+    <div class="command-card"><code>hardening</code><span>Open SSH Hardening.</span></div>
+    <div class="command-card"><code>sshkeys</code><span>Open SSH Key Guard.</span></div>
+    <div class="command-card"><code>fileguard</code><span>Open FileGuard.</span></div>
+    <div class="command-card"><code>exit</code><span>Close the SSH connection.</span></div>
+  </div>
+</section>
 
-            <div class="command-grid">
+<section id="security" class="doc-section">
+  <div class="eyebrow">06 / SECURITY</div>
+  <h2>Security module</h2>
+  <p class="section-description">The Security module provides protection against repeated failed SSH authentication attempts and allows the protection service to be managed.</p>
 
-                <div class="command-card">
-                    <code>help</code>
-                    <span>Show available commands.</span>
-                </div>
+  <figure class="screenshot large">
+    <img src="images/05-security-menu.png" alt="ServerGuard Security menu" loading="lazy">
+    <figcaption>Security module menu</figcaption>
+  </figure>
 
-                <div class="command-card">
-                    <code>ls</code>
-                    <span>List files in the current directory.</span>
-                </div>
-
-                <div class="command-card">
-                    <code>pwd</code>
-                    <span>Show the current directory.</span>
-                </div>
-
-                <div class="command-card">
-                    <code>cd</code>
-                    <span>Change the current directory.</span>
-                </div>
-
-                <div class="command-card">
-                    <code>security</code>
-                    <span>Open the Security module.</span>
-                </div>
-
-                <div class="command-card">
-                    <code>telegram</code>
-                    <span>Open the Telegram Bot module.</span>
-                </div>
-
-                <div class="command-card">
-                    <code>hardening</code>
-                    <span>Open SSH Hardening.</span>
-                </div>
-
-                <div class="command-card">
-                    <code>sshkeys</code>
-                    <span>Open SSH Key Guard.</span>
-                </div>
-
-                <div class="command-card">
-                    <code>fileguard</code>
-                    <span>Open FileGuard.</span>
-                </div>
-
-                <div class="command-card">
-                    <code>exit</code>
-                    <span>Close the SSH connection.</span>
-                </div>
-
-            </div>
-
-        </section>
-
-        <section
-            id="security"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                06 / SECURITY
-            </div>
-
-            <h2>
-                Security module
-            </h2>
-
-            <p class="section-description">
-                The Security module provides protection against
-                repeated failed SSH authentication attempts and
-                allows the protection service to be managed.
-            </p>
-
-            <figure class="screenshot large">
-
-                <img
-                    src="images/05-security-menu.png"
-                    alt="ServerGuard Security menu"
-                    loading="lazy"
-                >
-
-                <figcaption>
-                    Security module menu
-                </figcaption>
-
-            </figure>
-
-            <div class="terminal">
-
+  <div class="terminal">
 <pre><code>========================================
  ServerGuard Security
 ========================================
@@ -767,150 +254,53 @@ exit</code></pre>
 6. Show logs
 7. Update Security
 0. Back</code></pre>
+  </div>
 
-            </div>
+  <div class="module-grid">
+    <article class="module-card">
+      <span class="module-number">01</span>
+      <h3>Install / enable</h3>
+      <p>Install the Security protection component and enable its configuration.</p>
+    </article>
+    <article class="module-card">
+      <span class="module-number">02</span>
+      <h3>Start / Stop</h3>
+      <p>Start or stop the protection service when required during testing.</p>
+    </article>
+    <article class="module-card">
+      <span class="module-number">03</span>
+      <h3>Status</h3>
+      <p>Check whether the protection service is installed and running.</p>
+    </article>
+    <article class="module-card">
+      <span class="module-number">04</span>
+      <h3>Logs</h3>
+      <p>Review security events and service logs generated during testing.</p>
+    </article>
+    <article class="module-card">
+      <span class="module-number">05</span>
+      <h3>Automatic startup</h3>
+      <p>Configure whether the protection service starts automatically with the system.</p>
+    </article>
+    <article class="module-card">
+      <span class="module-number">06</span>
+      <h3>Update</h3>
+      <p>Update the installed Security module.</p>
+    </article>
+  </div>
+</section>
 
-            <div class="module-grid">
+<section id="telegram" class="doc-section">
+  <div class="eyebrow">07 / TELEGRAM BOT</div>
+  <h2>Telegram Bot</h2>
+  <p class="section-description">The Telegram module allows ServerGuard to send security notifications from the Linux server.</p>
 
-                <article class="module-card">
+  <figure class="screenshot large">
+    <img src="images/06-telegram-menu.png" alt="ServerGuard Telegram Bot menu" loading="lazy">
+    <figcaption>Telegram Bot management menu</figcaption>
+  </figure>
 
-                    <span class="module-number">
-                        01
-                    </span>
-
-                    <h3>
-                        Install / enable
-                    </h3>
-
-                    <p>
-                        Install the Security protection component
-                        and enable its configuration.
-                    </p>
-
-                </article>
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        02
-                    </span>
-
-                    <h3>
-                        Start / Stop
-                    </h3>
-
-                    <p>
-                        Start or stop the protection service
-                        when required during testing.
-                    </p>
-
-                </article>
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        03
-                    </span>
-
-                    <h3>
-                        Status
-                    </h3>
-
-                    <p>
-                        Check whether the protection service
-                        is installed and running.
-                    </p>
-
-                </article>
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        04
-                    </span>
-
-                    <h3>
-                        Logs
-                    </h3>
-
-                    <p>
-                        Review security events and service logs
-                        generated during testing.
-                    </p>
-
-                </article>
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        05
-                    </span>
-
-                    <h3>
-                        Automatic startup
-                    </h3>
-
-                    <p>
-                        Configure whether the protection service
-                        starts automatically with the system.
-                    </p>
-
-                </article>
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        06
-                    </span>
-
-                    <h3>
-                        Update
-                    </h3>
-
-                    <p>
-                        Update the installed Security module.
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-        <section
-            id="telegram"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                07 / TELEGRAM BOT
-            </div>
-
-            <h2>
-                Telegram Bot
-            </h2>
-
-            <p class="section-description">
-                The Telegram module allows ServerGuard to send
-                security notifications from the Linux server.
-            </p>
-
-            <figure class="screenshot large">
-
-                <img
-                    src="images/06-telegram-menu.png"
-                    alt="ServerGuard Telegram Bot menu"
-                    loading="lazy"
-                >
-
-                <figcaption>
-                    Telegram Bot management menu
-                </figcaption>
-
-            </figure>
-
-            <div class="terminal">
-
+  <div class="terminal">
 <pre><code>============================================
              TELEGRAM BOT
 ============================================
@@ -928,789 +318,234 @@ Telegram bot: ACTIVE
 9. Show logs
 10. Remove bot
 0. Back</code></pre>
-
-            </div>
-
-            <div class="module-table">
-
-                <div class="table-row table-head">
-
-                    <div>
-                        Function
-                    </div>
-
-                    <div>
-                        Description
-                    </div>
-
-                </div>
-
-                <div class="table-row">
-
-                    <div>
-                        Install / configure
-                    </div>
-
-                    <div>
-                        Install and configure the Telegram bot.
-                    </div>
-
-                </div>
-
-                <div class="table-row">
-
-                    <div>
-                        Verification code
-                    </div>
-
-                    <div>
-                        Generate a verification code for connecting
-                        the required Telegram account.
-                    </div>
-
-                </div>
-
-                <div class="table-row">
-
-                    <div>
-                        Start
-                    </div>
-
-                    <div>
-                        Start the Telegram bot service.
-                    </div>
-
-                </div>
-
-                <div class="table-row">
-
-                    <div>
-                        Stop
-                    </div>
-
-                    <div>
-                        Stop the Telegram bot service.
-                    </div>
-
-                </div>
-
-                <div class="table-row">
-
-                    <div>
-                        Restart
-                    </div>
-
-                    <div>
-                        Restart the bot service.
-                    </div>
-
-                </div>
-
-                <div class="table-row">
-
-                    <div>
-                        Status
-                    </div>
-
-                    <div>
-                        Check whether the bot is installed and active.
-                    </div>
-
-                </div>
-
-                <div class="table-row">
-
-                    <div>
-                        Logs
-                    </div>
-
-                    <div>
-                        View Telegram bot logs.
-                    </div>
-
-                </div>
-
-                <div class="table-row">
-
-                    <div>
-                        Update
-                    </div>
-
-                    <div>
-                        Update the installed Telegram bot.
-                    </div>
-
-                </div>
-
-                <div class="table-row">
-
-                    <div>
-                        Remove
-                    </div>
-
-                    <div>
-                        Completely remove the Telegram bot.
-                    </div>
-
-                </div>
-
-            </div>
-
-            <figure class="screenshot">
-
-                <img
-                    src="images/07-telegram-install.png"
-                    alt="Telegram Bot installation"
-                    loading="lazy"
-                >
-
-                <figcaption>
-                    Telegram Bot installation and configuration
-                </figcaption>
-
-            </figure>
-
-            <div class="notice warning">
-
-                <strong>
-                    Important
-                </strong>
-
-                <p>
-                    Never publish the Telegram bot token or other
-                    authentication credentials in screenshots,
-                    public repositories or documentation.
-                </p>
-
-            </div>
-
-        </section>
-
-        <section
-            id="hardening"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                08 / SSH HARDENING
-            </div>
-
-            <h2>
-                SSH Hardening
-            </h2>
-
-            <p class="section-description">
-                SSH Hardening provides tools for reviewing and
-                managing security-related SSH configuration.
-            </p>
-
-            <figure class="screenshot large">
-
-                <img
-                    src="images/08-hardening.png"
-                    alt="SSH Hardening module"
-                    loading="lazy"
-                >
-
-                <figcaption>
-                    SSH Hardening module
-                </figcaption>
-
-            </figure>
-
-            <div class="feature-list">
-
-                <div>
-
-                    <strong>
-                        SSH configuration
-                    </strong>
-
-                    <span>
-                        Review security-related SSH settings.
-                    </span>
-
-                </div>
-
-                <div>
-
-                    <strong>
-                        Authentication security
-                    </strong>
-
-                    <span>
-                        Review authentication-related configuration.
-                    </span>
-
-                </div>
-
-                <div>
-
-                    <strong>
-                        Service management
-                    </strong>
-
-                    <span>
-                        Apply and manage supported hardening settings.
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="notice warning">
-
-                <strong>
-                    Testing recommendation
-                </strong>
-
-                <p>
-                    SSH configuration changes can affect remote
-                    access. Perform hardening tests only on the
-                    designated test server and keep an alternative
-                    access method available when possible.
-                </p>
-
-            </div>
-
-        </section>
-
-        <section
-            id="sshkeys"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                09 / SSH KEY GUARD
-            </div>
-
-            <h2>
-                SSH Key Guard
-            </h2>
-
-            <p class="section-description">
-                SSH Key Guard monitors SSH authorized keys and
-                generates security events when changes are detected.
-            </p>
-
-            <figure class="screenshot large">
-
-                <img
-                    src="images/09-sshkeys.png"
-                    alt="SSH Key Guard"
-                    loading="lazy"
-                >
-
-                <figcaption>
-                    SSH Key Guard module
-                </figcaption>
-
-            </figure>
-
-            <div class="module-grid">
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        01
-                    </span>
-
-                    <h3>
-                        Install
-                    </h3>
-
-                    <p>
-                        Install SSH Key Guard on the Linux server.
-                    </p>
-
-                </article>
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        02
-                    </span>
-
-                    <h3>
-                        Scan
-                    </h3>
-
-                    <p>
-                        Scan authorized SSH keys and detect changes.
-                    </p>
-
-                </article>
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        03
-                    </span>
-
-                    <h3>
-                        Baseline
-                    </h3>
-
-                    <p>
-                        Create or update the known key baseline.
-                    </p>
-
-                </article>
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        04
-                    </span>
-
-                    <h3>
-                        Audit
-                    </h3>
-
-                    <p>
-                        Review detected SSH key security events.
-                    </p>
-
-                </article>
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        05
-                    </span>
-
-                    <h3>
-                        Update
-                    </h3>
-
-                    <p>
-                        Update the SSH Key Guard component.
-                    </p>
-
-                </article>
-
-                <article class="module-card">
-
-                    <span class="module-number">
-                        06
-                    </span>
-
-                    <h3>
-                        Remove
-                    </h3>
-
-                    <p>
-                        Remove the module from the test server.
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-        <section
-            id="fileguard"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                10 / FILEGUARD
-            </div>
-
-            <h2>
-                FileGuard
-            </h2>
-
-            <p class="section-description">
-                FileGuard provides file-related server management
-                capabilities through the ServerGuard interface.
-            </p>
-
-            <figure class="screenshot large">
-
-                <img
-                    src="images/10-fileguard.png"
-                    alt="FileGuard module"
-                    loading="lazy"
-                >
-
-                <figcaption>
-                    FileGuard module
-                </figcaption>
-
-            </figure>
-
-            <div class="info-card">
-
-                <div class="info-icon">
-                    📁
-                </div>
-
-                <div>
-
-                    <h3>
-                        File management
-                    </h3>
-
-                    <p>
-                        Use FileGuard to work with server files
-                        through the ServerGuard interface and
-                        available SFTP/server tools.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <section
-            id="testing"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                11 / TESTING
-            </div>
-
-            <h2>
-                Recommended testing procedure
-            </h2>
-
-            <p class="section-description">
-                The following sequence can be used as a structured
-                evaluation of ServerGuard.
-            </p>
-
-            <div class="test-timeline">
-
-                <div class="timeline-item">
-
-                    <div class="timeline-number">
-                        01
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Connect
-                        </h3>
-
-                        <p>
-                            Connect ServerGuard to the provided
-                            Linux test server through SSH.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="timeline-item">
-
-                    <div class="timeline-number">
-                        02
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Check terminal
-                        </h3>
-
-                        <p>
-                            Run <code>help</code>, <code>pwd</code>
-                            and <code>ls</code> and verify that
-                            terminal commands work correctly.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="timeline-item">
-
-                    <div class="timeline-number">
-                        03
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Test Security
-                        </h3>
-
-                        <p>
-                            Install or enable the Security module,
-                            start protection and check its status.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="timeline-item">
-
-                    <div class="timeline-number">
-                        04
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Check logs
-                        </h3>
-
-                        <p>
-                            Review module logs and verify that
-                            security events are recorded.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="timeline-item">
-
-                    <div class="timeline-number">
-                        05
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Test Telegram
-                        </h3>
-
-                        <p>
-                            Install/configure the Telegram Bot,
-                            generate the verification code and
-                            verify notifications.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="timeline-item">
-
-                    <div class="timeline-number">
-                        06
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Test SSH Key Guard
-                        </h3>
-
-                        <p>
-                            Run a scan, create a baseline and
-                            review the generated audit information.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="timeline-item">
-
-                    <div class="timeline-number">
-                        07
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Test other modules
-                        </h3>
-
-                        <p>
-                            Review SSH Hardening and FileGuard
-                            according to the available test scenario.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="timeline-item">
-
-                    <div class="timeline-number">
-                        08
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Review results
-                        </h3>
-
-                        <p>
-                            Check statuses, logs, generated events
-                            and Telegram notifications.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <section
-            id="troubleshooting"
-            class="doc-section"
-        >
-
-            <div class="eyebrow">
-                12 / TROUBLESHOOTING
-            </div>
-
-            <h2>
-                Troubleshooting
-            </h2>
-
-            <p class="section-description">
-                If something does not work as expected, check the
-                following areas first.
-            </p>
-
-            <div class="faq">
-
-                <details>
-
-                    <summary>
-                        ServerGuard cannot connect to the server
-                    </summary>
-
-                    <div class="faq-content">
-
-                        Check the server IP address, SSH port,
-                        username and authentication credentials.
-                        Also verify that the SSH service is running
-                        and accessible from the Windows computer.
-
-                    </div>
-
-                </details>
-
-                <details>
-
-                    <summary>
-                        A module is not installed
-                    </summary>
-
-                    <div class="faq-content">
-
-                        Open the corresponding module and use its
-                        installation/configuration option. After
-                        installation, check the module status.
-
-                    </div>
-
-                </details>
-
-                <details>
-
-                    <summary>
-                        A service is not running
-                    </summary>
-
-                    <div class="faq-content">
-
-                        Use the module's status and log options.
-                        If available, restart the service and review
-                        the resulting logs.
-
-                    </div>
-
-                </details>
-
-                <details>
-
-                    <summary>
-                        Telegram Bot is inactive
-                    </summary>
-
-                    <div class="faq-content">
-
-                        Check whether the bot is installed,
-                        configured and started. Then check its
-                        status and logs.
-
-                    </div>
-
-                </details>
-
-                <details>
-
-                    <summary>
-                        Where can I find more information?
-                    </summary>
-
-                    <div class="faq-content">
-
-                        Visit the ServerGuard website or the
-                        project's GitHub page for additional
-                        information and development updates.
-
-                    </div>
-
-                </details>
-
-            </div>
-
-            <div class="final-card">
-
-                <div class="final-icon">
-                    🛡
-                </div>
-
-                <div>
-
-                    <h2>
-                        Thank you for testing ServerGuard.
-                    </h2>
-
-                    <p>
-                        Your feedback helps improve the project,
-                        identify issues and develop new features.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
+  </div>
+
+  <div class="module-table">
+    <div class="table-row table-head"><div>Function</div><div>Description</div></div>
+    <div class="table-row"><div>Install / configure</div><div>Install and configure the Telegram bot.</div></div>
+    <div class="table-row"><div>Verification code</div><div>Generate a verification code for connecting the required Telegram account.</div></div>
+    <div class="table-row"><div>Start</div><div>Start the Telegram bot service.</div></div>
+    <div class="table-row"><div>Stop</div><div>Stop the Telegram bot service.</div></div>
+    <div class="table-row"><div>Restart</div><div>Restart the bot service.</div></div>
+    <div class="table-row"><div>Status</div><div>Check whether the bot is installed and active.</div></div>
+    <div class="table-row"><div>Logs</div><div>View Telegram bot logs.</div></div>
+    <div class="table-row"><div>Update</div><div>Update the installed Telegram bot.</div></div>
+    <div class="table-row"><div>Remove</div><div>Completely remove the Telegram bot.</div></div>
+  </div>
+
+  <h3>Creating a Telegram bot with BotFather</h3>
+  <p class="section-description">Before ServerGuard can send notifications, you need a Telegram bot and its token. The token is created by the official Telegram bot <strong>@BotFather</strong>.</p>
+
+  <div class="step-list">
+    <div class="instruction-step">
+      <div class="step-badge">01</div>
+      <div class="step-content">
+        <h3>Open BotFather</h3>
+        <p>In Telegram, search for <code>@BotFather</code> (the account with the blue verified badge), open the chat and press <strong>Start</strong> or send <code>/start</code>. BotFather will show the list of available commands.</p>
+        <figure class="screenshot">
+          <img src="images/11-botfather-start.png" alt="BotFather start menu" loading="lazy">
+          <figcaption>BotFather chat and command list</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="instruction-step">
+      <div class="step-badge">02</div>
+      <div class="step-content">
+        <h3>Create a new bot</h3>
+        <p>Send <code>/newbot</code>. BotFather will ask for two things:</p>
+        <p>1. A <strong>name</strong> for the bot (displayed in chats), for example <code>Test Bot</code>.<br>2. A <strong>username</strong> that must end with <code>bot</code>, for example <code>server_guard_test_bot</code>. The username must be unique.</p>
+        <figure class="screenshot">
+          <img src="images/12-botfather-newbot.png" alt="Creating a bot with BotFather" loading="lazy">
+          <figcaption>Creating a new bot and receiving the token</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="instruction-step">
+      <div class="step-badge">03</div>
+      <div class="step-content">
+        <h3>Copy the bot token</h3>
+        <p>In the final message, BotFather shows the token under the line <em>“Use this token to access the HTTP API”</em>. It looks like this:</p>
+        <div class="terminal">
+<pre><code>123456789:ABCdefGhIJKlmNoPQRstuVWxyZ</code></pre>
+        </div>
+        <p>Tap or select the token and copy it. If you lose the message, send <code>/mybots</code>, choose your bot and open <strong>API Token</strong>, or send <code>/token</code>.</p>
+      </div>
+    </div>
+
+    <div class="instruction-step">
+      <div class="step-badge">04</div>
+      <div class="step-content">
+        <h3>Paste the token into ServerGuard</h3>
+        <p>Open the Telegram Bot module in ServerGuard, choose <strong>1. Install / configure bot</strong> and paste the token when ServerGuard asks for it. Then use <strong>2. Generate verification code</strong> and send the code to your bot in Telegram to connect your account.</p>
+      </div>
+    </div>
+  </div>
+
+  <figure class="screenshot">
+    <img src="images/07-telegram-install.png" alt="Telegram Bot installation" loading="lazy">
+    <figcaption>Telegram Bot installation and configuration</figcaption>
+  </figure>
+
+  <div class="notice warning">
+    <strong>Important</strong>
+    <p>Never publish the Telegram bot token or other authentication credentials in screenshots, public repositories or documentation. Anyone who has the token can control your bot. If the token was exposed, send <code>/revoke</code> to BotFather to get a new one and update it in ServerGuard.</p>
+  </div>
+</section>
+
+<section id="hardening" class="doc-section">
+  <div class="eyebrow">08 / SSH HARDENING</div>
+  <h2>SSH Hardening</h2>
+  <p class="section-description">SSH Hardening provides tools for reviewing and managing security-related SSH configuration.</p>
+
+  <figure class="screenshot large">
+    <img src="images/08-hardening.png" alt="SSH Hardening module" loading="lazy">
+    <figcaption>SSH Hardening module</figcaption>
+  </figure>
+
+  <div class="feature-list">
+    <div><strong>SSH configuration</strong><span>Review security-related SSH settings.</span></div>
+    <div><strong>Authentication security</strong><span>Review authentication-related configuration.</span></div>
+    <div><strong>Service management</strong><span>Apply and manage supported hardening settings.</span></div>
+  </div>
+
+  <div class="notice warning">
+    <strong>Testing recommendation</strong>
+    <p>SSH configuration changes can affect remote access. Perform hardening tests only on the designated test server and keep an alternative access method available when possible.</p>
+  </div>
+</section>
+
+<section id="sshkeys" class="doc-section">
+  <div class="eyebrow">09 / SSH KEY GUARD</div>
+  <h2>SSH Key Guard</h2>
+  <p class="section-description">SSH Key Guard monitors SSH authorized keys and generates security events when changes are detected.</p>
+
+  <figure class="screenshot large">
+    <img src="images/09-sshkeys.png" alt="SSH Key Guard" loading="lazy">
+    <figcaption>SSH Key Guard module</figcaption>
+  </figure>
+
+  <div class="module-grid">
+    <article class="module-card"><span class="module-number">01</span><h3>Install</h3><p>Install SSH Key Guard on the Linux server.</p></article>
+    <article class="module-card"><span class="module-number">02</span><h3>Scan</h3><p>Scan authorized SSH keys and detect changes.</p></article>
+    <article class="module-card"><span class="module-number">03</span><h3>Baseline</h3><p>Create or update the known key baseline.</p></article>
+    <article class="module-card"><span class="module-number">04</span><h3>Audit</h3><p>Review detected SSH key security events.</p></article>
+    <article class="module-card"><span class="module-number">05</span><h3>Update</h3><p>Update the SSH Key Guard component.</p></article>
+    <article class="module-card"><span class="module-number">06</span><h3>Remove</h3><p>Remove the module from the test server.</p></article>
+  </div>
+</section>
+
+<section id="fileguard" class="doc-section">
+  <div class="eyebrow">10 / FILEGUARD</div>
+  <h2>FileGuard</h2>
+  <p class="section-description">FileGuard provides file-related server management capabilities through the ServerGuard interface.</p>
+
+  <figure class="screenshot large">
+    <img src="images/10-fileguard.png" alt="FileGuard module" loading="lazy">
+    <figcaption>FileGuard module</figcaption>
+  </figure>
+
+  <div class="info-card">
+    <div class="info-icon">📁</div>
+    <div>
+      <h3>File management</h3>
+      <p>Use FileGuard to work with server files through the ServerGuard interface and available SFTP/server tools.</p>
+    </div>
+  </div>
+</section>
+
+<section id="testing" class="doc-section">
+  <div class="eyebrow">11 / TESTING</div>
+  <h2>Recommended testing procedure</h2>
+  <p class="section-description">The following sequence can be used as a structured evaluation of ServerGuard.</p>
+
+  <div class="test-timeline">
+    <div class="timeline-item">
+      <div class="timeline-number">01</div>
+      <div><h3>Connect</h3><p>Connect ServerGuard to the provided Linux test server through SSH.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-number">02</div>
+      <div><h3>Check terminal</h3><p>Run <code>help</code>, <code>pwd</code> and <code>ls</code> and verify that terminal commands work correctly.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-number">03</div>
+      <div><h3>Test Security</h3><p>Install or enable the Security module, start protection and check its status.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-number">04</div>
+      <div><h3>Check logs</h3><p>Review module logs and verify that security events are recorded.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-number">05</div>
+      <div><h3>Test Telegram</h3><p>Install/configure the Telegram Bot, generate the verification code and verify notifications.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-number">06</div>
+      <div><h3>Test SSH Key Guard</h3><p>Run a scan, create a baseline and review the generated audit information.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-number">07</div>
+      <div><h3>Test other modules</h3><p>Review SSH Hardening and FileGuard according to the available test scenario.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-number">08</div>
+      <div><h3>Review results</h3><p>Check statuses, logs, generated events and Telegram notifications.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="troubleshooting" class="doc-section">
+  <div class="eyebrow">12 / TROUBLESHOOTING</div>
+  <h2>Troubleshooting</h2>
+  <p class="section-description">If something does not work as expected, check the following areas first.</p>
+
+  <div class="faq">
+    <details>
+      <summary>ServerGuard cannot connect to the server</summary>
+      <div class="faq-content">Check the server IP address, SSH port, username and authentication credentials. Also verify that the SSH service is running and accessible from the Windows computer.</div>
+    </details>
+    <details>
+      <summary>A module is not installed</summary>
+      <div class="faq-content">Open the corresponding module and use its installation/configuration option. After installation, check the module status.</div>
+    </details>
+    <details>
+      <summary>A service is not running</summary>
+      <div class="faq-content">Use the module's status and log options. If available, restart the service and review the resulting logs.</div>
+    </details>
+    <details>
+      <summary>Telegram Bot is inactive</summary>
+      <div class="faq-content">Check whether the bot is installed, configured and started. Then check its status and logs.</div>
+    </details>
+    <details>
+      <summary>Where can I find more information?</summary>
+      <div class="faq-content">Visit the ServerGuard website or the project's GitHub page for additional information and development updates.</div>
+    </details>
+  </div>
+
+  <div class="final-card">
+    <div class="final-icon">🛡</div>
+    <div>
+      <h2>Thank you for testing ServerGuard.</h2>
+      <p>Your feedback helps improve the project, identify issues and develop new features.</p>
+    </div>
+  </div>
+</section>
+
+</main>
 
 </div>
 
 <footer>
-
-    <div class="footer-inner">
-
-        <span>
-            © 2026 ServerGuard
-        </span>
-
-        <span>
-            Documentation
-        </span>
-
-        <a href="../index.html">
-            serverguard.site ↗
-        </a>
-
-    </div>
-
+  <div class="footer-inner">
+    <span>© 2026 ServerGuard</span>
+    <span>Documentation</span>
+    <a href="../index.html">serverguard.site ↗</a>
+  </div>
 </footer>
 
 <script src="js/main.js"></script>
 
 </body>
-
 </html>
