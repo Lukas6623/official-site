@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,491 +51,491 @@
         <div class="module-head">
             <div class="eyebrow">MODULE 02 / TELEGRAM BOT</div>
             <h1>Telegram Bot</h1>
-            <p>Уведомления о безопасности и управление защитой из Telegram.</p>
+            <p>Security notifications and protection management from Telegram.</p>
         </div>
 
-        <!-- ================= ВСТАВЬТЕ ДОКУМЕНТАЦИЮ НИЖЕ =================
-             Допустимые теги: h2, h3, p, ul/ol, pre>code, blockquote, table, img, hr.
-             Оглавление справа строится автоматически из h2 и h3. -->
+        <!-- ================= INSERT DOCUMENTATION BELOW =================
+             Allowed tags: h2, h3, p, ul/ol, pre>code, blockquote, table, img, hr.
+             The table of contents on the right is built automatically from h2 and h3. -->
         <article class="doc-article">
-<p><strong>Telegram Bot</strong> — модуль ServerGuard, который присылает вам в Telegram уведомления о событиях безопасности на сервере и позволяет управлять защитой прямо из чата: блокировать и разблокировать IP, менять настройки, смотреть статистику и состояние сервера.</p>
+<p><strong>Telegram Bot</strong> — a ServerGuard module that sends you notifications about security events on your server in Telegram and lets you manage protection directly from the chat: block and unblock IPs, change settings, view statistics and server status.</p>
 <blockquote>
-<p>Бот работает на вашем Linux-сервере и обращается к данным других модулей ServerGuard. Приложение на компьютере для этого открывать не нужно.</p>
+<p>The bot runs on your Linux server and accesses data from other ServerGuard modules. You do not need to open the desktop application for this.</p>
 </blockquote>
 <hr />
-<h2>1. Что умеет бот</h2>
+<h2>1. What the bot can do</h2>
 <ul>
-<li>уведомления о <strong>блокировке и разблокировке IP</strong>;</li>
-<li>уведомления о <strong>входах по SSH</strong>, включая вход с нового IP;</li>
-<li>уведомления о <strong>неудачных попытках входа</strong> (по желанию);</li>
-<li>уведомления об <strong>изменении SSH-ключей</strong> (SSH Key Guard);</li>
-<li>уведомления об <strong>изменении системных служб</strong>;</li>
-<li><strong>ежедневный отчёт</strong>;</li>
-<li>управление блокировками и белым списком (whitelist);</li>
-<li>настройка порога и срока блокировки;</li>
-<li>состояние сервера и последние строки журнала SSH;</li>
-<li>кнопочное меню и команды.</li>
+<li>notifications about <strong>IP blocking and unblocking</strong>;</li>
+<li>notifications about <strong>SSH logins</strong>, including logins from a new IP;</li>
+<li>notifications about <strong>failed login attempts</strong> (optional);</li>
+<li>notifications about <strong>SSH key changes</strong> (SSH Key Guard);</li>
+<li>notifications about <strong>system service changes</strong>;</li>
+<li>a <strong>daily report</strong>;</li>
+<li>management of blocks and the whitelist (whitelist);</li>
+<li>configuring the threshold and block duration;</li>
+<li>server status and the latest SSH log lines;</li>
+<li>an inline button menu and commands.</li>
 </ul>
 <hr />
-<h2>2. Как это работает</h2>
-<pre><code class="language-text">Модули ServerGuard на сервере
-(защита от brute-force, SSH Key Guard, мониторинг служб)
+<h2>2. How it works</h2>
+<pre><code class="language-text">ServerGuard modules on the server
+(brute-force protection, SSH Key Guard, service monitoring)
               |
               v
-       записывают события
+       record events
               |
               v
         Telegram Bot
               |
               v
-   фильтрует, объединяет, отправляет
+   filters, groups, sends
               |
               v
-      ваш чат в Telegram
+      your Telegram chat
               |
               v
-  вы нажимаете кнопку → бот выполняет действие на сервере
+  you press a button → the bot performs an action on the server
 </code></pre>
-<p>Бот проверяет новые события каждые несколько секунд. Старые события при запуске бота повторно не отправляются.</p>
+<p>The bot checks for new events every few seconds. Old events are not sent again when the bot starts.</p>
 <hr />
-<h2>3. Подключение</h2>
-<p>Бот привязывается к вашему аккаунту Telegram с помощью одноразового кода.</p>
+<h2>3. Connecting</h2>
+<p>The bot is linked to your Telegram account using a one-time code.</p>
 <ol>
-<li>В ServerGuard откройте <strong>Telegram bot</strong> и установите/настройте бота (потребуется токен, который выдаёт <code>@BotFather</code>).</li>
-<li>Выберите пункт <strong>Generate verification code</strong> и скопируйте код.</li>
-<li>Откройте своего бота в Telegram и отправьте:</li>
+<li>In ServerGuard, open <strong>Telegram bot</strong> and install/configure the bot (you will need a token issued by <code>@BotFather</code>).</li>
+<li>Select <strong>Generate verification code</strong> and copy the code.</li>
+<li>Open your bot in Telegram and send:</li>
 </ol>
-<pre><code class="language-text">/start КОД
+<pre><code class="language-text">/start CODE
 </code></pre>
 <ol start="4">
-<li>Бот удалит сообщение с кодом из чата и подтвердит регистрацию.</li>
+<li>The bot will delete the message with the code from the chat and confirm registration.</li>
 </ol>
-<p>После этого вы увидите главное меню.</p>
-<p><strong>Важно:</strong>
-- код действует <strong>5 минут</strong>; если он истёк, создайте новый;
-- при нескольких неверных кодах подряд бот временно перестаёт принимать попытки;
-- бот работает только в <strong>личном чате</strong>.</p>
+<p>After that you will see the main menu.</p>
+<p><strong>Important:</strong>
+- the code is valid for <strong>5 minutes</strong>; if it has expired, create a new one;
+- after several incorrect codes in a row, the bot temporarily stops accepting attempts;
+- the bot works only in a <strong>private chat</strong>.</p>
 <hr />
-<h2>4. Доступ: один владелец</h2>
-<p>Бот обслуживает <strong>только одного владельца</strong> — того, кто зарегистрировался с кодом.</p>
+<h2>4. Access: a single owner</h2>
+<p>The bot serves <strong>only one owner</strong> — the person who registered with the code.</p>
 <ul>
-<li>Сообщения и кнопки от других пользователей игнорируются или отклоняются.</li>
-<li>Если вы сгенерируете новый код и его активирует другой аккаунт, доступ <strong>переходит</strong> к новому аккаунту. Прежний владелец получит уведомление об этом.</li>
-<li>Настройки и список известных IP при смене владельца сохраняются.</li>
+<li>Messages and buttons from other users are ignored or rejected.</li>
+<li>If you generate a new code and another account activates it, access <strong>transfers</strong> to the new account. The previous owner will receive a notification about this.</li>
+<li>Settings and the list of known IPs are preserved when the owner changes.</li>
 </ul>
-<p>Никому не передавайте токен бота и коды подтверждения.</p>
+<p>Do not share the bot token or verification codes with anyone.</p>
 <hr />
-<h2>5. Главное меню</h2>
-<p>Откройте меню командой <code>/menu</code>.</p>
+<h2>5. Main menu</h2>
+<p>Open the menu with the <code>/menu</code> command.</p>
 <table>
 <thead>
 <tr>
-<th>Кнопка</th>
-<th>Что показывает</th>
+<th>Button</th>
+<th>What it shows</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>📊 Status</td>
-<td>Состояние защиты и статистика за 24 часа и за всё время</td>
+<td>Protection status and statistics for 24 hours and all time</td>
 </tr>
 <tr>
 <td>🚫 Blocks</td>
-<td>Активные блокировки, кнопки разблокировки</td>
+<td>Active blocks, unblock buttons</td>
 </tr>
 <tr>
 <td>📜 Events</td>
-<td>Последние события SSH</td>
+<td>Latest SSH events</td>
 </tr>
 <tr>
 <td>🔑 Logins</td>
-<td>Последние успешные входы</td>
+<td>Latest successful logins</td>
 </tr>
 <tr>
 <td>🏴‍☠️ Top attackers</td>
-<td>Самые активные IP за 24 часа или 7 дней</td>
+<td>The most active IPs over 24 hours or 7 days</td>
 </tr>
 <tr>
 <td>🖥 Server</td>
-<td>Нагрузка, память, диск, uptime</td>
+<td>Load, memory, disk, uptime</td>
 </tr>
 <tr>
 <td>🛡 Protection</td>
-<td>Настройки защиты</td>
+<td>Protection settings</td>
 </tr>
 <tr>
 <td>✅ Whitelist</td>
-<td>Список доверенных IP</td>
+<td>List of trusted IPs</td>
 </tr>
 <tr>
 <td>🔔 Notifications</td>
-<td>Настройка уведомлений</td>
+<td>Notification settings</td>
 </tr>
 <tr>
 <td>🧾 SSH logs</td>
-<td>Последние строки журнала SSH</td>
+<td>Latest SSH log lines</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>6. Какие уведомления приходят</h2>
+<h2>6. Which notifications you receive</h2>
 <table>
 <thead>
 <tr>
-<th>Событие</th>
-<th>Когда приходит</th>
+<th>Event</th>
+<th>When it arrives</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>🚫 IP blocked</td>
-<td>IP заблокирован автоматически или вручную</td>
+<td>IP blocked automatically or manually</td>
 </tr>
 <tr>
 <td>✅ IP unblocked</td>
-<td>Блокировка истекла или снята</td>
+<td>The block expired or was lifted</td>
 </tr>
 <tr>
 <td>🔑 SSH login</td>
-<td>Успешный вход (если включено) или вход с нового IP</td>
+<td>Successful login (if enabled) or login from a new IP</td>
 </tr>
 <tr>
 <td>⚠️ Failed SSH attempts</td>
-<td>Неудачные попытки входа (по умолчанию выключено)</td>
+<td>Failed login attempts (disabled by default)</td>
 </tr>
 <tr>
 <td>🔐 SSH key added / removed / changed</td>
-<td>Изменился <code>authorized_keys</code></td>
+<td><code>authorized_keys</code> changed</td>
 </tr>
 <tr>
 <td>🔧 Service changed</td>
-<td>Служба запущена, остановлена или изменена</td>
+<td>Service started, stopped, or changed</td>
 </tr>
 <tr>
 <td>📅 Daily report</td>
-<td>Ежедневная сводка</td>
+<td>Daily summary</td>
 </tr>
 </tbody>
 </table>
-<p>Многие уведомления содержат <strong>кнопки действий</strong> — например, заблокировать IP или добавить его в whitelist одним нажатием.</p>
+<p>Many notifications contain <strong>action buttons</strong> — for example, block an IP or add it to the whitelist with one tap.</p>
 <hr />
-<h2>7. Уведомление о блокировке</h2>
-<p>Показывает:</p>
+<h2>7. Block notification</h2>
+<p>It shows:</p>
 <ul>
-<li>заблокированный IP и его геолокацию (если включена);</li>
-<li>количество неудачных попыток;</li>
-<li>срок блокировки и время окончания;</li>
-<li>причину.</li>
+<li>the blocked IP and its geolocation (if enabled);</li>
+<li>the number of failed attempts;</li>
+<li>the block duration and end time;</li>
+<li>the reason.</li>
 </ul>
-<p>Кнопки: <strong>🔓 Unblock</strong>, <strong>✅ Add to whitelist</strong>, <strong>🔎 Info</strong>.</p>
+<p>Buttons: <strong>🔓 Unblock</strong>, <strong>✅ Add to whitelist</strong>, <strong>🔎 Info</strong>.</p>
 <hr />
-<h2>8. Уведомление о входе по SSH</h2>
-<p>Содержит пользователя, IP, геолокацию, способ аутентификации и время.</p>
-<p>Если вход выполнен с <strong>IP, с которого раньше успешных входов не было</strong>, бот помечает его как <strong>🆕 New IP</strong>. Такое уведомление приходит с повышенным приоритетом. Если это были не вы — сразу нажмите <strong>🚫 Block</strong>.</p>
-<p>Кнопки: <strong>🚫 Block</strong>, <strong>✅ Add to whitelist</strong>, <strong>🔎 Info</strong>.</p>
+<h2>8. SSH login notification</h2>
+<p>It contains the user, IP, geolocation, authentication method and time.</p>
+<p>If the login was made from an <strong>IP that has had no successful logins before</strong>, the bot marks it as <strong>🆕 New IP</strong>. Such a notification arrives with increased priority. If it was not you, press <strong>🚫 Block</strong> immediately.</p>
+<p>Buttons: <strong>🚫 Block</strong>, <strong>✅ Add to whitelist</strong>, <strong>🔎 Info</strong>.</p>
 <hr />
-<h2>9. Изменения SSH-ключей</h2>
-<p>Эти уведомления формирует модуль <strong>SSH Key Guard</strong>. Бот сообщает:</p>
+<h2>9. SSH key changes</h2>
+<p>These notifications are generated by the <strong>SSH Key Guard</strong> module. The bot reports:</p>
 <ul>
-<li>что именно произошло: ключ <strong>добавлен</strong>, <strong>удалён</strong> или <strong>изменён</strong>;</li>
-<li>аккаунт и файл <code>authorized_keys</code>;</li>
-<li>тип ключа, fingerprint и комментарий;</li>
-<li>кто изменил: пользователь, процесс, команда (если доступен <code>auditd</code>);</li>
-<li>IP-адрес источника, если удалось определить.</li>
+<li>what exactly happened: the key was <strong>added</strong>, <strong>removed</strong>, or <strong>changed</strong>;</li>
+<li>the account and the <code>authorized_keys</code> file;</li>
+<li>the key type, fingerprint and comment;</li>
+<li>who made the change: user, process, command (if <code>auditd</code> is available);</li>
+<li>the source IP address, if it could be determined.</li>
 </ul>
-<p>Удаление ключа считается критичным событием. Если вы не вносили изменений — проверьте сервер немедленно.</p>
+<p>Removing a key is considered a critical event. If you did not make the change, check the server immediately.</p>
 <hr />
-<h2>10. Уведомления о службах</h2>
-<p>Бот сообщает об изменении системных служб: запуск, остановка, изменение состояния.</p>
+<h2>10. Service notifications</h2>
+<p>The bot reports changes to system services: start, stop, state change.</p>
 <ul>
-<li>Служебные и шумные процессы (сессии, обновления, таймеры и т.п.) отфильтровываются.</li>
-<li>Одинаковые события по одной службе не повторяются в течение 10 минут.</li>
-<li>Остановка важных служб — SSH, фаервола, <code>fail2ban</code>, <code>auditd</code>, ServerGuard — приходит как <strong>критическое</strong> уведомление.</li>
+<li>Service and noisy processes (sessions, updates, timers, etc.) are filtered out.</li>
+<li>Identical events for the same service are not repeated for 10 minutes.</li>
+<li>Stopping important services — SSH, the firewall, <code>fail2ban</code>, <code>auditd</code>, ServerGuard — arrives as a <strong>critical</strong> notification.</li>
 </ul>
 <hr />
-<h2>11. Ежедневный отчёт</h2>
-<p>Раз в день (по умолчанию в <strong>9:00 по времени сервера</strong>) бот присылает сводку за 24 часа:</p>
+<h2>11. Daily report</h2>
+<p>Once a day (by default at <strong>9:00 server time</strong>) the bot sends a summary for the last 24 hours:</p>
 <ul>
-<li>число неудачных попыток и уникальных IP-атакующих;</li>
-<li>число успешных входов;</li>
-<li>изменения SSH-ключей;</li>
-<li>новые и активные блокировки;</li>
-<li>топ атакующих и список входов.</li>
+<li>the number of failed attempts and unique attacking IPs;</li>
+<li>the number of successful logins;</li>
+<li>SSH key changes;</li>
+<li>new and active blocks;</li>
+<li>top attackers and the list of logins.</li>
 </ul>
-<p>Час отправки можно выбрать: <strong>6, 9, 18 или 22</strong>. Отчёт можно выключить.</p>
+<p>You can choose the sending hour: <strong>6, 9, 18 or 22</strong>. The report can be disabled.</p>
 <hr />
-<h2>12. Настройка уведомлений</h2>
-<p>Откройте <strong>🔔 Notifications</strong> и нажимайте на пункты — ✅ включено, ❌ выключено.</p>
+<h2>12. Configuring notifications</h2>
+<p>Open <strong>🔔 Notifications</strong> and tap the items — ✅ enabled, ❌ disabled.</p>
 <table>
 <thead>
 <tr>
-<th>Пункт</th>
-<th>Что делает</th>
+<th>Item</th>
+<th>What it does</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>⭐ Important only</td>
-<td>Скрывает второстепенные события</td>
+<td>Hides secondary events</td>
 </tr>
 <tr>
 <td>🚫 Blocks</td>
-<td>Уведомления о блокировках</td>
+<td>Notifications about blocks</td>
 </tr>
 <tr>
 <td>✅ Unblocks</td>
-<td>Уведомления о разблокировках</td>
+<td>Notifications about unblocks</td>
 </tr>
 <tr>
 <td>🔑 All successful logins</td>
-<td>Каждый успешный вход</td>
+<td>Every successful login</td>
 </tr>
 <tr>
 <td>🆕 Login from a new IP</td>
-<td>Вход с неизвестного IP</td>
+<td>Login from an unknown IP</td>
 </tr>
 <tr>
 <td>⚠️ Failed attempts</td>
-<td>Неудачные попытки</td>
+<td>Failed attempts</td>
 </tr>
 <tr>
 <td>🔧 Service changes</td>
-<td>События служб</td>
+<td>Service events</td>
 </tr>
 <tr>
 <td>🔐 SSH key changes</td>
-<td>Изменения SSH-ключей</td>
+<td>SSH key changes</td>
 </tr>
 <tr>
 <td>🌍 IP geolocation</td>
-<td>Показывать страну и провайдера</td>
+<td>Show country and provider</td>
 </tr>
 <tr>
 <td>📅 Daily report</td>
-<td>Ежедневный отчёт</td>
+<td>Daily report</td>
 </tr>
 </tbody>
 </table>
-<p>Режим <strong>Important only</strong> включён по умолчанию: разблокировки, неудачные попытки и запуск служб скрываются, чтобы не отвлекать. Выключите его, если хотите видеть всё.</p>
+<p>The <strong>Important only</strong> mode is enabled by default: unblocks, failed attempts and service starts are hidden so as not to distract you. Turn it off if you want to see everything.</p>
 <hr />
-<h2>13. Тишина и критические уведомления</h2>
-<p>Чтобы временно отключить уведомления:</p>
-<pre><code class="language-text">/mute 60      — на 60 минут (по умолчанию 60, максимум 7 суток)
-/unmute       — включить обратно
+<h2>13. Mute and critical notifications</h2>
+<p>To temporarily disable notifications:</p>
+<pre><code class="language-text">/mute 60      — for 60 minutes (default 60, maximum 7 days)
+/unmute       — turn back on
 </code></pre>
-<p>Также можно нажать <strong>🔕 1h</strong>, <strong>🔕 8h</strong> или <strong>🔔 Unmute</strong> в меню уведомлений.</p>
-<p><strong>Критические уведомления приходят всегда</strong>, даже в режиме тишины: вход с нового IP, удаление SSH-ключа, остановка важной службы.</p>
+<p>You can also press <strong>🔕 1h</strong>, <strong>🔕 8h</strong> or <strong>🔔 Unmute</strong> in the notifications menu.</p>
+<p><strong>Critical notifications always arrive</strong>, even in mute mode: login from a new IP, SSH key removal, stopping an important service.</p>
 <hr />
-<h2>14. Защита от потока сообщений</h2>
-<p>Если событий очень много (например, идёт массовая атака), бот не засыпает вас сообщениями: часть уведомлений подавляется, а затем приходит короткое сообщение <strong>🌊 Flood protection</strong> с количеством пропущенных. Полные данные при этом остаются в журналах и в разделах <strong>Events</strong> и <strong>Status</strong>.</p>
+<h2>14. Flood protection</h2>
+<p>If there are a lot of events (for example, a mass attack is underway), the bot does not bury you in messages: some notifications are suppressed, and then a short <strong>🌊 Flood protection</strong> message arrives with the number of skipped ones. The full data remains in the logs and in the <strong>Events</strong> and <strong>Status</strong> sections.</p>
 <hr />
-<h2>15. Управление защитой</h2>
-<p>Раздел <strong>🛡 Protection</strong> позволяет менять параметры защиты от подбора паролей прямо из Telegram:</p>
+<h2>15. Managing protection</h2>
+<p>The <strong>🛡 Protection</strong> section lets you change password-guessing protection parameters directly from Telegram:</p>
 <table>
 <thead>
 <tr>
-<th>Параметр</th>
-<th>Варианты</th>
+<th>Parameter</th>
+<th>Options</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Включить / выключить защиту</td>
-<td>кнопка</td>
+<td>Enable / disable protection</td>
+<td>button</td>
 </tr>
 <tr>
-<td>Порог неудачных попыток</td>
+<td>Failed attempt threshold</td>
 <td>3, 5, 10, 20</td>
 </tr>
 <tr>
-<td>Срок блокировки</td>
-<td>10 минут, 1 час, 6 часов, 24 часа, 7 дней</td>
+<td>Block duration</td>
+<td>10 minutes, 1 hour, 6 hours, 24 hours, 7 days</td>
 </tr>
 <tr>
-<td>Постоянная блокировка</td>
+<td>Permanent block</td>
 <td>ON / OFF</td>
 </tr>
 </tbody>
 </table>
-<p>Изменения применяются примерно в течение 5 секунд. Выбранный пункт отмечается значком ●.</p>
-<p>Ослабляйте защиту осознанно: слишком высокий порог или выключенная защита облегчают подбор паролей.</p>
+<p>Changes take effect within about 5 seconds. The selected item is marked with ●.</p>
+<p>Loosen protection deliberately: too high a threshold or disabled protection makes password guessing easier.</p>
 <hr />
-<h2>16. Блокировка и разблокировка IP</h2>
-<p><strong>Карточка IP.</strong> Отправьте боту любой IP-адрес — он покажет карточку:</p>
+<h2>16. Blocking and unblocking IPs</h2>
+<p><strong>IP card.</strong> Send the bot any IP address — it will show a card:</p>
 <ul>
-<li>геолокацию и провайдера;</li>
-<li>статус (заблокирован ли, сколько осталось);</li>
-<li>находится ли в whitelist;</li>
-<li>число неудачных попыток и входов за 7 дней;</li>
-<li>какие имена пользователей пробовали;</li>
-<li>кнопки <strong>Block / Unblock</strong> и <strong>Add to / Remove from whitelist</strong>.</li>
+<li>geolocation and provider;</li>
+<li>status (whether it is blocked, how much time is left);</li>
+<li>whether it is in the whitelist;</li>
+<li>the number of failed attempts and logins over 7 days;</li>
+<li>which usernames were tried;</li>
+<li>the <strong>Block / Unblock</strong> and <strong>Add to / Remove from whitelist</strong> buttons.</li>
 </ul>
-<p><strong>Команды:</strong></p>
-<pre><code class="language-text">/ip 1.2.3.4              — карточка IP
-/block 1.2.3.4           — блокировка с параметрами по умолчанию
-/block 1.2.3.4 60        — на 60 минут
-/block 1.2.3.4 perm      — навсегда
-/unblock 1.2.3.4         — разблокировать
+<p><strong>Commands:</strong></p>
+<pre><code class="language-text">/ip 1.2.3.4              — IP card
+/block 1.2.3.4           — block with default parameters
+/block 1.2.3.4 60        — for 60 minutes
+/block 1.2.3.4 perm      — forever
+/unblock 1.2.3.4         — unblock
 </code></pre>
-<p>В разделе <strong>🚫 Blocks</strong> видны активные блокировки со сроком; кнопка <strong>Unblock all</strong> снимает все блокировки после подтверждения.</p>
-<p><strong>Нельзя заблокировать:</strong> IP из whitelist и собственный IP сервера.</p>
+<p>The <strong>🚫 Blocks</strong> section shows active blocks with their duration; the <strong>Unblock all</strong> button lifts all blocks after confirmation.</p>
+<p><strong>You cannot block:</strong> IPs from the whitelist and the server's own IP.</p>
 <hr />
 <h2>17. Whitelist</h2>
-<p>Whitelist — доверенные IP, которые не блокируются автоматически.</p>
-<pre><code class="language-text">/whitelist                 — показать список
-/whitelist add 1.2.3.4     — добавить
-/whitelist del 1.2.3.4     — удалить
+<p>Whitelist — trusted IPs that are not blocked automatically.</p>
+<pre><code class="language-text">/whitelist                 — show the list
+/whitelist add 1.2.3.4     — add
+/whitelist del 1.2.3.4     — remove
 </code></pre>
-<p>Добавлять и удалять можно и кнопками в карточках и уведомлениях. Если IP уже был заблокирован, при добавлении в whitelist блокировка снимается.</p>
-<p>Добавляйте только адреса, которым действительно доверяете.</p>
+<p>You can also add and remove with buttons in the cards and notifications. If the IP was already blocked, adding it to the whitelist removes the block.</p>
+<p>Only add addresses that you truly trust.</p>
 <hr />
-<h2>18. Все команды</h2>
+<h2>18. All commands</h2>
 <table>
 <thead>
 <tr>
-<th>Команда</th>
-<th>Назначение</th>
+<th>Command</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>/start КОД</code></td>
-<td>Регистрация владельца</td>
+<td><code>/start CODE</code></td>
+<td>Owner registration</td>
 </tr>
 <tr>
 <td><code>/menu</code></td>
-<td>Главное меню</td>
+<td>Main menu</td>
 </tr>
 <tr>
 <td><code>/status</code></td>
-<td>Статус и статистика</td>
+<td>Status and statistics</td>
 </tr>
 <tr>
 <td><code>/blocks</code></td>
-<td>Активные блокировки</td>
+<td>Active blocks</td>
 </tr>
 <tr>
 <td><code>/events</code></td>
-<td>Последние события</td>
+<td>Latest events</td>
 </tr>
 <tr>
 <td><code>/top</code></td>
-<td>Топ атакующих</td>
+<td>Top attackers</td>
 </tr>
 <tr>
 <td><code>/server</code></td>
-<td>Состояние сервера</td>
+<td>Server status</td>
 </tr>
 <tr>
 <td><code>/ip IP</code></td>
-<td>Информация об IP</td>
+<td>IP information</td>
 </tr>
 <tr>
-<td><code>/block IP [минуты \| perm]</code></td>
-<td>Заблокировать IP</td>
+<td><code>/block IP [minutes \| perm]</code></td>
+<td>Block an IP</td>
 </tr>
 <tr>
 <td><code>/unblock IP</code></td>
-<td>Разблокировать IP</td>
+<td>Unblock an IP</td>
 </tr>
 <tr>
 <td><code>/whitelist [add \| del IP]</code></td>
-<td>Управление whitelist</td>
+<td>Whitelist management</td>
 </tr>
 <tr>
-<td><code>/mute [минуты]</code></td>
-<td>Отключить некритичные уведомления</td>
+<td><code>/mute [minutes]</code></td>
+<td>Disable non-critical notifications</td>
 </tr>
 <tr>
 <td><code>/unmute</code></td>
-<td>Включить уведомления</td>
+<td>Enable notifications</td>
 </tr>
 <tr>
 <td><code>/help</code></td>
-<td>Справка</td>
+<td>Help</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>19. Геолокация и приватность</h2>
-<p>Для публичных IP бот может показывать страну, город и провайдера (а также пометку «hosting / VPN / proxy»). Для этого IP-адрес отправляется <strong>внешнему сервису геолокации</strong>. Для локальных адресов запрос не выполняется.</p>
+<h2>19. Geolocation and privacy</h2>
+<p>For public IPs, the bot can show the country, city and provider (as well as a “hosting / VPN / proxy” label). To do this, the IP address is sent to an <strong>external geolocation service</strong>. No request is made for local addresses.</p>
 <ul>
-<li>Геолокация примерная и не определяет реальное местоположение человека.</li>
-<li>Если не хотите передавать IP третьим сторонам — выключите <strong>🌍 IP geolocation</strong> в настройках уведомлений.</li>
+<li>Geolocation is approximate and does not determine a person's real location.</li>
+<li>If you do not want to share IPs with third parties, turn off <strong>🌍 IP geolocation</strong> in the notification settings.</li>
 </ul>
-<p>Помните, что уведомления проходят через серверы Telegram. Не отправляйте через бота данные, которые не должны покидать сервер.</p>
+<p>Keep in mind that notifications pass through Telegram servers. Do not send data through the bot that should not leave the server.</p>
 <hr />
-<h2>20. Чего бот не делает</h2>
+<h2>20. What the bot does not do</h2>
 <ul>
-<li>не заменяет защиту сервера — он <strong>информирует</strong> и <strong>выполняет ваши команды</strong>;</li>
-<li>не блокирует IP без модуля защиты ServerGuard или без вашей команды;</li>
-<li>не видит событий, которые не фиксируют другие модули;</li>
-<li>не работает в группах и каналах, только в личном чате с владельцем;</li>
-<li>не гарантирует доставку при проблемах с сетью или Telegram.</li>
+<li>it does not replace server protection — it <strong>informs</strong> and <strong>executes your commands</strong>;</li>
+<li>it does not block IPs without the ServerGuard protection module or without your command;</li>
+<li>it does not see events that other modules do not record;</li>
+<li>it does not work in groups or channels, only in a private chat with the owner;</li>
+<li>it does not guarantee delivery during network or Telegram problems.</li>
 </ul>
 <hr />
-<h2>21. Если что-то не работает</h2>
+<h2>21. If something is not working</h2>
 <table>
 <thead>
 <tr>
-<th>Проблема</th>
-<th>Что проверить</th>
+<th>Problem</th>
+<th>What to check</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Бот не отвечает</td>
-<td>Запущена ли служба бота (раздел Telegram bot в ServerGuard → <strong>Check status</strong>, <strong>Show logs</strong>)</td>
+<td>The bot does not respond</td>
+<td>Whether the bot service is running (the Telegram bot section in ServerGuard → <strong>Check status</strong>, <strong>Show logs</strong>)</td>
 </tr>
 <tr>
-<td>«Нет активного кода»</td>
-<td>Сгенерируйте новый код в ServerGuard</td>
+<td>“No active code”</td>
+<td>Generate a new code in ServerGuard</td>
 </tr>
 <tr>
-<td>Код истёк или неверный</td>
-<td>Код действует 5 минут; создайте новый и отправьте точно как в ServerGuard</td>
+<td>The code has expired or is incorrect</td>
+<td>The code is valid for 5 minutes; create a new one and send it exactly as shown in ServerGuard</td>
 </tr>
 <tr>
-<td>«Too many wrong attempts»</td>
-<td>Подождите указанное время и повторите</td>
+<td>“Too many wrong attempts”</td>
+<td>Wait the indicated time and try again</td>
 </tr>
 <tr>
-<td>Нет уведомлений</td>
-<td>Не включён ли режим тишины <code>/mute</code>; включены ли нужные пункты в 🔔 Notifications; не включён ли Important only</td>
+<td>No notifications</td>
+<td>Whether mute mode <code>/mute</code> is enabled; whether the needed items in 🔔 Notifications are enabled; whether Important only is enabled</td>
 </tr>
 <tr>
-<td>Нет уведомлений о ключах</td>
-<td>Работает ли SSH Key Guard</td>
+<td>No notifications about keys</td>
+<td>Whether SSH Key Guard is running</td>
 </tr>
 <tr>
-<td>Не выполняется блокировка</td>
-<td>Бот должен работать от root; на сервере должен быть доступен <code>ufw</code></td>
+<td>Blocking is not being performed</td>
+<td>The bot must run as root; <code>ufw</code> must be available on the server</td>
 </tr>
 <tr>
-<td>Ошибка «This is the server's own IP»</td>
-<td>Нельзя заблокировать собственный IP сервера</td>
+<td>Error “This is the server's own IP”</td>
+<td>You cannot block the server's own IP</td>
 </tr>
 <tr>
-<td>Доступ получил другой аккаунт</td>
-<td>Любой, у кого был действующий код, мог зарегистрироваться; создайте новый код и зарегистрируйтесь снова</td>
+<td>Another account gained access</td>
+<td>Anyone who had a valid code could register; create a new code and register again</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>22. Рекомендации</h2>
+<h2>22. Recommendations</h2>
 <ul>
-<li>держите включёнными <strong>вход с нового IP</strong>, <strong>блокировки</strong> и <strong>изменения SSH-ключей</strong>;</li>
-<li>оставьте <strong>Important only</strong>, пока не привыкнете к потоку событий;</li>
-<li>включите <strong>ежедневный отчёт</strong> в удобное время;</li>
-<li>добавьте в whitelist свои постоянные адреса, чтобы не заблокировать себя;</li>
-<li>не публикуйте токен бота и коды подтверждения (в том числе на скриншотах);</li>
-<li>включите двухфакторную аутентификацию в Telegram — доступ к вашему аккаунту даёт доступ к управлению блокировками;</li>
-<li>используйте бота вместе с остальными модулями: Security, SSH Hardening, SSH Key Guard, FileGuard.</li>
+<li>keep <strong>login from a new IP</strong>, <strong>blocks</strong> and <strong>SSH key changes</strong> enabled;</li>
+<li>leave <strong>Important only</strong> on until you get used to the flow of events;</li>
+<li>enable the <strong>daily report</strong> at a convenient time;</li>
+<li>add your permanent addresses to the whitelist so you do not block yourself;</li>
+<li>do not publish the bot token or verification codes (including in screenshots);</li>
+<li>enable two-factor authentication in Telegram — access to your account gives access to block management;</li>
+<li>use the bot together with the other modules: Security, SSH Hardening, SSH Key Guard, FileGuard.</li>
 </ul>
 <hr />
-<p><em>Документация описывает работу Telegram Bot на пользовательском уровне. Внутренние детали реализации относятся к технической документации разработчиков.</em></p>
+<p><em>This documentation describes how the Telegram Bot works at the user level. Internal implementation details belong to the developers' technical documentation.</em></p>
         </article>
-        <!-- ================= КОНЕЦ ДОКУМЕНТАЦИИ ================= -->
+        <!-- ================= END OF DOCUMENTATION ================= -->
 
         <nav class="pager">
             <a href="security.html" class="prev"><small>← Previous</small><strong>Security</strong></a>

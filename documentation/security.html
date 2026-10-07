@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,21 +51,21 @@
         <div class="module-head">
             <div class="eyebrow">MODULE 01 / SECURITY</div>
             <h1>Security</h1>
-            <p>Защита Linux-сервера от SSH brute-force атак.</p>
+            <p>Protection of a Linux server from SSH brute-force attacks.</p>
         </div>
 
         
         <article class="doc-article">
-<p><strong>ServerGuard Security</strong> — модуль безопасности ServerGuard, предназначенный для автоматического обнаружения и ограничения массовых попыток подбора учётных данных через SSH.</p>
-<p>Модуль работает непосредственно на Linux-сервере и функционирует в фоновом режиме. Управление и настройка выполняются через ServerGuard.</p>
-<p>Основная задача Security:</p>
+<p><strong>ServerGuard Security</strong> — a ServerGuard security module designed for automatic detection and restriction of mass attempts to guess credentials over SSH.</p>
+<p>The module runs directly on the Linux server and operates in the background. Management and configuration are performed through ServerGuard.</p>
+<p>The main task of Security:</p>
 <blockquote>
-<p>обнаружить подозрительную серию неудачных попыток SSH-аутентификации и автоматически ограничить источник таких попыток.</p>
+<p>to detect a suspicious series of failed SSH authentication attempts and automatically restrict the source of such attempts.</p>
 </blockquote>
 <hr />
-<h2 id="1-что-защищает-serverguard-security">1. Что защищает ServerGuard Security</h2>
-<p>SSH является одним из основных способов удалённого администрирования Linux-серверов.</p>
-<p>Если сервер доступен из Интернета, злоумышленники могут автоматически отправлять большое количество попыток входа, например:</p>
+<h2 id="1-что-защищает-serverguard-security">1. What ServerGuard Security protects against</h2>
+<p>SSH is one of the main methods of remote administration of Linux servers.</p>
+<p>If a server is accessible from the Internet, attackers can automatically send a large number of login attempts, for example:</p>
 <pre class="text"><code>username: root
 password: 123456
 
@@ -76,130 +76,130 @@ username: ubuntu
 password: qwerty
 
 ...</code></pre>
-<p>Такие атаки называются <strong>brute-force attacks</strong>.</p>
-<p>ServerGuard Security предназначен для автоматического обнаружения подобных попыток.</p>
-<p>Вместо того чтобы администратор самостоятельно просматривал журналы SSH, система постоянно анализирует события аутентификации и реагирует на подозрительную активность.</p>
+<p>Such attacks are called <strong>brute-force attacks</strong>.</p>
+<p>ServerGuard Security is designed for automatic detection of such attempts.</p>
+<p>Instead of the administrator manually reviewing SSH logs, the system constantly analyzes authentication events and responds to suspicious activity.</p>
 <hr />
-<h2 id="2-как-работает-защита">2. Как работает защита</h2>
-<p>Упрощённая схема:</p>
+<h2 id="2-как-работает-защита">2. How protection works</h2>
+<p>Simplified diagram:</p>
 <pre class="text"><code>              SSH
-               |
-               v
-       Authentication
-               |
-               v
-       System security logs
-               |
-               v
-       ServerGuard Security
-               |
-               v
-       Анализ попыток входа
-               |
-               v
-        Определение источника
-               |
-               v
-         Проверка правил
-               |
-               v
-       Подсчёт неудачных
-          попыток
-               |
-               v
-       Порог превышен?
-          /          \
-        НЕТ           ДА
-         |             |
-         v             v
-     Продолжить     Ограничить
-                     источник</code></pre>
-<p>Таким образом, ServerGuard не пытается блокировать каждого пользователя после первой ошибки.</p>
-<p>Система предназначена именно для обнаружения <strong>серий подозрительных попыток</strong>.</p>
+                |
+                v
+        Authentication
+                |
+                v
+        System security logs
+                |
+                v
+        ServerGuard Security
+                |
+                v
+        Analysis of login attempts
+                |
+                v
+         Source identification
+                |
+                v
+          Rule check
+                |
+                v
+        Counting failed
+           attempts
+                |
+                v
+        Threshold exceeded?
+           /          \
+         NO            YES
+          |             |
+          v             v
+      Continue       Restrict
+                     source</code></pre>
+<p>Thus, ServerGuard does not try to block every user after the first mistake.</p>
+<p>The system is designed specifically to detect <strong>series of suspicious attempts</strong>.</p>
 <hr />
-<h2 id="3-почему-одна-неправильная-попытка-не-считается-атакой">3. Почему одна неправильная попытка не считается атакой</h2>
-<p>Обычный пользователь может ошибиться при вводе пароля.</p>
-<p>Например:</p>
-<pre class="text"><code>Попытка 1 → ошибка
-Попытка 2 → ошибка
-Попытка 3 → успешный вход</code></pre>
-<p>Сам факт наличия нескольких ошибок ещё не означает, что сервер атакуют.</p>
-<p>Поэтому Security использует настраиваемый порог.</p>
-<p>Например, если администратор установил:</p>
-<pre class="text"><code>5 неудачных попыток</code></pre>
-<p>система может рассматривать достижение этого количества как основание для автоматического ограничения источника.</p>
-<p>Конкретные значения зависят от конфигурации сервера.</p>
+<h2 id="3-почему-одна-неправильная-попытка-не-считается-атакой">3. Why a single incorrect attempt is not considered an attack</h2>
+<p>An ordinary user may make a mistake when entering a password.</p>
+<p>For example:</p>
+<pre class="text"><code>Attempt 1 → error
+Attempt 2 → error
+Attempt 3 → successful login</code></pre>
+<p>The mere fact that several errors exist does not yet mean that the server is under attack.</p>
+<p>Therefore Security uses a configurable threshold.</p>
+<p>For example, if the administrator has set:</p>
+<pre class="text"><code>5 failed attempts</code></pre>
+<p>the system may consider reaching this number as grounds for automatically restricting the source.</p>
+<p>The specific values depend on the server configuration.</p>
 <hr />
-<h2 id="4-контроль-источника-атак">4. Контроль источника атак</h2>
-<p>Security связывает неудачные попытки авторизации с источником подключения.</p>
-<p>Это позволяет обрабатывать разные адреса независимо.</p>
-<p>Например:</p>
-<pre class="text"><code>IP A → 2 неудачные попытки
-IP B → 1 неудачная попытка
-IP C → 5 неудачных попыток</code></pre>
-<p>При достижении установленного порога действие применяется к соответствующему источнику.</p>
-<p>Это позволяет не блокировать весь сервер из-за активности одного адреса.</p>
+<h2 id="4-контроль-источника-атак">4. Attack source control</h2>
+<p>Security associates failed authorization attempts with the connection source.</p>
+<p>This allows different addresses to be handled independently.</p>
+<p>For example:</p>
+<pre class="text"><code>IP A → 2 failed attempts
+IP B → 1 failed attempt
+IP C → 5 failed attempts</code></pre>
+<p>When the configured threshold is reached, the action is applied to the corresponding source.</p>
+<p>This avoids blocking the entire server because of the activity of a single address.</p>
 <hr />
-<h2 id="5-автоматическая-блокировка">5. Автоматическая блокировка</h2>
-<p>После достижения установленного порога ServerGuard может передать информацию механизму firewall Linux.</p>
-<p>В результате источник атаки получает ограничение на дальнейшие подключения.</p>
-<p>Упрощённо:</p>
-<pre class="text"><code>Подозрительная активность
+<h2 id="5-автоматическая-блокировка">5. Automatic blocking</h2>
+<p>After the configured threshold is reached, ServerGuard can pass the information to the Linux firewall mechanism.</p>
+<p>As a result, the attack source receives a restriction on further connections.</p>
+<p>Simplified:</p>
+<pre class="text"><code>Suspicious activity
           |
           v
-Порог достигнут
+Threshold reached
           |
           v
 Firewall
           |
           v
-Источник заблокирован</code></pre>
-<p>Таким образом, ServerGuard не просто сообщает администратору:</p>
+Source blocked</code></pre>
+<p>Thus, ServerGuard does not merely notify the administrator:</p>
 <blockquote>
-<p>«На сервер поступает много попыток входа».</p>
+<p>«The server is receiving many login attempts».</p>
 </blockquote>
-<p>Он может автоматически применить защитное действие.</p>
+<p>It can automatically apply a protective action.</p>
 <hr />
-<h2 id="6-временная-и-постоянная-блокировка">6. Временная и постоянная блокировка</h2>
-<p>В зависимости от конфигурации администратора блокировка может иметь различный характер.</p>
-<h4 id="временная-блокировка">Временная блокировка</h4>
-<p>Источник ограничивается на определённый период.</p>
-<p>После завершения периода ограничение может быть снято автоматически.</p>
-<p>Схема:</p>
-<pre class="text"><code>Атака
+<h2 id="6-временная-и-постоянная-блокировка">6. Temporary and permanent blocking</h2>
+<p>Depending on the administrator's configuration, blocking may have a different nature.</p>
+<h4 id="временная-блокировка">Temporary blocking</h4>
+<p>The source is restricted for a certain period.</p>
+<p>After the period ends, the restriction may be lifted automatically.</p>
+<p>Diagram:</p>
+<pre class="text"><code>Attack
   ↓
-Обнаружение
+Detection
   ↓
-Блокировка
+Blocking
   ↓
-Ожидание
+Waiting
   ↓
-Разблокировка</code></pre>
-<h4 id="постоянная-блокировка">Постоянная блокировка</h4>
-<p>Источник остаётся заблокированным до тех пор, пока администратор или система не выполнит соответствующее действие.</p>
-<p>Выбор режима зависит от политики безопасности сервера.</p>
+Unblocking</code></pre>
+<h4 id="постоянная-блокировка">Permanent blocking</h4>
+<p>The source remains blocked until the administrator or the system performs the corresponding action.</p>
+<p>The choice of mode depends on the server's security policy.</p>
 <hr />
 <h2 id="7-whitelist">7. Whitelist</h2>
-<p>ServerGuard поддерживает список доверенных источников.</p>
-<p>Администратор может указать адреса, которые не должны попадать под автоматическую блокировку.</p>
-<p>Это может быть полезно для:</p>
+<p>ServerGuard supports a list of trusted sources.</p>
+<p>The administrator can specify addresses that should not be subject to automatic blocking.</p>
+<p>This may be useful for:</p>
 <ul>
-<li>административных сетей;</li>
-<li>доверенных серверов;</li>
-<li>систем мониторинга;</li>
-<li>автоматизированных сервисов;</li>
-<li>других известных источников подключений.</li>
+<li>administrative networks;</li>
+<li>trusted servers;</li>
+<li>monitoring systems;</li>
+<li>automated services;</li>
+<li>other known connection sources.</li>
 </ul>
-<p>При настройке whitelist необходимо внимательно проверять добавляемые адреса.</p>
-<p>Если в список доверенных случайно добавить нежелательный источник, автоматическая защита не сможет применить к нему обычное правило блокировки.</p>
+<p>When configuring the whitelist, the addresses being added must be carefully verified.</p>
+<p>If an unwanted source is accidentally added to the trusted list, the automatic protection will not be able to apply the usual blocking rule to it.</p>
 <hr />
-<h2 id="8-работа-в-фоновом-режиме">8. Работа в фоновом режиме</h2>
-<p>Security не требует постоянного открытия ServerGuard на компьютере пользователя.</p>
-<p>После установки защитный компонент работает непосредственно на Linux-сервере как системный фоновый процесс.</p>
-<p>Это означает:</p>
+<h2 id="8-работа-в-фоновом-режиме">8. Operation in the background</h2>
+<p>Security does not require ServerGuard to be constantly open on the user's computer.</p>
+<p>After installation, the protective component runs directly on the Linux server as a system background process.</p>
+<p>This means:</p>
 <pre class="text"><code>Windows ServerGuard
         |
-        | управление
+        | management
         v
 Linux Server
         |
@@ -207,14 +207,14 @@ Linux Server
 Security
         |
         v
-работает самостоятельно</code></pre>
-<p>Windows-приложение используется для управления модулем, просмотра его состояния и выполнения административных операций.</p>
-<p>Сам механизм обнаружения атак работает на сервере.</p>
+runs independently</code></pre>
+<p>The Windows application is used to manage the module, view its status, and perform administrative operations.</p>
+<p>The attack detection mechanism itself runs on the server.</p>
 <hr />
-<h2 id="9-работа-после-перезагрузки-сервера">9. Работа после перезагрузки сервера</h2>
-<p>Security интегрируется с системным менеджером Linux.</p>
-<p>Это позволяет запускать защитный компонент автоматически после перезагрузки сервера.</p>
-<p>Общий процесс:</p>
+<h2 id="9-работа-после-перезагрузки-сервера">9. Operation after server reboot</h2>
+<p>Security integrates with the Linux system manager.</p>
+<p>This allows the protective component to be started automatically after a server reboot.</p>
+<p>General process:</p>
 <pre class="text"><code>Linux Server Restart
         |
         v
@@ -225,159 +225,159 @@ ServerGuard Security
         |
         v
 Protection active</code></pre>
-<p>Поэтому администратору не требуется вручную запускать защитный скрипт после каждой перезагрузки.</p>
+<p>Therefore the administrator does not need to manually start the protective script after every reboot.</p>
 <hr />
-<h2 id="10-что-происходит-во-время-атаки">10. Что происходит во время атаки</h2>
-<p>Рассмотрим условный пример.</p>
-<p>Допустим, один источник начинает отправлять большое количество неудачных попыток SSH-аутентификации.</p>
-<p>Система обнаруживает события:</p>
-<pre class="text"><code>Неудачная попытка
+<h2 id="10-что-происходит-во-время-атаки">10. What happens during an attack</h2>
+<p>Let us consider a hypothetical example.</p>
+<p>Suppose a single source begins sending a large number of failed SSH authentication attempts.</p>
+<p>The system detects events:</p>
+<pre class="text"><code>Failed attempt
         ↓
-Неудачная попытка
+Failed attempt
         ↓
-Неудачная попытка
+Failed attempt
         ↓
 ...</code></pre>
-<p>Security отслеживает количество таких событий.</p>
-<p>После достижения настроенного порога:</p>
+<p>Security tracks the number of such events.</p>
+<p>After the configured threshold is reached:</p>
 <pre class="text"><code>Threshold reached
         ↓
 Security action
         ↓
 Firewall restriction</code></pre>
-<p>Дальнейшие подключения с этого источника ограничиваются средствами firewall.</p>
+<p>Further connections from this source are restricted by firewall means.</p>
 <hr />
-<h2 id="11-что-получает-администратор">11. Что получает администратор</h2>
-<p>ServerGuard позволяет администратору контролировать состояние защитного механизма.</p>
-<p>В зависимости от версии ServerGuard могут быть доступны:</p>
+<h2 id="11-что-получает-администратор">11. What the administrator gets</h2>
+<p>ServerGuard allows the administrator to monitor the state of the protective mechanism.</p>
+<p>Depending on the ServerGuard version, the following may be available:</p>
 <ul>
-<li>состояние Security;</li>
-<li>состояние системного сервиса;</li>
-<li>информация о событиях;</li>
-<li>настройки защиты;</li>
-<li>список заблокированных адресов;</li>
-<li>статистика;</li>
-<li>управление блокировками;</li>
-<li>обновление защитного компонента.</li>
+<li>Security status;</li>
+<li>system service status;</li>
+<li>information about events;</li>
+<li>protection settings;</li>
+<li>list of blocked addresses;</li>
+<li>statistics;</li>
+<li>blocking management;</li>
+<li>updating the protective component.</li>
 </ul>
-<p>Это позволяет выполнять основные операции через ServerGuard вместо ручного управления отдельными Linux-командами.</p>
+<p>This allows basic operations to be performed through ServerGuard instead of manually managing individual Linux commands.</p>
 <hr />
-<h2 id="12-архитектура-security">12. Архитектура Security</h2>
-<p>Внутри ServerGuard используется разделение обязанностей.</p>
-<p>Упрощённо архитектура выглядит так:</p>
+<h2 id="12-архитектура-security">12. Security architecture</h2>
+<p>Separation of responsibilities is used inside ServerGuard.</p>
+<p>In simplified form, the architecture looks like this:</p>
 <pre class="text"><code>                 SERVERGUARD
-                      |
-                      v
-              Windows Application
-                      |
-                SSH management
-                      |
-                      v
-                Linux Server
-                      |
-          +-----------+-----------+
-          |                       |
-          v                       v
-      Security               System Service
-          |                       |
-          +-----------+-----------+
-                      |
-                      v
-              Security Engine
-                      |
-                      v
-             SSH Authentication
-                 Events
-                      |
-                      v
-                Event Analysis
-                      |
-                      v
-              Attempt Tracking
-                      |
-                      v
-              Security Decision
-                      |
-                      v
-                  Firewall</code></pre>
-<p>Такое разделение позволяет отделить интерфейс управления от непосредственно работающего на сервере механизма защиты.</p>
+                       |
+                       v
+               Windows Application
+                       |
+                 SSH management
+                       |
+                       v
+                 Linux Server
+                       |
+           +-----------+-----------+
+           |                       |
+           v                       v
+       Security               System Service
+           |                       |
+           +-----------+-----------+
+                       |
+                       v
+               Security Engine
+                       |
+                       v
+              SSH Authentication
+                  Events
+                       |
+                       v
+                 Event Analysis
+                       |
+                       v
+               Attempt Tracking
+                       |
+                       v
+               Security Decision
+                       |
+                       v
+                   Firewall</code></pre>
+<p>This separation allows the management interface to be decoupled from the protection mechanism running directly on the server.</p>
 <hr />
-<h2 id="13-почему-защита-работает-на-linux-а-не-только-в-windows">13. Почему защита работает на Linux, а не только в Windows</h2>
-<p>ServerGuard является инструментом управления Linux-серверами.</p>
-<p>Поэтому обнаружение атак выполняется непосредственно на защищаемом сервере.</p>
-<p>Это имеет важное преимущество:</p>
-<pre class="text"><code>Windows компьютер пользователя
+<h2 id="13-почему-защита-работает-на-linux-а-не-только-в-windows">13. Why protection runs on Linux and not only in Windows</h2>
+<p>ServerGuard is a tool for managing Linux servers.</p>
+<p>Therefore attack detection is performed directly on the protected server.</p>
+<p>This has an important advantage:</p>
+<pre class="text"><code>User's Windows computer
         |
-        | может быть выключен
+        | may be turned off
         |
         X</code></pre>
-<p>При этом:</p>
+<p>At the same time:</p>
 <pre class="text"><code>Linux Server
         |
         v
 Security
         |
         v
-продолжает работать</code></pre>
-<p>То есть работа защитного механизма не должна зависеть от того, открыт ли сейчас Windows-клиент.</p>
+keeps running</code></pre>
+<p>That is, the operation of the protective mechanism should not depend on whether the Windows client is currently open.</p>
 <hr />
-<h2 id="14-защита-является-многоуровневой">14. Защита является многоуровневой</h2>
-<p>Security является только одним из компонентов ServerGuard.</p>
-<p>Общая система может объединять несколько независимых механизмов:</p>
+<h2 id="14-защита-является-многоуровневой">14. Protection is multi-layered</h2>
+<p>Security is only one of the components of ServerGuard.</p>
+<p>The overall system can combine several independent mechanisms:</p>
 <pre class="text"><code>                    ServerGuard
-                         |
-       +-----------------+-----------------+
-       |                 |                 |
-       v                 v                 v
-   SSH Security      File Integrity     SSH Keys
-       |                 |                 |
-       v                 v                 v
- Brute-force         FileGuard        Key Guard
- protection
-       |
-       v
-    Firewall</code></pre>
-<p>Это означает, что ServerGuard не должен рассматриваться как один механизм, который пытается решить все проблемы безопасности.</p>
-<p>Каждый компонент выполняет свою задачу.</p>
+                          |
+        +-----------------+-----------------+
+        |                 |                 |
+        v                 v                 v
+    SSH Security      File Integrity     SSH Keys
+        |                 |                 |
+        v                 v                 v
+  Brute-force         FileGuard        Key Guard
+  protection
+        |
+        v
+     Firewall</code></pre>
+<p>This means that ServerGuard should not be viewed as a single mechanism that tries to solve all security problems.</p>
+<p>Each component performs its own task.</p>
 <hr />
-<h2 id="15-security-не-является-антивирусом">15. Security не является антивирусом</h2>
-<p>Важно правильно понимать назначение модуля.</p>
-<p>Security предназначен прежде всего для защиты SSH от автоматизированных попыток подбора доступа.</p>
-<p>Он не является:</p>
+<h2 id="15-security-не-является-антивирусом">15. Security is not an antivirus</h2>
+<p>It is important to correctly understand the purpose of the module.</p>
+<p>Security is intended primarily to protect SSH from automated attempts to guess access.</p>
+<p>It is not:</p>
 <ul>
-<li>полноценным антивирусом;</li>
-<li>универсальным malware scanner;</li>
-<li>полноценной SIEM;</li>
-<li>полной системой IDS/IPS;</li>
-<li>системой анализа всего сетевого трафика;</li>
-<li>заменой firewall;</li>
-<li>заменой резервного копирования;</li>
-<li>заменой системного администратора.</li>
+<li>a full-fledged antivirus;</li>
+<li>a universal malware scanner;</li>
+<li>a full-fledged SIEM;</li>
+<li>a complete IDS/IPS system;</li>
+<li>a system for analyzing all network traffic;</li>
+<li>a replacement for a firewall;</li>
+<li>a replacement for backups;</li>
+<li>a replacement for a system administrator.</li>
 </ul>
-<p>Security решает более конкретную задачу:</p>
+<p>Security solves a more specific task:</p>
 <blockquote>
-<p><strong>обнаружение подозрительной активности при SSH-аутентификации и автоматическое ограничение источника.</strong></p>
+<p><strong>detection of suspicious activity during SSH authentication and automatic restriction of the source.</strong></p>
 </blockquote>
 <hr />
-<h2 id="16-что-security-не-может-гарантировать">16. Что Security не может гарантировать</h2>
-<p>Ни одна система защиты от brute-force не должна рассматриваться как абсолютная гарантия безопасности.</p>
-<p>Например, Security не решает автоматически следующие проблемы:</p>
+<h2 id="16-что-security-не-может-гарантировать">16. What Security cannot guarantee</h2>
+<p>No brute-force protection system should be regarded as an absolute guarantee of security.</p>
+<p>For example, Security does not automatically solve the following problems:</p>
 <ul>
-<li>украденный пароль;</li>
-<li>украденный SSH-ключ;</li>
-<li>уязвимость самого SSH-сервера;</li>
-<li>уязвимое веб-приложение;</li>
-<li>вредоносное программное обеспечение;</li>
-<li>компрометацию учётной записи;</li>
-<li>уязвимость операционной системы;</li>
-<li>ошибки конфигурации;</li>
-<li>социальную инженерию.</li>
+<li>a stolen password;</li>
+<li>a stolen SSH key;</li>
+<li>a vulnerability in the SSH server itself;</li>
+<li>a vulnerable web application;</li>
+<li>malicious software;</li>
+<li>compromise of an account;</li>
+<li>a vulnerability in the operating system;</li>
+<li>configuration errors;</li>
+<li>social engineering.</li>
 </ul>
-<p>Поэтому Security является <strong>одним из уровней защиты</strong>, а не единственной защитой сервера.</p>
+<p>Therefore Security is <strong>one of the layers of protection</strong>, not the only protection for the server.</p>
 <hr />
-<h2 id="17-почему-serverguard-использует-несколько-механизмов">17. Почему ServerGuard использует несколько механизмов</h2>
-<p>Безопасность сервера нельзя строить вокруг одного правила.</p>
-<p>Например:</p>
+<h2 id="17-почему-serverguard-использует-несколько-механизмов">17. Why ServerGuard uses several mechanisms</h2>
+<p>Server security cannot be built around a single rule.</p>
+<p>For example:</p>
 <pre class="text"><code>SSH protection
        +
 Firewall
@@ -389,341 +389,341 @@ SSH Key monitoring
 File integrity monitoring
        +
 Security monitoring</code></pre>
-<p>дают более комплексный контроль.</p>
-<p>Если одна технология отвечает за обнаружение определённого типа событий, другая может отвечать за ограничение последствий.</p>
-<p>Именно поэтому ServerGuard состоит из отдельных специализированных модулей.</p>
+<p>provide more comprehensive control.</p>
+<p>If one technology is responsible for detecting a certain type of event, another can be responsible for limiting the consequences.</p>
+<p>That is why ServerGuard consists of separate specialized modules.</p>
 <hr />
-<h2 id="18-что-происходит-с-данными">18. Что происходит с данными</h2>
-<p>Security использует служебные данные для хранения информации о своей работе.</p>
-<p>Эти данные могут использоваться для:</p>
+<h2 id="18-что-происходит-с-данными">18. What happens to the data</h2>
+<p>Security uses service data to store information about its operation.</p>
+<p>This data may be used for:</p>
 <ul>
-<li>текущего состояния защиты;</li>
-<li>счётчиков;</li>
-<li>статистики;</li>
-<li>истории событий;</li>
-<li>информации о блокировках;</li>
-<li>настроек модуля.</li>
+<li>the current protection status;</li>
+<li>counters;</li>
+<li>statistics;</li>
+<li>event history;</li>
+<li>information about blocks;</li>
+<li>module settings.</li>
 </ul>
-<p>Рабочие данные находятся на Linux-сервере.</p>
-<p>Это позволяет защитному компоненту продолжать работу независимо от Windows-интерфейса.</p>
+<p>The operational data is located on the Linux server.</p>
+<p>This allows the protective component to continue operating independently of the Windows interface.</p>
 <hr />
-<h2 id="19-обновление-security">19. Обновление Security</h2>
-<p>ServerGuard поддерживает обновление защитного компонента.</p>
-<p>При обновлении система должна сначала подготовить новую версию, выполнить необходимые проверки и только после этого заменить рабочий компонент.</p>
-<p>Также предусматривается резервирование предыдущей версии.</p>
-<p>Общий принцип:</p>
-<pre class="text"><code>Текущая версия
+<h2 id="19-обновление-security">19. Updating Security</h2>
+<p>ServerGuard supports updating the protective component.</p>
+<p>During an update, the system must first prepare the new version, perform the necessary checks, and only then replace the working component.</p>
+<p>Backup of the previous version is also provided for.</p>
+<p>General principle:</p>
+<pre class="text"><code>Current version
        |
        +----&gt; Backup
        |
        v
-Новая версия
+New version
        |
        v
-Проверка
+Check
        |
        v
-Установка
+Installation
        |
        v
-Перезапуск защиты
+Restart of protection
        |
        v
-Проверка состояния</code></pre>
-<p>Такой подход уменьшает вероятность того, что повреждённый или некорректный файл сразу заменит работающий компонент.</p>
+Status check</code></pre>
+<p>This approach reduces the likelihood that a corrupted or incorrect file will immediately replace the working component.</p>
 <hr />
-<h2 id="20-автоматическое-восстановление-работы">20. Автоматическое восстановление работы</h2>
-<p>Защитный компонент запускается как системная служба Linux.</p>
-<p>Системный менеджер может контролировать состояние процесса и повторно запускать его после неожиданного завершения, если это предусмотрено конфигурацией сервера.</p>
-<p>Это повышает устойчивость защиты к отдельным сбоям процесса.</p>
+<h2 id="20-автоматическое-восстановление-работы">20. Automatic recovery of operation</h2>
+<p>The protective component is started as a Linux system service.</p>
+<p>The system manager can monitor the process state and restart it after an unexpected termination, if this is provided for by the server configuration.</p>
+<p>This increases the resilience of the protection to individual process failures.</p>
 <hr />
-<h2 id="21-безопасность-самого-serverguard">21. Безопасность самого ServerGuard</h2>
-<p>ServerGuard использует повышенные системные права для выполнения некоторых защитных операций.</p>
-<p>Это необходимо, поскольку управление системным firewall и некоторыми системными службами требует административных полномочий.</p>
-<p>Поэтому важно:</p>
+<h2 id="21-безопасность-самого-serverguard">21. Security of ServerGuard itself</h2>
+<p>ServerGuard uses elevated system privileges to perform some protective operations.</p>
+<p>This is necessary because managing the system firewall and some system services requires administrative privileges.</p>
+<p>Therefore it is important:</p>
 <ul>
-<li>использовать ServerGuard только на серверах, которыми вы управляете;</li>
-<li>защищать учётные данные администратора;</li>
-<li>использовать сильную аутентификацию;</li>
-<li>не передавать доступ к серверу неизвестным пользователям;</li>
-<li>регулярно обновлять операционную систему;</li>
-<li>контролировать установленные компоненты.</li>
+<li>to use ServerGuard only on servers you manage;</li>
+<li>to protect administrator credentials;</li>
+<li>to use strong authentication;</li>
+<li>not to give server access to unknown users;</li>
+<li>to update the operating system regularly;</li>
+<li>to monitor installed components.</li>
 </ul>
-<p>ServerGuard является инструментом администрирования и безопасности, поэтому его необходимо использовать с соответствующими административными правами и ответственностью.</p>
+<p>ServerGuard is an administration and security tool, so it must be used with the appropriate administrative rights and responsibility.</p>
 <hr />
-<h2 id="22-может-ли-злоумышленник-обойти-защиту-зная-как-она-работает">22. Может ли злоумышленник обойти защиту, зная, как она работает?</h2>
-<p>Знание принципа работы системы само по себе не должно считаться механизмом, от которого зависит безопасность.</p>
-<p>ServerGuard не должен рассчитывать на то, что атакующий:</p>
+<h2 id="22-может-ли-злоумышленник-обойти-защиту-зная-как-она-работает">22. Can an attacker bypass the protection by knowing how it works?</h2>
+<p>Knowledge of the system's operating principle should not by itself be considered a mechanism on which security depends.</p>
+<p>ServerGuard should not count on the attacker:</p>
 <blockquote>
-<p>«не знает, что на сервере установлен Security».</p>
+<p>«does not know that Security is installed on the server».</p>
 </blockquote>
-<p>Например, пользователь может знать, что ServerGuard контролирует SSH-аутентификацию.</p>
-<p>Это не отменяет сам механизм:</p>
-<pre class="text"><code>Атакующий знает о защите
+<p>For example, a user may know that ServerGuard monitors SSH authentication.</p>
+<p>This does not negate the mechanism itself:</p>
+<pre class="text"><code>The attacker knows about the protection
         |
         v
-Пытается атаковать SSH
+Tries to attack SSH
         |
         v
-Security получает событие
+Security receives the event
         |
         v
-Анализ
+Analysis
         |
         v
-Защитное действие</code></pre>
-<p>Поэтому публичная документация ServerGuard может открыто объяснять назначение и принцип работы модулей.</p>
-<p>При этом внутренние детали реализации, которые не нужны пользователю, не обязательно публиковать.</p>
+Protective action</code></pre>
+<p>Therefore ServerGuard's public documentation can openly explain the purpose and operating principle of the modules.</p>
+<p>At the same time, internal implementation details that the user does not need do not have to be published.</p>
 <hr />
-<h2 id="23-что-пользователь-должен-знать">23. Что пользователь должен знать</h2>
-<p>Пользователю важно понимать:</p>
+<h2 id="23-что-пользователь-должен-знать">23. What the user should know</h2>
+<p>It is important for the user to understand:</p>
 <h4 id="serverguard-security">ServerGuard Security:</h4>
 <ul>
-<li>контролирует SSH-аутентификацию;</li>
-<li>обнаруживает большое количество неудачных попыток;</li>
-<li>связывает события с источниками подключений;</li>
-<li>учитывает настроенные исключения;</li>
-<li>может автоматически применять firewall-блокировку;</li>
-<li>поддерживает различные режимы блокировки;</li>
-<li>работает на самом Linux-сервере;</li>
-<li>запускается как системный компонент;</li>
-<li>может работать независимо от открытого Windows-клиента;</li>
-<li>является частью многоуровневой защиты ServerGuard.</li>
+<li>monitors SSH authentication;</li>
+<li>detects a large number of failed attempts;</li>
+<li>associates events with connection sources;</li>
+<li>takes configured exceptions into account;</li>
+<li>can automatically apply a firewall block;</li>
+<li>supports various blocking modes;</li>
+<li>runs on the Linux server itself;</li>
+<li>starts as a system component;</li>
+<li>can operate independently of an open Windows client;</li>
+<li>is part of ServerGuard's multi-layered protection.</li>
 </ul>
 <hr />
-<h2 id="24-что-не-обязательно-раскрывать-в-пользовательской-документации">24. Что не обязательно раскрывать в пользовательской документации</h2>
-<p>Внутренняя реализация ServerGuard содержит дополнительные технические детали.</p>
-<p>Они предназначены прежде всего для разработчиков и администраторов.</p>
-<p>К ним относятся:</p>
+<h2 id="24-что-не-обязательно-раскрывать-в-пользовательской-документации">24. What does not have to be disclosed in user documentation</h2>
+<p>The internal implementation of ServerGuard contains additional technical details.</p>
+<p>They are intended primarily for developers and administrators.</p>
+<p>These include:</p>
 <ul>
-<li>внутренние пути файлов приложения;</li>
-<li>названия временных файлов обновления;</li>
-<li>структура исходного кода;</li>
-<li>внутренние функции Python;</li>
-<li>структура внутренних JSON-объектов;</li>
-<li>последовательность внутренних вызовов;</li>
-<li>детали реализации парсера;</li>
-<li>внутренние механизмы управления процессом;</li>
-<li>внутренние API;</li>
-<li>служебные переменные;</li>
-<li>детали реализации обновления;</li>
-<li>конкретные внутренние команды операционной системы.</li>
+<li>internal application file paths;</li>
+<li>names of update temporary files;</li>
+<li>source code structure;</li>
+<li>internal Python functions;</li>
+<li>structure of internal JSON objects;</li>
+<li>sequence of internal calls;</li>
+<li>parser implementation details;</li>
+<li>internal process management mechanisms;</li>
+<li>internal APIs;</li>
+<li>service variables;</li>
+<li>update implementation details;</li>
+<li>specific internal operating system commands.</li>
 </ul>
-<p>Такая информация может находиться в отдельной <strong>Developer Documentation</strong>.</p>
+<p>Such information may be located in a separate <strong>Developer Documentation</strong>.</p>
 <hr />
-<h2 id="25-пользовательская-и-разработческая-документация">25. Пользовательская и разработческая документация</h2>
-<p>ServerGuard целесообразно разделить на два уровня документации.</p>
+<h2 id="25-пользовательская-и-разработческая-документация">25. User and developer documentation</h2>
+<p>It is advisable to divide ServerGuard into two levels of documentation.</p>
 <h3 id="public-documentation">Public Documentation</h3>
-<p>Для пользователей:</p>
-<pre class="text"><code>Что защищает
-Как работает
-Какие события обнаруживаются
-Что означает блокировка
-Как управлять защитой
-Какие существуют ограничения</code></pre>
+<p>For users:</p>
+<pre class="text"><code>What it protects against
+How it works
+Which events are detected
+What a block means
+How to manage protection
+What limitations exist</code></pre>
 <h3 id="developer-documentation">Developer Documentation</h3>
-<p>Для разработчиков:</p>
-<pre class="text"><code>Исходный код
-Архитектура
+<p>For developers:</p>
+<pre class="text"><code>Source code
+Architecture
 Python modules
 C++ modules
 systemd
-файловая структура
-форматы данных
+file structure
+data formats
 API
-обновления
-внутренние алгоритмы
-диагностика</code></pre>
-<p>Такой подход позволяет одновременно быть прозрачным перед пользователями и не перегружать их внутренними деталями реализации.</p>
+updates
+internal algorithms
+diagnostics</code></pre>
+<p>This approach makes it possible to be transparent with users while not overloading them with internal implementation details.</p>
 <hr />
-<h2 id="26-связь-с-другими-модулями-serverguard">26. Связь с другими модулями ServerGuard</h2>
-<p>Security не существует изолированно.</p>
-<p>В экосистеме ServerGuard другие компоненты могут выполнять дополнительные задачи.</p>
-<p>Например:</p>
+<h2 id="26-связь-с-другими-модулями-serverguard">26. Relationship with other ServerGuard modules</h2>
+<p>Security does not exist in isolation.</p>
+<p>In the ServerGuard ecosystem, other components can perform additional tasks.</p>
+<p>For example:</p>
 <pre class="text"><code>                    SERVERGUARD
-                         |
-          +--------------+--------------+
-          |              |              |
-          v              v              v
-       Security       FileGuard      SSH Key Guard
-          |              |              |
-          v              v              v
-      SSH attacks     File changes    Key changes
-          |              |              |
-          +--------------+--------------+
-                         |
-                         v
-                  Security Events</code></pre>
-<p>Каждый модуль специализируется на своей категории событий.</p>
+                          |
+           +--------------+--------------+
+           |              |              |
+           v              v              v
+        Security       FileGuard      SSH Key Guard
+           |              |              |
+           v              v              v
+       SSH attacks     File changes    Key changes
+           |              |              |
+           +--------------+--------------+
+                          |
+                          v
+                   Security Events</code></pre>
+<p>Each module specializes in its own category of events.</p>
 <hr />
-<h2 id="27-пример-для-обычного-пользователя">27. Пример для обычного пользователя</h2>
-<p>Представим, что сервер находится в Интернете.</p>
-<p>Неизвестный источник начинает отправлять большое количество запросов на SSH.</p>
-<p>Без автоматизированной защиты администратору пришлось бы самостоятельно отслеживать журнал и принимать решение о блокировке.</p>
-<p>С ServerGuard процесс автоматизируется:</p>
-<pre class="text"><code>Попытки входа
+<h2 id="27-пример-для-обычного-пользователя">27. Example for an ordinary user</h2>
+<p>Let us imagine that the server is on the Internet.</p>
+<p>An unknown source begins sending a large number of SSH requests.</p>
+<p>Without automated protection, the administrator would have to monitor the log themselves and decide on blocking.</p>
+<p>With ServerGuard, the process is automated:</p>
+<pre class="text"><code>Login attempts
       ↓
-Обнаружение активности
+Activity detection
       ↓
-Подсчёт
+Counting
       ↓
-Срабатывание правила
+Rule triggered
       ↓
 Firewall restriction
       ↓
-Источник ограничен</code></pre>
-<p>При этом администратор может продолжать работать с сервером через разрешённый источник.</p>
+Source restricted</code></pre>
+<p>At the same time, the administrator can continue working with the server through an allowed source.</p>
 <hr />
-<h2 id="28-почему-serverguard-не-просто-блокирует-ssh-полностью">28. Почему ServerGuard не просто блокирует SSH полностью</h2>
-<p>Полное отключение SSH не всегда возможно.</p>
-<p>SSH используется администраторами для:</p>
+<h2 id="28-почему-serverguard-не-просто-блокирует-ssh-полностью">28. Why ServerGuard does not simply block SSH entirely</h2>
+<p>Completely disabling SSH is not always possible.</p>
+<p>SSH is used by administrators for:</p>
 <ul>
-<li>удалённого управления;</li>
-<li>обслуживания сервера;</li>
-<li>обновления программного обеспечения;</li>
-<li>диагностики;</li>
-<li>резервного администрирования.</li>
+<li>remote management;</li>
+<li>server maintenance;</li>
+<li>software updates;</li>
+<li>diagnostics;</li>
+<li>backup administration.</li>
 </ul>
-<p>Поэтому задача Security заключается не в том, чтобы просто отключить SSH.</p>
-<p>Задача состоит в том, чтобы сохранить возможность администрирования и одновременно автоматически реагировать на подозрительную активность.</p>
+<p>Therefore the task of Security is not simply to disable SSH.</p>
+<p>The task is to preserve the ability to administer while automatically responding to suspicious activity.</p>
 <hr />
-<h2 id="29-рекомендации-по-безопасному-использованию">29. Рекомендации по безопасному использованию</h2>
-<p>Для повышения общей безопасности сервера рекомендуется использовать Security совместно с другими средствами защиты.</p>
-<p>В частности:</p>
+<h2 id="29-рекомендации-по-безопасному-использованию">29. Recommendations for safe use</h2>
+<p>To improve the overall security of the server, it is recommended to use Security together with other protection tools.</p>
+<p>In particular:</p>
 <ul>
-<li>использовать сильные пароли;</li>
-<li>по возможности применять SSH-ключи;</li>
-<li>отключать ненужные способы аутентификации;</li>
-<li>регулярно обновлять Linux;</li>
-<li>ограничивать административный доступ;</li>
-<li>использовать firewall;</li>
-<li>контролировать SSH-конфигурацию;</li>
-<li>контролировать SSH-ключи;</li>
-<li>использовать FileGuard или другие средства контроля целостности;</li>
-<li>регулярно проверять журналы безопасности;</li>
-<li>создавать резервные копии важных данных.</li>
+<li>use strong passwords;</li>
+<li>use SSH keys where possible;</li>
+<li>disable unnecessary authentication methods;</li>
+<li>update Linux regularly;</li>
+<li>restrict administrative access;</li>
+<li>use a firewall;</li>
+<li>monitor SSH configuration;</li>
+<li>monitor SSH keys;</li>
+<li>use FileGuard or other integrity monitoring tools;</li>
+<li>regularly review security logs;</li>
+<li>create backups of important data.</li>
 </ul>
-<p>ServerGuard предназначен для того, чтобы объединить часть этих задач в единой системе управления.</p>
+<p>ServerGuard is designed to combine some of these tasks in a single management system.</p>
 <hr />
-<h2 id="30-ограничения">30. Ограничения</h2>
-<p>Security специально ориентирован на SSH brute-force.</p>
-<p>Поэтому его нельзя рассматривать как защиту от всех возможных атак.</p>
-<p>Например, если злоумышленник уже получил действующие учётные данные, само наличие brute-force protection не означает, что его доступ автоматически будет заблокирован.</p>
-<p>По этой причине безопасность сервера должна строиться на нескольких уровнях.</p>
+<h2 id="30-ограничения">30. Limitations</h2>
+<p>Security is specifically oriented toward SSH brute-force.</p>
+<p>Therefore it cannot be regarded as protection against all possible attacks.</p>
+<p>For example, if an attacker has already obtained valid credentials, the mere presence of brute-force protection does not mean that their access will automatically be blocked.</p>
+<p>For this reason, server security must be built on several layers.</p>
 <hr />
-<h2 id="31-основная-идея-serverguard-security">31. Основная идея ServerGuard Security</h2>
-<p>В кратком виде:</p>
+<h2 id="31-основная-идея-serverguard-security">31. The main idea of ServerGuard Security</h2>
+<p>In brief:</p>
 <pre class="text"><code>             SSH
-              |
-              v
-       Authentication
-              |
-              v
-       Security monitoring
-              |
-              v
-       Suspicious activity
-              |
-              v
-        Attempt tracking
-              |
-              v
-       Security threshold
-              |
-              v
-      Firewall protection
-              |
-              v
-       Source restricted</code></pre>
-<p>Security превращает обнаружение подозрительной SSH-активности в автоматизированный процесс.</p>
+               |
+               v
+        Authentication
+               |
+               v
+        Security monitoring
+               |
+               v
+        Suspicious activity
+               |
+               v
+         Attempt tracking
+               |
+               v
+        Security threshold
+               |
+               v
+       Firewall protection
+               |
+               v
+        Source restricted</code></pre>
+<p>Security turns the detection of suspicious SSH activity into an automated process.</p>
 <hr />
-<h2 id="32-кратко-для-пользователя">32. Кратко для пользователя</h2>
-<p><strong>ServerGuard Security</strong> — это автоматическая защита Linux-сервера от SSH brute-force атак.</p>
-<p>Она:</p>
+<h2 id="32-кратко-для-пользователя">32. Briefly for the user</h2>
+<p><strong>ServerGuard Security</strong> is automatic protection of a Linux server from SSH brute-force attacks.</p>
+<p>It:</p>
 <ul>
-<li>отслеживает попытки SSH-аутентификации;</li>
-<li>обнаруживает подозрительное количество неудачных попыток;</li>
-<li>анализирует источники подключений;</li>
-<li>использует настроенные правила и исключения;</li>
-<li>может автоматически ограничивать подозрительные источники через firewall;</li>
-<li>работает на Linux-сервере в фоновом режиме;</li>
-<li>запускается автоматически вместе с системой;</li>
-<li>управляется через ServerGuard;</li>
-<li>является частью многоуровневой архитектуры безопасности ServerGuard.</li>
+<li>tracks SSH authentication attempts;</li>
+<li>detects a suspicious number of failed attempts;</li>
+<li>analyzes connection sources;</li>
+<li>uses configured rules and exceptions;</li>
+<li>can automatically restrict suspicious sources through the firewall;</li>
+<li>runs on the Linux server in the background;</li>
+<li>starts automatically together with the system;</li>
+<li>is managed through ServerGuard;</li>
+<li>is part of ServerGuard's multi-layered security architecture.</li>
 </ul>
 <hr />
-<h2 id="33-важное-замечание">33. Важное замечание</h2>
-<p>ServerGuard Security является <strong>одним из уровней защиты</strong>, а не гарантией абсолютной безопасности.</p>
-<p>Ни одна система автоматической блокировки не способна устранить все возможные угрозы.</p>
-<p>Безопасность сервера зависит также от:</p>
+<h2 id="33-важное-замечание">33. Important note</h2>
+<p>ServerGuard Security is <strong>one of the layers of protection</strong>, not a guarantee of absolute security.</p>
+<p>No automatic blocking system is capable of eliminating all possible threats.</p>
+<p>Server security also depends on:</p>
 <ul>
-<li>конфигурации SSH;</li>
-<li>качества паролей и ключей;</li>
-<li>состояния операционной системы;</li>
-<li>установленных приложений;</li>
-<li>сетевой конфигурации;</li>
-<li>прав пользователей;</li>
-<li>своевременности обновлений;</li>
-<li>других средств защиты.</li>
+<li>SSH configuration;</li>
+<li>the quality of passwords and keys;</li>
+<li>the state of the operating system;</li>
+<li>installed applications;</li>
+<li>network configuration;</li>
+<li>user rights;</li>
+<li>timely updates;</li>
+<li>other protection tools.</li>
 </ul>
-<p>ServerGuard предназначен для того, чтобы автоматизировать обнаружение и реакцию на определённый класс угроз и объединить эту защиту с другими механизмами безопасности.</p>
+<p>ServerGuard is designed to automate the detection of and response to a certain class of threats and to combine this protection with other security mechanisms.</p>
 <hr />
-<h2 id="34-serverguard-security-в-общей-архитектуре">34. ServerGuard Security в общей архитектуре</h2>
+<h2 id="34-serverguard-security-в-общей-архитектуре">34. ServerGuard Security in the overall architecture</h2>
 <pre class="text"><code>                         SERVERGUARD
-                              |
-                              v
-                    Windows Management
-                              |
-                              |
-                             SSH
-                              |
-                              v
-                    +-------------------+
-                    |   Linux Server    |
-                    +-------------------+
-                              |
-                 +------------+------------+
-                 |            |            |
-                 v            v            v
-             Security     FileGuard    SSH Key Guard
-                 |            |            |
-                 v            v            v
-             SSH attacks   File changes  Key changes
-                 |            |            |
-                 +------------+------------+
-                              |
-                              v
-                       Security Events
-                              |
-                       +------+------+
-                       |             |
-                       v             v
-                   ServerGuard    Notifications
-                     Client</code></pre>
+                               |
+                               v
+                     Windows Management
+                               |
+                               |
+                              SSH
+                               |
+                               v
+                     +-------------------+
+                     |   Linux Server    |
+                     +-------------------+
+                               |
+                  +------------+------------+
+                  |            |            |
+                  v            v            v
+              Security     FileGuard    SSH Key Guard
+                  |            |            |
+                  v            v            v
+              SSH attacks   File changes  Key changes
+                  |            |            |
+                  +------------+------------+
+                               |
+                               v
+                        Security Events
+                               |
+                        +------+------+
+                        |             |
+                        v             v
+                    ServerGuard    Notifications
+                      Client</code></pre>
 <hr />
-<h2 id="35-итог">35. Итог</h2>
-<p>ServerGuard Security предназначен для автоматизации одной из распространённых задач Linux-администрирования — защиты SSH от массовых попыток подбора доступа.</p>
-<p>Вместо ручного постоянного просмотра журналов система:</p>
+<h2 id="35-итог">35. Summary</h2>
+<p>ServerGuard Security is designed to automate one of the common tasks of Linux administration — protecting SSH from mass attempts to guess access.</p>
+<p>Instead of manually and constantly reviewing logs, the system:</p>
 <ol type="1">
-<li>получает информацию о событиях SSH;</li>
-<li>анализирует попытки аутентификации;</li>
-<li>отслеживает активность источников;</li>
-<li>применяет заданные правила;</li>
-<li>при необходимости передаёт решение firewall;</li>
-<li>ограничивает подозрительный источник;</li>
-<li>продолжает работать в фоновом режиме.</li>
+<li>receives information about SSH events;</li>
+<li>analyzes authentication attempts;</li>
+<li>tracks source activity;</li>
+<li>applies the configured rules;</li>
+<li>passes the decision to the firewall if necessary;</li>
+<li>restricts the suspicious source;</li>
+<li>continues to operate in the background.</li>
 </ol>
-<p>Security при этом является только одним из компонентов ServerGuard.</p>
-<p>Вместе с FileGuard, SSH Key Guard, SSH Hardening, мониторингом и другими модулями он образует многоуровневую систему защиты и управления Linux-сервером.</p>
-<p><strong>Главная идея ServerGuard:</strong></p>
+<p>At the same time, Security is only one of the components of ServerGuard.</p>
+<p>Together with FileGuard, SSH Key Guard, SSH Hardening, monitoring, and other modules, it forms a multi-layered system of protection and management for the Linux server.</p>
+<p><strong>The main idea of ServerGuard:</strong></p>
 <blockquote>
-<p>не просто сообщить администратору о проблеме, а автоматизировать обнаружение и реакцию на определённые типы угроз, сохраняя при этом возможность контроля со стороны администратора.</p>
+<p>not just to notify the administrator about a problem, but to automate the detection of and response to certain types of threats while preserving the ability for the administrator to stay in control.</p>
 </blockquote>
 <hr />
-<p><em>Документация описывает назначение и принцип работы Security на пользовательском уровне. Внутренние детали реализации относятся к технической документации разработчиков.</em></p>
+<p><em>The documentation describes the purpose and operating principle of Security at the user level. Internal implementation details belong to the developers' technical documentation.</em></p>
 
         </article>
-        <!-- ================= КОНЕЦ ДОКУМЕНТАЦИИ ================= -->
+        <!-- ================= END OF DOCUMENTATION ================= -->
 
         <nav class="pager">
             <a href="telegram.html" class="next"><small>Next →</small><strong>Telegram Bot</strong></a>
