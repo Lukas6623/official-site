@@ -434,6 +434,116 @@ document
 
 
 /* =====================================================
+   MOBILE NAVIGATION
+===================================================== */
+
+const navToggle =
+    document.getElementById("navToggle");
+
+const mobileNav =
+    document.getElementById("mobileNav");
+
+
+if (navToggle && mobileNav) {
+
+    const setMobileNavState = (open) => {
+
+        mobileNav.classList.toggle(
+            "open",
+            open
+        );
+
+        navToggle.setAttribute(
+            "aria-expanded",
+            open ? "true" : "false"
+        );
+
+        navToggle.setAttribute(
+            "aria-label",
+            open
+                ? "Close navigation"
+                : "Open navigation"
+        );
+
+        navToggle.textContent =
+            open ? "×" : "☰";
+
+    };
+
+
+    const closeMobileNav = () => {
+
+        if (
+            mobileNav.classList.contains("open")
+        ) {
+
+            setMobileNavState(false);
+
+        }
+
+    };
+
+
+    navToggle.addEventListener(
+        "click",
+        () => {
+
+            setMobileNavState(
+                !mobileNav.classList.contains("open")
+            );
+
+        }
+    );
+
+
+    mobileNav
+        .querySelectorAll("a")
+        .forEach((link) => {
+
+            link.addEventListener(
+                "click",
+                closeMobileNav
+            );
+
+        });
+
+
+    document.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (
+                event.key === "Escape" &&
+                mobileNav.classList.contains("open")
+            ) {
+
+                setMobileNavState(false);
+
+                navToggle.focus();
+
+            }
+
+        }
+    );
+
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if (window.innerWidth > 720) {
+
+                closeMobileNav();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
    INITIALIZE
 ===================================================== */
 
