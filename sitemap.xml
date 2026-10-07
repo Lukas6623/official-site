@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://serverguard.site/</loc>
+    </url>
+
+    <url>
+        <loc>https://serverguard.site/documentation/index.html</loc>
+    </url>
+
+    <url>
+        <loc>https://serverguard.site/documentation/security.html</loc>
+    </url>
+
+    <url>
+        <loc>https://serverguard.site/documentation/telegram.html</loc>
+    </url>
+
+    <url>
+        <loc>https://serverguard.site/documentation/hardening.html</loc>
+    </url>
+
+    <url>
+        <loc>https://serverguard.site/documentation/sshkeys.html</loc>
+    </url>
+
+    <url>
+        <loc>https://serverguard.site/documentation/fileguard.html</loc>
+    </url>
+
+</urlset>
