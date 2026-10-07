@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ServerGuard SSH Key Guard — module documentation.">
+    <meta name="description" content="ServerGuard SSH Key Guard — module documentation and SSH key setup guide.">
     <meta name="theme-color" content="#080b12">
     <title>ServerGuard — SSH Key Guard</title>
     <link rel="stylesheet" href="css/style.css">
@@ -51,7 +51,7 @@
         <div class="module-head">
             <div class="eyebrow">MODULE 04 / SSH KEY GUARD</div>
             <h1>SSH Key Guard</h1>
-            <p>Monitoring SSH keys of Linux server users.</p>
+            <p>Monitoring SSH keys on a Linux server, and a practical guide to setting up SSH key authentication.</p>
         </div>
 
         <!-- ================= INSERT DOCUMENTATION BELOW =================
@@ -342,7 +342,204 @@ journalctl -u serverguard-ssh-key.service -f
 <li>use SSH Key Guard together with SSH Hardening, Security, and FileGuard.</li>
 </ul>
 <hr />
-<h2>20. Conclusion</h2>
+<h2>20. SSH key setup guide</h2>
+<p>This guide explains how to create an SSH key, install the public key on a Linux server, and connect to the server using ServerGuard.</p>
+<h3>Overview</h3>
+<p>ServerGuard can authenticate with Linux servers using an SSH private key instead of an account password.</p>
+<p>SSH key authentication uses a pair of cryptographic keys: a private key stored on your computer and a public key installed on the Linux server.</p>
+<blockquote>
+<p><strong>Note:</strong> The private key stays on your computer. Only the public key should be installed on the server.</p>
+</blockquote>
+<h3>Requirements</h3>
+<p>Before starting, make sure you have:</p>
+<ul>
+<li>Windows 10 or Windows 11.</li>
+<li>OpenSSH Client installed on Windows.</li>
+<li>Access to a Linux server.</li>
+<li>The server IP address or hostname.</li>
+<li>A Linux account that can log in through SSH.</li>
+<li>The account password for the initial key installation.</li>
+</ul>
+<h3>Creating an SSH key</h3>
+<p>Open PowerShell on Windows.</p>
+<p>Check that OpenSSH is available:</p>
+<pre><code>ssh -V</code></pre>
+<p>Create an Ed25519 SSH key:</p>
+<pre><code>ssh-keygen -t ed25519</code></pre>
+<p>When Windows asks where to save the key, press <strong>Enter</strong> to use the default location.</p>
+<p>The default location is:</p>
+<pre><code>C:\Users\YOUR_USERNAME\.ssh\id_ed25519</code></pre>
+<p>You will then be asked to enter a passphrase. You can leave it empty or use an additional passphrase to protect the private key.</p>
+<h3>Private and public keys</h3>
+<p>After creating the key, Windows normally creates two files:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_ed25519</code></td>
+<td>Private key. Must remain private and should never be uploaded to the server or shared with other people.</td>
+</tr>
+<tr>
+<td><code>id_ed25519.pub</code></td>
+<td>Public key. This key can be installed on the Linux server.</td>
+</tr>
+</tbody>
+</table>
+<p>To display your public key:</p>
+<pre><code>Get-Content "$env:USERPROFILE\.ssh\id_ed25519.pub"</code></pre>
+<p>The output should look similar to:</p>
+<pre><code>ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA... ServerGuard</code></pre>
+<h3>Installing the public key on the Linux server</h3>
+<p>First connect to your Linux server using the normal SSH password:</p>
+<pre><code>ssh root@SERVER_IP</code></pre>
+<p>Replace <code>SERVER_IP</code> with the address of your server.</p>
+<p>Create the SSH directory:</p>
+<pre><code>mkdir -p ~/.ssh
+chmod 700 ~/.ssh</code></pre>
+<p>Open the authorized keys file:</p>
+<pre><code>nano ~/.ssh/authorized_keys</code></pre>
+<p>Paste the complete contents of your <code>id_ed25519.pub</code> file into this file.</p>
+<p>Each public key must occupy its own line.</p>
+<p>Save the file in nano:</p>
+<pre><code>Ctrl + O
+Enter
+Ctrl + X</code></pre>
+<h3>Configuring SSH key permissions</h3>
+<p>Set the recommended permissions:</p>
+<pre><code>chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys</code></pre>
+<p>You can verify the file:</p>
+<pre><code>ls -la ~/.ssh</code></pre>
+<p>The <code>authorized_keys</code> file should not be writable by other users.</p>
+<h3>Testing SSH key authentication</h3>
+<p>Exit the current SSH session:</p>
+<pre><code>exit</code></pre>
+<p>From Windows, connect using the private key:</p>
+<pre><code>ssh -i "$env:USERPROFILE\.ssh\id_ed25519" root@SERVER_IP</code></pre>
+<p>If the key has no passphrase and everything is configured correctly, the Linux account password should not be requested.</p>
+<blockquote>
+<p><strong>Note:</strong> If your SSH key has a passphrase, SSH may ask for the passphrase protecting the private key. This is different from the Linux account password.</p>
+</blockquote>
+<h3>Testing password authentication</h3>
+<p>You can test password authentication without deleting the SSH key.</p>
+<p>Use:</p>
+<pre><code>ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password root@SERVER_IP</code></pre>
+<p>SSH will attempt password authentication for this connection only.</p>
+<blockquote>
+<p><strong>Warning:</strong> This command does not remove or modify your SSH key. It only tells the SSH client not to use public-key authentication for this connection.</p>
+</blockquote>
+<h3>Connecting to the server using ServerGuard</h3>
+<p>Start ServerGuard and create or edit a server connection.</p>
+<p>Enter the normal server connection information:</p>
+<ul>
+<li>Server IP address or hostname.</li>
+<li>SSH port, normally <code>22</code>.</li>
+<li>Linux username.</li>
+</ul>
+<p>For authentication, select:</p>
+<pre><code>Auth: Private key</code></pre>
+<p>Select your private key. For example:</p>
+<pre><code>C:\Users\YOUR_USERNAME\.ssh\id_ed25519</code></pre>
+<p>If the private key has a passphrase, enter it in the corresponding field.</p>
+<p>In ServerGuard, complete the following connection steps:</p>
+<ol>
+<li>Authentication method — select <strong>Private key</strong> instead of password authentication.</li>
+<li>Private key path — select the private key stored on your Windows computer, for example <code>C:\Users\YOUR_USERNAME\.ssh\id_ed25519</code>.</li>
+<li>Verify the connection — after connecting, ServerGuard should indicate that the server was authenticated using the private key.</li>
+</ol>
+<h3>SSH key passphrase</h3>
+<p>A passphrase is an additional password that protects the private key file.</p>
+<p>There are two different credentials:</p>
+<ul>
+<li><strong>Linux password</strong> — password of the server account.</li>
+<li><strong>SSH key passphrase</strong> — protects the private key on your computer.</li>
+</ul>
+<p>If the private key was created without a passphrase, leave the ServerGuard key passphrase field empty.</p>
+<h3>SSH Hardening</h3>
+<p>SSH key authentication is especially important when using ServerGuard SSH Hardening.</p>
+<p>Hardening can change SSH authentication settings. Losing access to a server after changing SSH settings can be difficult to recover from.</p>
+<p>ServerGuard therefore checks the authentication method before applying SSH Hardening.</p>
+<blockquote>
+<p><strong>Note:</strong> ServerGuard allows SSH Hardening to continue when the current ServerGuard connection uses SSH public-key authentication.</p>
+</blockquote>
+<blockquote>
+<p><strong>Important:</strong> If ServerGuard is connected using password authentication, SSH Hardening is blocked for safety. This prevents password authentication from being disabled while the current connection depends on that password.</p>
+</blockquote>
+<p>Before using SSH Hardening, make sure that:</p>
+<ol>
+<li>The public key is installed on the server.</li>
+<li>SSH key authentication works.</li>
+<li>ServerGuard is connected using <strong>Private key</strong>.</li>
+<li>You can reconnect to the server using the private key.</li>
+</ol>
+<h3>Troubleshooting</h3>
+<h4>Permission denied (publickey)</h4>
+<p>Check that the public key is present:</p>
+<pre><code>cat ~/.ssh/authorized_keys</code></pre>
+<p>Check the permissions:</p>
+<pre><code>chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys</code></pre>
+<p>Check whether public-key authentication is enabled:</p>
+<pre><code>sshd -T | grep pubkeyauthentication</code></pre>
+<p>The expected result is:</p>
+<pre><code>pubkeyauthentication yes</code></pre>
+<h4>ServerGuard cannot authenticate using the key</h4>
+<p>Verify that the selected key is the private key:</p>
+<pre><code>id_ed25519</code></pre>
+<p>Do not select:</p>
+<pre><code>id_ed25519.pub</code></pre>
+<p>The <code>.pub</code> file is the public key and should not be used as the private key in ServerGuard.</p>
+<h4>SSH asks for a password</h4>
+<p>Test the connection manually:</p>
+<pre><code>ssh -v -i "$env:USERPROFILE\.ssh\id_ed25519" root@SERVER_IP</code></pre>
+<p>The verbose output can show whether the client is actually attempting to use the selected key.</p>
+<h4>Test the key with maximum SSH debugging</h4>
+<pre><code>ssh -vvv -i "$env:USERPROFILE\.ssh\id_ed25519" root@SERVER_IP</code></pre>
+<h3>Security recommendations</h3>
+<p>Protect your private SSH key carefully.</p>
+<ul>
+<li>Never publish the private key.</li>
+<li>Never upload the private key to GitHub.</li>
+<li>Never send the private key through Telegram, email or other messaging services.</li>
+<li>Do not copy the private key to the Linux server unless there is a specific security reason.</li>
+<li>Consider using a passphrase to protect important private keys.</li>
+<li>Keep a secure backup of important keys.</li>
+</ul>
+<blockquote>
+<p><strong>Important:</strong> If someone obtains your private SSH key and can use it, they may be able to authenticate to servers where the corresponding public key is authorized. Treat a leaked private key as compromised and replace it.</p>
+</blockquote>
+<h3>Summary</h3>
+<p>The complete ServerGuard SSH key workflow is:</p>
+<pre><code>Windows
+   │
+   ├── id_ed25519
+   │      └── Private key
+   │
+   └── id_ed25519.pub
+          │
+          ▼
+Linux Server
+   │
+   └── ~/.ssh/authorized_keys
+          │
+          ▼
+SSH key authentication
+          │
+          ▼
+ServerGuard
+   │
+   └── Auth: Private key
+          │
+          ▼
+SSH Hardening and server management</code></pre>
+<p>Once key authentication has been tested successfully, ServerGuard can use the private key to establish a secure SSH connection to the Linux server.</p>
+<hr />
+<h2>21. Conclusion</h2>
 <pre><code class="language-text">identifies users → finds authorized_keys → creates a baseline
 → compares snapshots → detects added and removed keys
 → adds context from auditd → stores a structured event
