@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,32 +54,32 @@
             <p>Review and manage SSH configuration.</p>
         </div>
 
-        <!-- ================= ВСТАВЬТЕ ДОКУМЕНТАЦИЮ НИЖЕ =================
-             Допустимые теги: h2, h3, p, ul/ol, pre>code, blockquote, table, img, hr.
-             Оглавление справа строится автоматически из h2 и h3. -->
+        <!-- ================= INSERT DOCUMENTATION BELOW =================
+             Allowed tags: h2, h3, p, ul/ol, pre>code, blockquote, table, img, hr.
+             The table of contents on the right is built automatically from h2 and h3. -->
         <article class="doc-article">
-<p>Модуль: SSH Hardening<br>Основной файл: ssh_hardening.py<br>Платформа: Linux / Ubuntu<br>Язык: Python 3<br>Технологии: Python, OpenSSH, systemd<br>Проект: ServerGuard</p>
-<p>Назначение модуля:</p>
-<pre><code>Автоматизированное усиление безопасности SSH-сервера,
-проверка конфигурации OpenSSH, резервное копирование,
-применение контролируемой политики безопасности
-и безопасное восстановление SSH-конфигурации.</code></pre>
-<h2>1. ОБЩЕЕ ОПИСАНИЕ</h2>
-<p>SSH Hardening — серверный модуль ServerGuard, предназначенный для автоматического управления параметрами безопасности OpenSSH.</p>
-<p>Модуль позволяет:</p>
-<ul><li>проверить права пользователя;</li><li>определить SSH-сервис;</li><li>проверить состояние SSH;</li><li>создать необходимые директории;</li><li>создать резервную копию конфигурации;</li><li>создать конфигурацию ServerGuard;</li><li>проверить конфигурацию OpenSSH;</li><li>применить изменения;</li><li>перезагрузить SSH-сервис;</li><li>проверить фактически применённые параметры;</li><li>определить состояние hardening;</li><li>удалить конфигурацию ServerGuard;</li><li>восстановить предыдущую конфигурацию;</li><li>выполнить rollback при ошибке.</li></ul>
-<p>Главная идея модуля:</p>
-<pre><code>ServerGuard не изменяет весь /etc/ssh/sshd_config.</code></pre>
-<p>Вместо этого используется отдельный конфигурационный fragment:</p>
+<p>Module: SSH Hardening<br>Main file: ssh_hardening.py<br>Platform: Linux / Ubuntu<br>Language: Python 3<br>Technologies: Python, OpenSSH, systemd<br>Project: ServerGuard</p>
+<p>Purpose of the module:</p>
+<pre><code>Automated hardening of SSH server security,
+OpenSSH configuration verification, backup,
+application of a controlled security policy
+and safe restoration of the SSH configuration.</code></pre>
+<h2>1. GENERAL DESCRIPTION</h2>
+<p>SSH Hardening is a server module of ServerGuard designed for automatic management of OpenSSH security settings.</p>
+<p>The module allows you to:</p>
+<ul><li>check user privileges;</li><li>determine the SSH service;</li><li>check SSH status;</li><li>create the required directories;</li><li>create a backup of the configuration;</li><li>create the ServerGuard configuration;</li><li>verify the OpenSSH configuration;</li><li>apply the changes;</li><li>reload the SSH service;</li><li>verify the parameters actually applied;</li><li>determine the hardening state;</li><li>remove the ServerGuard configuration;</li><li>restore the previous configuration;</li><li>perform a rollback on error.</li></ul>
+<p>The main idea of the module:</p>
+<pre><code>ServerGuard does not modify the entire /etc/ssh/sshd_config.</code></pre>
+<p>Instead, a separate configuration fragment is used:</p>
 <pre><code>/etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>Основной файл:</p>
+<p>The main file:</p>
 <pre><code>/etc/ssh/sshd_config</code></pre>
-<p>при этом остаётся отдельным.</p>
-<p>Такой подход позволяет ServerGuard применять собственную SSH-политику, не переписывая полностью существующую конфигурацию администратора.</p>
-<h2>2. ЧТО ТАКОЕ SSH HARDENING</h2>
-<p>Hardening — это усиление безопасности системы за счёт ограничения ненужных или потенциально опасных возможностей.</p>
-<p>В контексте SSH это означает изменение политики OpenSSH таким образом, чтобы сервер разрешал только необходимые функции.</p>
-<p>ServerGuard устанавливает следующие параметры:</p>
+<p>while remaining separate.</p>
+<p>This approach allows ServerGuard to apply its own SSH policy without completely rewriting the administrator's existing configuration.</p>
+<h2>2. WHAT SSH HARDENING IS</h2>
+<p>Hardening is the strengthening of system security by restricting unnecessary or potentially dangerous capabilities.</p>
+<p>In the context of SSH, this means changing the OpenSSH policy so that the server allows only the necessary features.</p>
+<p>ServerGuard sets the following parameters:</p>
 <pre><code>PermitEmptyPasswords no
 
 X11Forwarding no
@@ -95,31 +95,31 @@ LoginGraceTime 30
 Compression no
 
 PermitRootLogin prohibit-password</code></pre>
-<p>Таким образом ограничиваются:</p>
-<ul><li>пустые пароли;</li><li>парольная аутентификация root;</li><li>количество попыток аутентификации;</li><li>время прохождения аутентификации;</li><li>X11 forwarding;</li><li>TCP forwarding;</li><li>SSH Agent Forwarding;</li><li>SSH compression.</li></ul>
-<h2>3. SSH HARDENING НЕ РАВЕН BRUTE-FORCE PROTECTION</h2>
-<p>Важно разделять две задачи.</p>
-<p>SSH Hardening отвечает за:</p>
-<pre><code>ПОЛИТИКУ SSH</code></pre>
-<p>То есть:</p>
-<pre><code>какие возможности разрешены;
-какие возможности запрещены;
-какие ограничения применяются.</code></pre>
-<p>Модуль Security отвечает за:</p>
-<pre><code>ОБНАРУЖЕНИЕ АТАК</code></pre>
-<p>Например:</p>
-<ul><li>анализ неудачных входов;</li><li>обнаружение большого количества попыток;</li><li>анализ IP;</li><li>блокировка IP;</li><li>защита от brute-force.</li></ul>
-<p>Поэтому:</p>
+<p>This restricts:</p>
+<ul><li>empty passwords;</li><li>root password authentication;</li><li>the number of authentication attempts;</li><li>the authentication time;</li><li>X11 forwarding;</li><li>TCP forwarding;</li><li>SSH Agent Forwarding;</li><li>SSH compression.</li></ul>
+<h2>3. SSH HARDENING IS NOT BRUTE-FORCE PROTECTION</h2>
+<p>It is important to separate the two tasks.</p>
+<p>SSH Hardening is responsible for:</p>
+<pre><code>SSH POLICY</code></pre>
+<p>That is:</p>
+<pre><code>which capabilities are allowed;
+which capabilities are prohibited;
+which restrictions are applied.</code></pre>
+<p>The Security module is responsible for:</p>
+<pre><code>ATTACK DETECTION</code></pre>
+<p>For example:</p>
+<ul><li>analysis of failed logins;</li><li>detection of a large number of attempts;</li><li>IP analysis;</li><li>IP blocking;</li><li>brute-force protection.</li></ul>
+<p>Therefore:</p>
 <pre><code>SSH Hardening
     =
-усиление конфигурации OpenSSH</code></pre>
-<p>а:</p>
+OpenSSH configuration hardening</code></pre>
+<p>and:</p>
 <pre><code>Security
     =
-обнаружение и блокировка подозрительной активности.</code></pre>
-<p>Эти механизмы дополняют друг друга.</p>
-<h2>4. АРХИТЕКТУРА МОДУЛЯ</h2>
-<p>Общая архитектура:</p>
+detection and blocking of suspicious activity.</code></pre>
+<p>These mechanisms complement each other.</p>
+<h2>4. MODULE ARCHITECTURE</h2>
+<p>General architecture:</p>
 <pre><code>ServerGuard
      |
      | SSH
@@ -147,22 +147,22 @@ sshd_config.d             SSH service
                   |
                   v
               Verification</code></pre>
-<p>Модуль взаимодействует с:</p>
-<pre><code>1. файловой системой Linux;
+<p>The module interacts with:</p>
+<pre><code>1. the Linux file system;
 2. OpenSSH;
 3. systemd;
-4. SSH daemon;
-5. системой резервного копирования.</code></pre>
-<h2>5. ОСНОВНЫЕ ПУТИ</h2>
-<p>Главная директория ServerGuard:</p>
+4. the SSH daemon;
+5. the backup system.</code></pre>
+<h2>5. MAIN PATHS</h2>
+<p>Main ServerGuard directory:</p>
 <pre><code>/opt/serverguard</code></pre>
-<p>Директория резервных копий:</p>
+<p>Backup directory:</p>
 <pre><code>/opt/serverguard/backups</code></pre>
-<p>Основная конфигурация OpenSSH:</p>
+<p>Main OpenSSH configuration:</p>
 <pre><code>/etc/ssh/sshd_config</code></pre>
-<p>Конфигурация ServerGuard:</p>
+<p>ServerGuard configuration:</p>
 <pre><code>/etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>Таким образом:</p>
+<p>Thus:</p>
 <pre><code>/etc/ssh/
     |
     +-- sshd_config
@@ -170,24 +170,24 @@ sshd_config.d             SSH service
     +-- sshd_config.d/
             |
             +-- 99-serverguard-hardening.conf</code></pre>
-<h2>6. ТЕХНОЛОГИИ</h2>
-<p>Модуль написан на:</p>
+<h2>6. TECHNOLOGIES</h2>
+<p>The module is written in:</p>
 <pre><code>Python 3</code></pre>
-<p>Используются стандартные библиотеки Python:</p>
+<p>Standard Python libraries are used:</p>
 <pre><code>sys
 os
 shutil
 subprocess
 datetime</code></pre>
-<p>Дополнительные Python-пакеты не требуются.</p>
-<p>Для работы используются системные компоненты Linux:</p>
+<p>No additional Python packages are required.</p>
+<p>The following Linux system components are used for operation:</p>
 <pre><code>systemctl
 sshd</code></pre>
-<p>Python выступает в качестве управляющего слоя между ServerGuard и операционной системой.</p>
-<p>Упрощённо:</p>
+<p>Python acts as a control layer between ServerGuard and the operating system.</p>
+<p>Simplified:</p>
 <pre><code>Python
    |
-   +---- файловая система
+   +---- file system
    |
    +---- OpenSSH
    |
@@ -195,36 +195,36 @@ sshd</code></pre>
    |
    +---- backup
    |
-   +---- проверка конфигурации</code></pre>
-<h2>7. ИМПОРТЫ PYTHON</h2>
-<p>В модуле используются:</p>
+   +---- configuration verification</code></pre>
+<h2>7. PYTHON IMPORTS</h2>
+<p>The module uses:</p>
 <pre><code>import sys
 import os
 import shutil
 import subprocess
 from datetime import datetime</code></pre>
 <h3>sys</h3>
-<p>Используется для:</p>
-<ul><li>обработки аргументов командной строки;</li><li>завершения программы;</li><li>возврата exit code.</li></ul>
-<p>Например:</p>
+<p>Used for:</p>
+<ul><li>processing command-line arguments;</li><li>terminating the program;</li><li>returning the exit code.</li></ul>
+<p>For example:</p>
 <pre><code>python3 ssh_hardening.py apply</code></pre>
-<p>передаёт:</p>
+<p>passes:</p>
 <pre><code>apply</code></pre>
-<p>через:</p>
+<p>through:</p>
 <pre><code>sys.argv</code></pre>
 <h3>os</h3>
-<p>Используется для работы с Linux-файловой системой.</p>
-<p>В частности:</p>
-<ul><li>проверки root;</li><li>проверки существования файлов;</li><li>создания директорий;</li><li>удаления файлов;</li><li>установки прав;</li><li>формирования путей.</li></ul>
+<p>Used to work with the Linux file system.</p>
+<p>In particular:</p>
+<ul><li>checking for root;</li><li>checking whether files exist;</li><li>creating directories;</li><li>deleting files;</li><li>setting permissions;</li><li>constructing paths.</li></ul>
 <h3>shutil</h3>
-<p>Используется для копирования файлов.</p>
-<p>Основная функция:</p>
+<p>Used for copying files.</p>
+<p>Main function:</p>
 <pre><code>shutil.copy2()</code></pre>
-<p>Применяется для:</p>
-<ul><li>создания backup;</li><li>восстановления конфигурации.</li></ul>
+<p>Used for:</p>
+<ul><li>creating a backup;</li><li>restoring the configuration.</li></ul>
 <h3>subprocess</h3>
-<p>Используется для запуска системных команд.</p>
-<p>Например:</p>
+<p>Used to run system commands.</p>
+<p>For example:</p>
 <pre><code>sshd -t
 
 sshd -T
@@ -233,120 +233,120 @@ systemctl is-active ssh
 
 systemctl reload ssh</code></pre>
 <h3>datetime</h3>
-<p>Используется для формирования временных меток.</p>
-<p>Например:</p>
+<p>Used to generate timestamps.</p>
+<p>For example:</p>
 <pre><code>20260930_215300</code></pre>
-<p>В результате backup может называться:</p>
+<p>As a result, a backup may be named:</p>
 <pre><code>sshd_config_20260930_215300.backup</code></pre>
-<h2>8. ТРЕБОВАНИЯ К ПРАВАМ</h2>
-<p>Изменение:</p>
+<h2>8. PRIVILEGE REQUIREMENTS</h2>
+<p>Modifying:</p>
 <pre><code>/etc/ssh/</code></pre>
-<p>и управление SSH-сервисом требуют повышенных привилегий.</p>
-<p>Поэтому модуль выполняет проверку root.</p>
-<p>Используется:</p>
+<p>and managing the SSH service require elevated privileges.</p>
+<p>Therefore, the module performs a root check.</p>
+<p>The following is used:</p>
 <pre><code>os.geteuid() == 0</code></pre>
-<p>Если программа запущена без root:</p>
+<p>If the program is run without root:</p>
 <pre><code>ERROR: This script must be run as root.</code></pre>
-<p>Операция прекращается.</p>
-<p>Это необходимо для работы с:</p>
+<p>The operation is terminated.</p>
+<p>This is necessary for working with:</p>
 <pre><code>/etc/ssh/sshd_config
 
 /etc/ssh/sshd_config.d/
 
 /opt/serverguard/backups</code></pre>
-<p>и systemd.</p>
-<h2>9. ВЫПОЛНЕНИЕ LINUX-КОМАНД</h2>
-<p>Для запуска системных команд используется:</p>
+<p>and systemd.</p>
+<h2>9. EXECUTING LINUX COMMANDS</h2>
+<p>To run system commands, the following is used:</p>
 <pre><code>run_command(command, check=False)</code></pre>
-<p>Внутри используется:</p>
+<p>Internally, it uses:</p>
 <pre><code>subprocess.run()</code></pre>
-<p>Функция получает:</p>
+<p>The function receives:</p>
 <pre><code>command</code></pre>
-<p>и возвращает:</p>
+<p>and returns:</p>
 <pre><code>returncode
 stdout
 stderr</code></pre>
-<p>Пример:</p>
+<p>Example:</p>
 <pre><code>code, stdout, stderr = run_command(
     [&quot;sshd&quot;, &quot;-t&quot;]
 )</code></pre>
-<p>Если:</p>
+<p>If:</p>
 <pre><code>code == 0</code></pre>
-<p>команда завершилась успешно.</p>
-<p>Если команда завершилась ошибкой, используется:</p>
+<p>the command completed successfully.</p>
+<p>If the command failed, the following is used:</p>
 <pre><code>stderr</code></pre>
-<p>для диагностики.</p>
-<p>Таким образом, Python-модуль не реализует собственный SSH daemon, а управляет существующим OpenSSH через стандартные Linux-команды.</p>
-<h2>10. ОБНАРУЖЕНИЕ SSH-СЕРВИСА</h2>
-<p>В Linux SSH service может называться:</p>
+<p>for diagnostics.</p>
+<p>Thus, the Python module does not implement its own SSH daemon but manages the existing OpenSSH through standard Linux commands.</p>
+<h2>10. SSH SERVICE DISCOVERY</h2>
+<p>In Linux, the SSH service may be named:</p>
 <pre><code>ssh</code></pre>
-<p>или:</p>
+<p>or:</p>
 <pre><code>sshd</code></pre>
-<p>Поэтому модуль не должен жёстко зависеть только от одного имени.</p>
-<p>Функция:</p>
+<p>Therefore, the module must not depend rigidly on a single name.</p>
+<p>The function:</p>
 <pre><code>get_ssh_service()</code></pre>
-<p>определяет используемое имя сервиса.</p>
-<p>После обнаружения результат используется при дальнейших операциях.</p>
-<p>Например:</p>
+<p>determines the service name in use.</p>
+<p>After discovery, the result is used in subsequent operations.</p>
+<p>For example:</p>
 <pre><code>systemctl is-active ssh</code></pre>
-<p>или:</p>
+<p>or:</p>
 <pre><code>systemctl is-active sshd</code></pre>
-<p>Аналогично выполняется:</p>
+<p>Similarly, the following is executed:</p>
 <pre><code>systemctl reload ssh</code></pre>
-<p>или:</p>
+<p>or:</p>
 <pre><code>systemctl reload sshd</code></pre>
-<h2>11. ПРОВЕРКА SSH-СЕРВИСА</h2>
-<p>Функция:</p>
+<h2>11. SSH SERVICE CHECK</h2>
+<p>The function:</p>
 <pre><code>check_ssh_service()</code></pre>
-<p>проверяет:</p>
-<ul><li>найден ли SSH service;</li><li>активен ли SSH service.</li></ul>
-<p>Используется:</p>
+<p>checks:</p>
+<ul><li>whether the SSH service was found;</li><li>whether the SSH service is active.</li></ul>
+<p>The following is used:</p>
 <pre><code>systemctl is-active &lt;service&gt;</code></pre>
-<p>Если результат:</p>
+<p>If the result is:</p>
 <pre><code>active</code></pre>
-<p>SSH считается работающим.</p>
-<p>Пример:</p>
+<p>SSH is considered running.</p>
+<p>Example:</p>
 <pre><code>SSH service: ACTIVE</code></pre>
-<p>Если сервис неактивен, его состояние выводится пользователю.</p>
-<h2>12. РЕЗЕРВНОЕ КОПИРОВАНИЕ</h2>
-<p>Изменение SSH-конфигурации является потенциально опасной операцией.</p>
-<p>Ошибка в конфигурации может привести к тому, что новые SSH-соединения не смогут установиться.</p>
-<p>Поэтому ServerGuard использует принцип:</p>
+<p>If the service is inactive, its state is displayed to the user.</p>
+<h2>12. BACKUP</h2>
+<p>Modifying the SSH configuration is a potentially dangerous operation.</p>
+<p>An error in the configuration can cause new SSH connections to be unable to establish.</p>
+<p>Therefore, ServerGuard uses the principle:</p>
 <pre><code>BACKUP BEFORE CHANGE</code></pre>
-<p>Перед изменением конфигурации создаётся резервная копия.</p>
-<p>Backup находится:</p>
+<p>Before changing the configuration, a backup is created.</p>
+<p>The backup is located at:</p>
 <pre><code>/opt/serverguard/backups</code></pre>
-<h2>13. BACKUP ОСНОВНОЙ КОНФИГУРАЦИИ</h2>
-<p>Функция:</p>
+<h2>13. BACKUP OF THE MAIN CONFIGURATION</h2>
+<p>The function:</p>
 <pre><code>backup_main_config()</code></pre>
-<p>работает с:</p>
+<p>works with:</p>
 <pre><code>/etc/ssh/sshd_config</code></pre>
-<p>Создаётся файл:</p>
+<p>A file is created:</p>
 <pre><code>sshd_config_YYYYMMDD_HHMMSS.backup</code></pre>
-<p>Например:</p>
+<p>For example:</p>
 <pre><code>sshd_config_20260930_215300.backup</code></pre>
-<p>Для копирования используется:</p>
+<p>Copying uses:</p>
 <pre><code>shutil.copy2()</code></pre>
-<p>Временная метка позволяет хранить несколько резервных копий.</p>
-<h2>14. BACKUP SERVERGUARD-КОНФИГУРАЦИИ</h2>
-<p>Если уже существует:</p>
+<p>The timestamp allows multiple backups to be stored.</p>
+<h2>14. BACKUP OF THE SERVERGUARD CONFIGURATION</h2>
+<p>If the following already exists:</p>
 <pre><code>/etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>перед созданием новой версии она также может быть сохранена.</p>
-<p>Пример:</p>
+<p>it may also be saved before creating a new version.</p>
+<p>Example:</p>
 <pre><code>99-serverguard-hardening_20260930_215300.backup</code></pre>
-<p>Таким образом можно сохранить предыдущую версию политики ServerGuard.</p>
-<p>Важно:</p>
-<pre><code>основной sshd_config</code></pre>
-<p>и:</p>
+<p>This way, the previous version of the ServerGuard policy can be preserved.</p>
+<p>Important:</p>
+<pre><code>the main sshd_config</code></pre>
+<p>and:</p>
 <pre><code>ServerGuard hardening config</code></pre>
-<p>резервируются отдельно.</p>
-<h2>15. СОЗДАНИЕ HARDENING-КОНФИГУРАЦИИ</h2>
-<p>Функция:</p>
+<p>are backed up separately.</p>
+<h2>15. CREATING THE HARDENING CONFIGURATION</h2>
+<p>The function:</p>
 <pre><code>create_hardening_config()</code></pre>
-<p>создаёт:</p>
+<p>creates:</p>
 <pre><code>/etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>В файл записывается политика ServerGuard.</p>
-<p>Основные параметры:</p>
+<p>The ServerGuard policy is written to the file.</p>
+<p>Main parameters:</p>
 <pre><code>PermitEmptyPasswords no
 
 X11Forwarding no
@@ -362,114 +362,114 @@ LoginGraceTime 30
 Compression no
 
 PermitRootLogin prohibit-password</code></pre>
-<p>После создания устанавливаются права:</p>
+<p>After creation, the permissions are set:</p>
 <pre><code>0644</code></pre>
 <h2>16. PermitEmptyPasswords</h2>
-<p>Параметр:</p>
+<p>The parameter:</p>
 <pre><code>PermitEmptyPasswords no</code></pre>
-<p>запрещает использование пустого пароля при SSH-аутентификации.</p>
-<p>Идея настройки:</p>
-<pre><code>пустой пароль
+<p>prohibits the use of an empty password during SSH authentication.</p>
+<p>The idea of the setting:</p>
+<pre><code>empty password
     |
     v
 SSH authentication
     |
     v
-запрещено</code></pre>
-<p>Это устраняет возможность использовать пустой пароль как SSH-механизм аутентификации.</p>
+prohibited</code></pre>
+<p>This eliminates the possibility of using an empty password as an SSH authentication mechanism.</p>
 <h2>17. X11Forwarding</h2>
-<p>ServerGuard устанавливает:</p>
+<p>ServerGuard sets:</p>
 <pre><code>X11Forwarding no</code></pre>
-<p>X11 Forwarding позволяет передавать X11-графику через SSH.</p>
-<p>Если сервер используется преимущественно для:</p>
-<ul><li>серверных приложений;</li><li>администрирования;</li><li>разработки;</li><li>фоновых сервисов;</li></ul>
-<p>X11 forwarding может быть не нужен.</p>
-<p>Поэтому ServerGuard отключает эту возможность.</p>
-<p>Важно:</p>
-<pre><code>SSH при этом НЕ отключается.</code></pre>
-<p>Отключается только X11 forwarding.</p>
+<p>X11 Forwarding allows X11 graphics to be transmitted over SSH.</p>
+<p>If the server is used primarily for:</p>
+<ul><li>server applications;</li><li>administration;</li><li>development;</li><li>background services;</li></ul>
+<p>X11 forwarding may not be needed.</p>
+<p>Therefore, ServerGuard disables this capability.</p>
+<p>Important:</p>
+<pre><code>SSH is NOT disabled by this.</code></pre>
+<p>Only X11 forwarding is disabled.</p>
 <h2>18. AllowTcpForwarding</h2>
-<p>ServerGuard устанавливает:</p>
+<p>ServerGuard sets:</p>
 <pre><code>AllowTcpForwarding no</code></pre>
-<p>TCP forwarding позволяет использовать SSH для сетевого туннелирования.</p>
-<p>Например:</p>
-<pre><code>клиент
+<p>TCP forwarding allows SSH to be used for network tunneling.</p>
+<p>For example:</p>
+<pre><code>client
    |
    | SSH
    v
-сервер
+server
    |
    v
-другой сетевой ресурс</code></pre>
-<p>Если сервер использует SSH-туннели, отключение TCP forwarding может изменить существующий рабочий процесс.</p>
-<p>Поэтому эту настройку необходимо учитывать перед применением hardening.</p>
+another network resource</code></pre>
+<p>If the server uses SSH tunnels, disabling TCP forwarding may change the existing workflow.</p>
+<p>Therefore, this setting must be taken into account before applying hardening.</p>
 <h2>19. AllowAgentForwarding</h2>
-<p>ServerGuard устанавливает:</p>
+<p>ServerGuard sets:</p>
 <pre><code>AllowAgentForwarding no</code></pre>
-<p>SSH Agent Forwarding позволяет использовать SSH-agent через удалённое соединение.</p>
-<p>Это может быть удобно при администрировании нескольких серверов.</p>
-<p>Если такая возможность серверу не требуется, ServerGuard её отключает.</p>
+<p>SSH Agent Forwarding allows the SSH agent to be used over a remote connection.</p>
+<p>This can be convenient when administering multiple servers.</p>
+<p>If the server does not require this capability, ServerGuard disables it.</p>
 <h2>20. MaxAuthTries</h2>
-<p>ServerGuard устанавливает:</p>
+<p>ServerGuard sets:</p>
 <pre><code>MaxAuthTries 3</code></pre>
-<p>Параметр ограничивает количество попыток аутентификации в рамках одного SSH-соединения.</p>
-<p>Важно:</p>
+<p>The parameter limits the number of authentication attempts within a single SSH connection.</p>
+<p>Important:</p>
 <pre><code>MaxAuthTries 3</code></pre>
-<p>не означает:</p>
-<pre><code>&quot;после трёх попыток IP блокируется&quot;.</code></pre>
-<p>Это разные механизмы.</p>
-<p>IP-блокировка относится к отдельной системе Security.</p>
+<p>does not mean:</p>
+<pre><code>&quot;the IP is blocked after three attempts&quot;.</code></pre>
+<p>These are different mechanisms.</p>
+<p>IP blocking belongs to the separate Security system.</p>
 <h2>21. LoginGraceTime</h2>
-<p>ServerGuard устанавливает:</p>
+<p>ServerGuard sets:</p>
 <pre><code>LoginGraceTime 30</code></pre>
-<p>Клиент получает ограниченное время для прохождения аутентификации.</p>
-<p>В политике ServerGuard:</p>
-<pre><code>30 секунд</code></pre>
-<p>Это уменьшает период существования неаутентифицированного соединения.</p>
+<p>The client is given a limited time to complete authentication.</p>
+<p>In the ServerGuard policy:</p>
+<pre><code>30 seconds</code></pre>
+<p>This reduces the lifetime of an unauthenticated connection.</p>
 <h2>22. Compression</h2>
-<p>ServerGuard устанавливает:</p>
+<p>ServerGuard sets:</p>
 <pre><code>Compression no</code></pre>
-<p>SSH compression отключается.</p>
-<p>Это уменьшает количество доступных функций SSH, если сжатие не требуется конкретному серверу.</p>
+<p>SSH compression is disabled.</p>
+<p>This reduces the number of available SSH features if compression is not required by a particular server.</p>
 <h2>23. PermitRootLogin</h2>
-<p>ServerGuard устанавливает:</p>
+<p>ServerGuard sets:</p>
 <pre><code>PermitRootLogin prohibit-password</code></pre>
-<p>Это означает, что парольная аутентификация root через SSH запрещается.</p>
-<p>При этом ключевая аутентификация root может оставаться доступной, если другие настройки OpenSSH это позволяют.</p>
-<p>Таким образом:</p>
-<pre><code>root + пароль
+<p>This means that root password authentication over SSH is prohibited.</p>
+<p>At the same time, root key authentication may remain available if other OpenSSH settings allow it.</p>
+<p>Thus:</p>
+<pre><code>root + password
     |
     v
-запрещено
+prohibited
 
 root + SSH key
     |
     v
-может быть разрешено</code></pre>
-<p>Это отличается от:</p>
+may be allowed</code></pre>
+<p>This differs from:</p>
 <pre><code>PermitRootLogin no</code></pre>
-<p>При:</p>
+<p>With:</p>
 <pre><code>PermitRootLogin no</code></pre>
-<p>root полностью запрещается через SSH.</p>
-<h2>24. ПОЧЕМУ ИСПОЛЬЗУЕТСЯ prohibit-password</h2>
-<p>ServerGuard намеренно использует:</p>
+<p>root is completely prohibited over SSH.</p>
+<h2>24. WHY prohibit-password IS USED</h2>
+<p>ServerGuard intentionally uses:</p>
 <pre><code>PermitRootLogin prohibit-password</code></pre>
-<p>а не:</p>
+<p>rather than:</p>
 <pre><code>PermitRootLogin no</code></pre>
-<p>Это позволяет сохранить возможность административного доступа через SSH-ключ.</p>
-<p>Итоговая возможность входа всё равно зависит от других параметров OpenSSH.</p>
-<p>Например:</p>
+<p>This preserves the possibility of administrative access via an SSH key.</p>
+<p>The final login capability still depends on other OpenSSH parameters.</p>
+<p>For example:</p>
 <pre><code>PubkeyAuthentication
 PasswordAuthentication
 AuthorizedKeysFile</code></pre>
-<p>и других настроек.</p>
-<p>Поэтому окончательное состояние рекомендуется проверять через:</p>
+<p>and other settings.</p>
+<p>Therefore, the final state is recommended to be verified via:</p>
 <pre><code>sshd -T</code></pre>
-<h2>25. ПРОВЕРКА КОНФИГУРАЦИИ</h2>
-<p>Перед reload ServerGuard использует:</p>
+<h2>25. CONFIGURATION VERIFICATION</h2>
+<p>Before reload, ServerGuard uses:</p>
 <pre><code>sshd -t</code></pre>
-<p>Команда проверяет конфигурацию OpenSSH на ошибки.</p>
-<p>Условно:</p>
+<p>The command checks the OpenSSH configuration for errors.</p>
+<p>Conditionally:</p>
 <pre><code>sshd -t
    |
    +---- 0
@@ -481,13 +481,13 @@ AuthorizedKeysFile</code></pre>
           |
           v
        INVALID</code></pre>
-<p>Если конфигурация невалидна, операция применения не должна продолжаться как успешная.</p>
-<h2>26. ПОЧЕМУ sshd -t ВАЖНА</h2>
-<p>Представим:</p>
+<p>If the configuration is invalid, the apply operation must not continue as successful.</p>
+<h2>26. WHY sshd -t IS IMPORTANT</h2>
+<p>Imagine:</p>
 <pre><code>ServerGuard
      |
      v
-создаёт config
+ creates config
      |
      v
    sshd -t
@@ -497,69 +497,69 @@ AuthorizedKeysFile</code></pre>
   OK ERROR
    |   |
    v   v
-reload rollback</code></pre>
-<p>Таким образом, синтаксическая ошибка обнаруживается до нормального применения конфигурации.</p>
+ reload rollback</code></pre>
+<p>Thus, a syntax error is detected before the configuration is actually applied.</p>
 <h2>27. RELOAD SSH</h2>
-<p>После успешной проверки выполняется:</p>
+<p>After a successful check, the following is executed:</p>
 <pre><code>systemctl reload &lt;ssh-service&gt;</code></pre>
-<p>Используется:</p>
+<p>The following is used:</p>
 <pre><code>reload</code></pre>
-<p>а не обязательный:</p>
+<p>rather than the mandatory:</p>
 <pre><code>restart</code></pre>
-<p>Это позволяет перечитать конфигурацию работающим SSH daemon.</p>
-<p>При успешном reload модуль продолжает проверку.</p>
+<p>This allows the running SSH daemon to reread the configuration.</p>
+<p>On a successful reload, the module continues with verification.</p>
 <h2>28. EFFECTIVE CONFIGURATION</h2>
-<p>После применения используется:</p>
+<p>After applying, the following is used:</p>
 <pre><code>sshd -T</code></pre>
-<p>Команда показывает эффективную конфигурацию OpenSSH.</p>
-<p>Это особенно важно, потому что OpenSSH может использовать несколько конфигурационных файлов.</p>
-<p>Например:</p>
+<p>The command shows the effective OpenSSH configuration.</p>
+<p>This is especially important because OpenSSH may use multiple configuration files.</p>
+<p>For example:</p>
 <pre><code>/etc/ssh/sshd_config</code></pre>
-<p>и:</p>
+<p>and:</p>
 <pre><code>/etc/ssh/sshd_config.d/*.conf</code></pre>
-<p>Поэтому содержимое одного файла не всегда равно итоговой конфигурации SSH daemon.</p>
-<p>ServerGuard проверяет именно результат:</p>
+<p>Therefore, the contents of a single file do not always equal the final SSH daemon configuration.</p>
+<p>ServerGuard checks specifically the result of:</p>
 <pre><code>sshd -T</code></pre>
-<h2>29. ПОЛУЧЕНИЕ ЗНАЧЕНИЙ</h2>
-<p>Функция:</p>
+<h2>29. RETRIEVING VALUES</h2>
+<p>The function:</p>
 <pre><code>get_config_value(config, name)</code></pre>
-<p>получает значение параметра из результата:</p>
+<p>retrieves the value of a parameter from the result of:</p>
 <pre><code>sshd -T</code></pre>
-<p>Например:</p>
+<p>For example:</p>
 <pre><code>permitrootlogin prohibit-password</code></pre>
-<p>разбирается как:</p>
+<p>is parsed as:</p>
 <pre><code>name:
     permitrootlogin
 
 value:
     prohibit-password</code></pre>
-<p>Сравнение производится без зависимости от регистра.</p>
-<p>Если параметр отсутствует:</p>
+<p>The comparison is performed case-insensitively.</p>
+<p>If the parameter is missing:</p>
 <pre><code>unknown</code></pre>
-<h2>30. СРАВНЕНИЕ ЗНАЧЕНИЙ</h2>
-<p>Функция:</p>
+<h2>30. VALUE COMPARISON</h2>
+<p>The function:</p>
 <pre><code>value_matches(actual, expected)</code></pre>
-<p>сравнивает:</p>
-<pre><code>фактическое значение</code></pre>
-<p>и:</p>
-<pre><code>ожидаемое значение.</code></pre>
-<p>Для:</p>
+<p>compares:</p>
+<pre><code>the actual value</code></pre>
+<p>and:</p>
+<pre><code>the expected value.</code></pre>
+<p>For:</p>
 <pre><code>prohibit-password</code></pre>
-<p>также может учитываться:</p>
+<p>the following may also be taken into account:</p>
 <pre><code>without-password</code></pre>
-<p>Это связано с различиями представления этой настройки в версиях OpenSSH.</p>
-<h2>31. ПРОВЕРКА HARDENING</h2>
-<p>Основная функция:</p>
+<p>This is due to differences in how this setting is represented across OpenSSH versions.</p>
+<h2>31. HARDENING CHECK</h2>
+<p>The main function:</p>
 <pre><code>check_hardening()</code></pre>
-<p>сначала проверяет:</p>
+<p>first checks:</p>
 <pre><code>/etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>Если файла нет:</p>
+<p>If the file does not exist:</p>
 <pre><code>ServerGuard hardening: NOT INSTALLED</code></pre>
-<p>Если файл существует, выполняется:</p>
+<p>If the file exists, the following is executed:</p>
 <pre><code>sshd -T</code></pre>
-<p>После чего проверяются параметры.</p>
-<h2>32. ПРОВЕРЯЕМЫЕ ПАРАМЕТРЫ</h2>
-<p>Проверяются:</p>
+<p>After that, the parameters are checked.</p>
+<h2>32. PARAMETERS CHECKED</h2>
+<p>The following are checked:</p>
 <pre><code>PermitRootLogin
 PasswordAuthentication
 PubkeyAuthentication
@@ -570,9 +570,9 @@ X11Forwarding
 AllowTcpForwarding
 AllowAgentForwarding
 Compression</code></pre>
-<p>При этом не все параметры являются жёсткими требованиями.</p>
-<h2>33. ОБЯЗАТЕЛЬНЫЕ ПАРАМЕТРЫ</h2>
-<p>Следующие параметры должны соответствовать политике ServerGuard:</p>
+<p>However, not all parameters are strict requirements.</p>
+<h2>33. REQUIRED PARAMETERS</h2>
+<p>The following parameters must match the ServerGuard policy:</p>
 <pre><code>PermitRootLogin
     prohibit-password
 
@@ -596,54 +596,54 @@ AllowAgentForwarding
 
 Compression
     no</code></pre>
-<p>Если значение совпадает:</p>
+<p>If the value matches:</p>
 <pre><code>[OK]</code></pre>
-<p>Если отличается:</p>
+<p>If it differs:</p>
 <pre><code>[FAIL]</code></pre>
-<h2>34. ИНФОРМАЦИОННЫЕ ПАРАМЕТРЫ</h2>
-<p>Для:</p>
+<h2>34. INFORMATIONAL PARAMETERS</h2>
+<p>For:</p>
 <pre><code>PasswordAuthentication</code></pre>
-<p>и:</p>
+<p>and:</p>
 <pre><code>PubkeyAuthentication</code></pre>
-<p>модуль выводит фактическое значение как информацию.</p>
-<p>То есть эти параметры показываются пользователю, но не используются как жёсткое условие успешного hardening.</p>
-<p>Например:</p>
+<p>the module outputs the actual value as information.</p>
+<p>That is, these parameters are shown to the user but are not used as a strict condition for successful hardening.</p>
+<p>For example:</p>
 <pre><code>[INFO] PasswordAuthentication yes</code></pre>
-<p>не обязательно означает ошибку.</p>
-<h2>35. РЕЗУЛЬТАТ ПРОВЕРКИ</h2>
-<p>Если все обязательные параметры соответствуют политике:</p>
+<p>does not necessarily mean an error.</p>
+<h2>35. CHECK RESULT</h2>
+<p>If all required parameters match the policy:</p>
 <pre><code>ServerGuard hardening: ENABLED</code></pre>
-<p>Если хотя бы один обязательный параметр отличается:</p>
+<p>If at least one required parameter differs:</p>
 <pre><code>ServerGuard hardening: PARTIALLY APPLIED</code></pre>
-<p>Это позволяет определить разницу между:</p>
-<pre><code>файл существует</code></pre>
-<p>и:</p>
-<pre><code>политика реально применяется.</code></pre>
-<h2>36. УДАЛЕНИЕ HARDENING</h2>
-<p>Функция:</p>
+<p>This allows distinguishing between:</p>
+<pre><code>the file exists</code></pre>
+<p>and:</p>
+<pre><code>the policy is actually applied.</code></pre>
+<h2>36. REMOVING HARDENING</h2>
+<p>The function:</p>
 <pre><code>remove_hardening_config()</code></pre>
-<p>удаляет:</p>
+<p>removes:</p>
 <pre><code>/etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>Если файла нет, это не считается критической ошибкой.</p>
-<p>Удаление используется, в частности, при rollback.</p>
-<h2>37. ПОЛНЫЙ ПРОЦЕСС APPLY</h2>
-<p>Команда:</p>
+<p>If the file does not exist, this is not considered a critical error.</p>
+<p>Removal is used, in particular, during rollback.</p>
+<h2>37. THE COMPLETE APPLY PROCESS</h2>
+<p>The command:</p>
 <pre><code>ssh_hardening.py apply</code></pre>
-<p>запускает процесс применения hardening.</p>
-<p>Общая последовательность:</p>
-<pre><code>1. Проверка root
+<p>starts the hardening application process.</p>
+<p>The general sequence:</p>
+<pre><code>1. Root check
        |
        v
-2. Создание директорий
+2. Creating directories
        |
        v
 3. Backup sshd_config
        |
        v
-4. Backup старого ServerGuard config
+4. Backup of the old ServerGuard config
        |
        v
-5. Создание нового config
+5. Creating the new config
        |
        v
 6. sshd -t
@@ -659,29 +659,29 @@ Compression
 8. sshd -T
        |
        v
-9. Проверка параметров
+9. Parameter check
        |
        v
-10. Результат</code></pre>
-<h2>38. BACKUP ПЕРЕД APPLY</h2>
-<p>Перед изменением основного SSH-конфигурационного файла создаётся backup.</p>
-<p>Если backup не удалось создать:</p>
+10. Result</code></pre>
+<h2>38. BACKUP BEFORE APPLY</h2>
+<p>Before modifying the main SSH configuration file, a backup is created.</p>
+<p>If the backup could not be created:</p>
 <pre><code>APPLY</code></pre>
-<p>отменяется.</p>
-<p>Принцип:</p>
+<p>is cancelled.</p>
+<p>The principle:</p>
 <pre><code>backup failed
      |
      v
 hardening cancelled</code></pre>
-<p>Это предотвращает изменение конфигурации без возможности вернуться к сохранённой версии.</p>
-<h2>39. ОТКАТ ПРИ ОШИБКЕ sshd -t</h2>
-<p>Если после создания ServerGuard-конфигурации:</p>
+<p>This prevents changing the configuration without the ability to return to a saved version.</p>
+<h2>39. ROLLBACK ON sshd -t ERROR</h2>
+<p>If, after creating the ServerGuard configuration:</p>
 <pre><code>sshd -t</code></pre>
-<p>возвращает ошибку:</p>
-<pre><code>1. ошибка выводится;
-2. ServerGuard удаляет созданный hardening config;
-3. операция считается неуспешной.</code></pre>
-<p>Схема:</p>
+<p>returns an error:</p>
+<pre><code>1. the error is output;
+2. ServerGuard removes the created hardening config;
+3. the operation is considered unsuccessful.</code></pre>
+<p>Diagram:</p>
 <pre><code>CREATE
   |
   v
@@ -695,16 +695,16 @@ REMOVE CONFIG
   |
   v
 CANCEL</code></pre>
-<h2>40. ОТКАТ ПРИ ОШИБКЕ RELOAD</h2>
-<p>Если:</p>
+<h2>40. ROLLBACK ON RELOAD ERROR</h2>
+<p>If:</p>
 <pre><code>sshd -t</code></pre>
-<p>успешен, но:</p>
+<p>is successful, but:</p>
 <pre><code>systemctl reload</code></pre>
-<p>завершается ошибкой:</p>
-<pre><code>1. ошибка выводится;
-2. hardening config удаляется;
-3. операция считается неуспешной.</code></pre>
-<p>Схема:</p>
+<p>ends with an error:</p>
+<pre><code>1. the error is output;
+2. the hardening config is removed;
+3. the operation is considered unsuccessful.</code></pre>
+<p>Diagram:</p>
 <pre><code>CONFIG
   |
   v
@@ -721,13 +721,13 @@ ERROR
   |
   v
 remove config</code></pre>
-<h2>41. ФИНАЛЬНАЯ ПРОВЕРКА</h2>
-<p>После успешного reload ServerGuard выполняет:</p>
+<h2>41. FINAL VERIFICATION</h2>
+<p>After a successful reload, ServerGuard executes:</p>
 <pre><code>check_hardening()</code></pre>
-<p>Внутри используется:</p>
+<p>Internally, the following is used:</p>
 <pre><code>sshd -T</code></pre>
-<p>После этого проверяются реальные значения параметров.</p>
-<p>Таким образом используется последовательность:</p>
+<p>After that, the actual parameter values are checked.</p>
+<p>Thus, the following sequence is used:</p>
 <pre><code>CREATE
    |
    v
@@ -741,51 +741,51 @@ EFFECTIVE CONFIG
    |
    v
 VERIFY</code></pre>
-<p>Это важнее, чем просто проверить существование файла.</p>
-<h2>42. РЕЗУЛЬТАТ APPLY</h2>
-<p>При полном успехе:</p>
+<p>This is more important than merely checking whether the file exists.</p>
+<h2>42. APPLY RESULT</h2>
+<p>On complete success:</p>
 <pre><code>SSH HARDENING APPLIED SUCCESSFULLY</code></pre>
-<p>Если обязательные параметры не соответствуют политике:</p>
+<p>If the required parameters do not match the policy:</p>
 <pre><code>ServerGuard hardening was not fully applied.</code></pre>
-<p>Таким образом наличие конфигурационного файла само по себе не считается достаточным доказательством успешного применения.</p>
-<h2>43. ПРОСМОТР BACKUP</h2>
-<p>Функция:</p>
+<p>Thus, the presence of the configuration file by itself is not considered sufficient proof of successful application.</p>
+<h2>43. VIEWING BACKUPS</h2>
+<p>The function:</p>
 <pre><code>list_backups()</code></pre>
-<p>показывает содержимое:</p>
+<p>shows the contents of:</p>
 <pre><code>/opt/serverguard/backups</code></pre>
-<p>Backup-файлы сортируются так, чтобы новые версии отображались раньше старых.</p>
-<p>Например:</p>
+<p>Backup files are sorted so that newer versions are displayed before older ones.</p>
+<p>For example:</p>
 <pre><code>1. sshd_config_20260930_215300.backup
 2. sshd_config_20260930_204100.backup
 3. sshd_config_20260929_190000.backup</code></pre>
-<p>Номер используется при выборе backup.</p>
+<p>The number is used when selecting a backup.</p>
 <h2>44. RESTORE</h2>
-<p>Модуль поддерживает восстановление основной SSH-конфигурации.</p>
-<p>Команда:</p>
+<p>The module supports restoring the main SSH configuration.</p>
+<p>The command:</p>
 <pre><code>ssh_hardening.py restore &lt;backup_file&gt;</code></pre>
-<p>использует выбранную резервную копию.</p>
-<p>Основной восстанавливаемый файл:</p>
+<p>uses the selected backup.</p>
+<p>The main file being restored:</p>
 <pre><code>/etc/ssh/sshd_config</code></pre>
-<p>Важно:</p>
+<p>Important:</p>
 <pre><code>backup ServerGuard hardening config</code></pre>
-<p>не является тем же самым, что backup основного sshd_config.</p>
-<p>Конфигурации хранятся отдельно.</p>
-<h2>45. АВАРИЙНАЯ КОПИЯ ПЕРЕД RESTORE</h2>
-<p>Перед восстановлением текущий:</p>
+<p>is not the same as a backup of the main sshd_config.</p>
+<p>The configurations are stored separately.</p>
+<h2>45. EMERGENCY COPY BEFORE RESTORE</h2>
+<p>Before restoration, the current:</p>
 <pre><code>/etc/ssh/sshd_config</code></pre>
-<p>сохраняется отдельно.</p>
-<p>Например:</p>
+<p>is saved separately.</p>
+<p>For example:</p>
 <pre><code>before_restore_20260930_215500.backup</code></pre>
-<p>Это emergency backup.</p>
-<p>Он нужен для возможности rollback, если выбранная старая конфигурация окажется невалидной.</p>
-<h2>46. ПРОВЕРКА RESTORE</h2>
-<p>После копирования backup выполняется:</p>
+<p>This is an emergency backup.</p>
+<p>It is needed to enable rollback if the selected old configuration turns out to be invalid.</p>
+<h2>46. RESTORE VERIFICATION</h2>
+<p>After copying the backup, the following is executed:</p>
 <pre><code>sshd -t</code></pre>
-<p>Если конфигурация валидна:</p>
-<pre><code>процесс продолжается.</code></pre>
-<p>Если конфигурация невалидна:</p>
-<pre><code>ServerGuard пытается восстановить emergency backup.</code></pre>
-<p>Схема:</p>
+<p>If the configuration is valid:</p>
+<pre><code>the process continues.</code></pre>
+<p>If the configuration is invalid:</p>
+<pre><code>ServerGuard attempts to restore the emergency backup.</code></pre>
+<p>Diagram:</p>
 <pre><code>RESTORE
    |
    v
@@ -797,17 +797,17 @@ sshd -t
 <pre><code>|     |
 v     v</code></pre>
 <p>RELOAD  ROLLBACK</p>
-<h2>47. ЗАЩИТА ОТ PATH TRAVERSAL</h2>
-<p>Команда:</p>
+<h2>47. PROTECTION AGAINST PATH TRAVERSAL</h2>
+<p>The command:</p>
 <pre><code>ssh_hardening.py restore &lt;backup_file&gt;</code></pre>
-<p>принимает имя backup.</p>
-<p>Однако пользователь не должен иметь возможность передать произвольный путь к файлу.</p>
-<p>Поэтому имя backup проверяется.</p>
-<p>Запрещаются опасные элементы:</p>
+<p>accepts a backup name.</p>
+<p>However, the user must not be able to pass an arbitrary file path.</p>
+<p>Therefore, the backup name is validated.</p>
+<p>Dangerous elements are prohibited:</p>
 <pre><code>/
 \
 ..</code></pre>
-<p>Например, должны отклоняться:</p>
+<p>For example, the following must be rejected:</p>
 <pre><code>../../etc/passwd
 
 ../backup
@@ -815,26 +815,26 @@ v     v</code></pre>
 /tmp/file
 
 ..\file</code></pre>
-<p>Цель:</p>
-<pre><code>разрешить работу только внутри
+<p>Goal:</p>
+<pre><code>allow operation only within
 /opt/serverguard/backups</code></pre>
-<p>Это защита от Path Traversal.</p>
-<h2>48. ПРОВЕРКА ТИПА BACKUP</h2>
-<p>Даже если файл существует, дополнительно проверяется его имя.</p>
-<p>Разрешённые типы:</p>
+<p>This is protection against Path Traversal.</p>
+<h2>48. BACKUP TYPE VERIFICATION</h2>
+<p>Even if the file exists, its name is additionally checked.</p>
+<p>Allowed types:</p>
 <pre><code>sshd_config_*.backup</code></pre>
-<p>и:</p>
+<p>and:</p>
 <pre><code>before_restore_*.backup</code></pre>
-<p>Если имя не соответствует допустимому типу:</p>
+<p>If the name does not match an allowed type:</p>
 <pre><code>Unsupported backup type.</code></pre>
-<p>Таким образом одной проверки существования файла недостаточно.</p>
-<h2>49. КОМАНДА CHECK</h2>
-<p>Поддерживается:</p>
+<p>Thus, a single existence check of the file is not sufficient.</p>
+<h2>49. THE CHECK COMMAND</h2>
+<p>The following is supported:</p>
 <pre><code>ssh_hardening.py check</code></pre>
-<p>Команда выполняет проверку SSH.</p>
-<p>Проверяется:</p>
-<ul><li>имя SSH-сервиса;</li><li>состояние SSH;</li><li>наличие hardening;</li><li>effective configuration;</li><li>обязательные параметры;</li><li>информационные параметры.</li></ul>
-<p>Упрощённо:</p>
+<p>The command performs an SSH check.</p>
+<p>The following are checked:</p>
+<ul><li>the SSH service name;</li><li>the SSH state;</li><li>the presence of hardening;</li><li>effective configuration;</li><li>required parameters;</li><li>informational parameters.</li></ul>
+<p>Simplified:</p>
 <pre><code>CHECK
   |
   +-- SSH service
@@ -844,11 +844,11 @@ v     v</code></pre>
   +-- sshd -T
   |
   +-- Policy verification</code></pre>
-<h2>50. КОМАНДА APPLY</h2>
-<p>Команда:</p>
+<h2>50. THE APPLY COMMAND</h2>
+<p>The command:</p>
 <pre><code>ssh_hardening.py apply</code></pre>
-<p>запускает полное применение политики.</p>
-<p>Основные этапы:</p>
+<p>starts the full application of the policy.</p>
+<p>Main stages:</p>
 <pre><code>root check
     |
     v
@@ -868,40 +868,40 @@ sshd -T
     |
     v
 verify</code></pre>
-<h2>51. КОМАНДА RESTORE</h2>
-<p>Команда:</p>
+<h2>51. THE RESTORE COMMAND</h2>
+<p>The command:</p>
 <pre><code>ssh_hardening.py restore &lt;backup_file&gt;</code></pre>
-<p>выполняет:</p>
-<ul><li>проверку root;</li><li>проверку имени backup;</li><li>проверку существования;</li><li>проверку типа backup;</li><li>создание emergency backup;</li><li>восстановление;</li><li>sshd -t;</li><li>rollback при ошибке;</li><li>reload SSH.</li></ul>
-<h2>52. КОМАНДЫ ПРОГРАММЫ</h2>
-<p>Основной синтаксис:</p>
+<p>performs:</p>
+<ul><li>root check;</li><li>backup name validation;</li><li>existence check;</li><li>backup type validation;</li><li>creation of an emergency backup;</li><li>restoration;</li><li>sshd -t;</li><li>rollback on error;</li><li>reload SSH.</li></ul>
+<h2>52. PROGRAM COMMANDS</h2>
+<p>Main syntax:</p>
 <pre><code>ssh_hardening.py [check|apply|restore]</code></pre>
-<p>Проверка:</p>
+<p>Check:</p>
 <pre><code>python3 ssh_hardening.py check</code></pre>
-<p>Применение:</p>
+<p>Apply:</p>
 <pre><code>python3 ssh_hardening.py apply</code></pre>
-<p>Восстановление:</p>
+<p>Restore:</p>
 <pre><code>python3 ssh_hardening.py restore sshd_config_20260930_215300.backup</code></pre>
-<p>Неизвестная команда приводит к сообщению:</p>
+<p>An unknown command results in the message:</p>
 <pre><code>Unknown command</code></pre>
-<p>и выводу корректного синтаксиса.</p>
-<h2>53. ТОЧКА ВХОДА</h2>
-<p>В конце файла используется стандартная конструкция Python:</p>
+<p>and the output of the correct syntax.</p>
+<h2>53. ENTRY POINT</h2>
+<p>At the end of the file, the standard Python construct is used:</p>
 <pre><code>if __name__ == &quot;__main__&quot;:
     sys.exit(main())</code></pre>
-<p>Это означает: если файл запускается непосредственно:</p>
+<p>This means: if the file is run directly:</p>
 <pre><code>python3 ssh_hardening.py</code></pre>
-<p>вызывается:</p>
+<p>the following is called:</p>
 <pre><code>main()</code></pre>
-<p>Функция main() анализирует:</p>
+<p>The main() function analyzes:</p>
 <pre><code>sys.argv</code></pre>
-<p>и определяет необходимую операцию.</p>
-<h2>54. ОБРАБОТКА КОМАНД</h2>
-<p>Поддерживаются:</p>
+<p>and determines the required operation.</p>
+<h2>54. COMMAND HANDLING</h2>
+<p>The following are supported:</p>
 <pre><code>check
 apply
 restore</code></pre>
-<p>Логика:</p>
+<p>The logic:</p>
 <pre><code>check
    |
    v
@@ -916,47 +916,47 @@ restore
    |
    v
 command_restore()</code></pre>
-<p>Неизвестная команда завершается ошибкой.</p>
-<h2>55. ПОЛНЫЙ СЦЕНАРИЙ APPLY</h2>
-<p>Администратор выполняет:</p>
+<p>An unknown command fails with an error.</p>
+<h2>55. THE COMPLETE APPLY SCENARIO</h2>
+<p>The administrator runs:</p>
 <pre><code>python3 ssh_hardening.py apply</code></pre>
-<p>Шаг 1:</p>
-<pre><code>Проверка root.</code></pre>
-<p>Шаг 2:</p>
-<pre><code>Создание необходимых директорий.</code></pre>
-<p>Шаг 3:</p>
+<p>Step 1:</p>
+<pre><code>Root check.</code></pre>
+<p>Step 2:</p>
+<pre><code>Creating the required directories.</code></pre>
+<p>Step 3:</p>
 <pre><code>Backup:
 
 /etc/ssh/sshd_config</code></pre>
-<p>Шаг 4:</p>
-<pre><code>Backup предыдущего ServerGuard config,
-если он существует.</code></pre>
-<p>Шаг 5:</p>
-<pre><code>Создание:
+<p>Step 4:</p>
+<pre><code>Backup of the previous ServerGuard config,
+if it exists.</code></pre>
+<p>Step 5:</p>
+<pre><code>Creating:
 
 /etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>Шаг 6:</p>
-<pre><code>Проверка:
+<p>Step 6:</p>
+<pre><code>Check:
 
 sshd -t</code></pre>
-<p>Шаг 7:</p>
+<p>Step 7:</p>
 <pre><code>Reload:
 
 systemctl reload ssh
 
-или:
+or:
 
 systemctl reload sshd</code></pre>
-<p>Шаг 8:</p>
-<pre><code>Получение:
+<p>Step 8:</p>
+<pre><code>Retrieving:
 
 sshd -T</code></pre>
-<p>Шаг 9:</p>
-<pre><code>Проверка политики.</code></pre>
-<p>Шаг 10:</p>
-<pre><code>Формирование результата.</code></pre>
-<h2>56. СЦЕНАРИЙ УСПЕШНОГО APPLY</h2>
-<p>Схема:</p>
+<p>Step 9:</p>
+<pre><code>Policy check.</code></pre>
+<p>Step 10:</p>
+<pre><code>Generating the result.</code></pre>
+<h2>56. SUCCESSFUL APPLY SCENARIO</h2>
+<p>Diagram:</p>
 <pre><code>root
   |
   v
@@ -982,12 +982,12 @@ verify
   |
   v
 SUCCESS</code></pre>
-<p>Результат:</p>
+<p>Result:</p>
 <pre><code>SSH HARDENING APPLIED SUCCESSFULLY</code></pre>
-<h2>57. СЦЕНАРИЙ ОШИБКИ</h2>
-<p>Если:</p>
+<h2>57. ERROR SCENARIO</h2>
+<p>If:</p>
 <pre><code>sshd -t</code></pre>
-<p>возвращает ошибку:</p>
+<p>returns an error:</p>
 <pre><code>CREATE
   |
   v
@@ -1001,9 +1001,9 @@ REMOVE HARDENING CONFIG
   |
   v
 CANCEL</code></pre>
-<p>Таким образом некорректный ServerGuard fragment не должен оставаться результатом неудачного применения.</p>
-<h2>58. СЦЕНАРИЙ НЕУДАЧНОГО RELOAD</h2>
-<p>Сценарий:</p>
+<p>Thus, an incorrect ServerGuard fragment must not remain as a result of a failed application.</p>
+<h2>58. FAILED RELOAD SCENARIO</h2>
+<p>Scenario:</p>
 <pre><code>CREATE
   |
   v
@@ -1023,21 +1023,21 @@ REMOVE HARDENING CONFIG
   |
   v
 ERROR</code></pre>
-<p>Операция применения считается неуспешной.</p>
-<h2>59. СЦЕНАРИЙ RESTORE</h2>
-<p>Администратор выбирает:</p>
+<p>The apply operation is considered unsuccessful.</p>
+<h2>59. RESTORE SCENARIO</h2>
+<p>The administrator selects:</p>
 <pre><code>sshd_config_20260930_210000.backup</code></pre>
-<p>ServerGuard выполняет:</p>
-<pre><code>1. Проверку root.
-2. Проверку имени.
-3. Проверку существования.
-4. Проверку допустимого типа.
-5. Создание emergency backup.
-6. Копирование выбранного backup.
+<p>ServerGuard performs:</p>
+<pre><code>1. Root check.
+2. Name validation.
+3. Existence check.
+4. Allowed type check.
+5. Creation of an emergency backup.
+6. Copying the selected backup.
 7. sshd -t.
-8. Rollback при ошибке.
+8. Rollback on error.
 9. Reload SSH.</code></pre>
-<p>Схема:</p>
+<p>Diagram:</p>
 <pre><code>SELECT BACKUP
      |
      v
@@ -1061,43 +1061,43 @@ RELOAD ROLLBACK
   |
   v
 SUCCESS</code></pre>
-<h2>60. БЕЗОПАСНОСТЬ МОДУЛЯ</h2>
-<p>В модуле реализованы несколько защитных механизмов.</p>
+<h2>60. MODULE SECURITY</h2>
+<p>The module implements several protective mechanisms.</p>
 <p>1. ROOT CHECK</p>
-<p>Только root может выполнять привилегированные операции.</p>
+<p>Only root can perform privileged operations.</p>
 <p>2. BACKUP BEFORE CHANGE</p>
-<p>Перед изменением создаётся резервная копия.</p>
+<p>A backup is created before any change.</p>
 <p>3. CONFIG VALIDATION</p>
-<p>Используется:</p>
+<p>The following is used:</p>
 <pre><code>sshd -t</code></pre>
 <p>4. EFFECTIVE CONFIG CHECK</p>
-<p>Используется:</p>
+<p>The following is used:</p>
 <pre><code>sshd -T</code></pre>
 <p>5. EMERGENCY BACKUP</p>
-<p>Перед restore сохраняется текущая конфигурация.</p>
+<p>Before restore, the current configuration is saved.</p>
 <p>6. ROLLBACK</p>
-<p>При проблеме с восстановлением используется emergency backup.</p>
+<p>If there is a problem with restoration, the emergency backup is used.</p>
 <p>7. PATH TRAVERSAL PROTECTION</p>
-<p>Опасные элементы пути запрещаются.</p>
+<p>Dangerous path elements are prohibited.</p>
 <p>8. BACKUP TYPE VALIDATION</p>
-<p>Разрешаются только предусмотренные типы backup.</p>
-<h2>61. ЧТО ИМЕННО ЗАЩИЩАЕТ SSH HARDENING</h2>
-<p>Модуль изменяет политику OpenSSH.</p>
-<p>Он ограничивает:</p>
-<ul><li>пустые пароли;</li><li>root password login;</li><li>число попыток аутентификации;</li><li>время аутентификации;</li><li>X11 forwarding;</li><li>TCP forwarding;</li><li>SSH Agent Forwarding;</li><li>SSH compression.</li></ul>
-<p>Это защита именно на уровне:</p>
+<p>Only the provided backup types are allowed.</p>
+<h2>61. WHAT EXACTLY SSH HARDENING PROTECTS</h2>
+<p>The module changes the OpenSSH policy.</p>
+<p>It restricts:</p>
+<ul><li>empty passwords;</li><li>root password login;</li><li>the number of authentication attempts;</li><li>authentication time;</li><li>X11 forwarding;</li><li>TCP forwarding;</li><li>SSH Agent Forwarding;</li><li>SSH compression.</li></ul>
+<p>This is protection specifically at the level of:</p>
 <pre><code>SSH daemon configuration.</code></pre>
-<h2>62. ЧЕГО МОДУЛЬ НЕ ДЕЛАЕТ</h2>
-<p>SSH Hardening НЕ является:</p>
-<ul><li>антивирусом;</li><li>firewall;</li><li>IDS/IPS;</li><li>системой блокировки IP;</li><li>системой анализа сетевых пакетов;</li><li>системой мониторинга файлов;</li><li>системой обнаружения malware;</li><li>полноценной защитой от DDoS.</li></ul>
-<p>Он отвечает за конфигурацию OpenSSH.</p>
-<p>Например:</p>
+<h2>62. WHAT THE MODULE DOES NOT DO</h2>
+<p>SSH Hardening is NOT:</p>
+<ul><li>an antivirus;</li><li>a firewall;</li><li>IDS/IPS;</li><li>an IP blocking system;</li><li>a network packet analysis system;</li><li>a file monitoring system;</li><li>a malware detection system;</li><li>a full-fledged DDoS protection.</li></ul>
+<p>It is responsible for the OpenSSH configuration.</p>
+<p>For example:</p>
 <pre><code>MaxAuthTries 3</code></pre>
-<p>не означает:</p>
-<pre><code>&quot;IP заблокируется после трёх попыток&quot;.</code></pre>
-<p>Для обнаружения и блокировки IP используется отдельная логика ServerGuard Security.</p>
-<h2>63. SSH HARDENING И SECURITY</h2>
-<p>Архитектура ServerGuard разделяет обязанности.</p>
+<p>does not mean:</p>
+<pre><code>&quot;the IP will be blocked after three attempts&quot;.</code></pre>
+<p>A separate ServerGuard Security logic is used for IP detection and blocking.</p>
+<h2>63. SSH HARDENING AND SECURITY</h2>
+<p>The ServerGuard architecture separates responsibilities.</p>
 <p>SSH Hardening:</p>
 <pre><code>OpenSSH configuration
       |
@@ -1113,14 +1113,14 @@ SUCCESS</code></pre>
       +-- IP analysis
       +-- brute-force detection
       +-- blocking</code></pre>
-<p>Один модуль не заменяет другой.</p>
-<h2>64. SSH HARDENING И FIREWALL</h2>
-<p>SSH Hardening не является firewall.</p>
-<p>Он не отвечает за:</p>
+<p>One module does not replace the other.</p>
+<h2>64. SSH HARDENING AND FIREWALL</h2>
+<p>SSH Hardening is not a firewall.</p>
+<p>It is not responsible for:</p>
 <pre><code>UFW rules
 packet filtering
 IP blocking</code></pre>
-<p>Уровни можно представить так:</p>
+<p>The levels can be represented as follows:</p>
 <pre><code>Internet
    |
    v
@@ -1134,33 +1134,33 @@ SSH authentication
    |
    v
 SSH Hardening policy</code></pre>
-<p>Каждый уровень выполняет свою задачу.</p>
-<h2>65. ДЛЯ НАЧИНАЮЩИХ</h2>
-<p>Если объяснить модуль максимально просто:</p>
-<p>SSH Hardening — это программа, которая говорит SSH:</p>
-<pre><code>&quot;Используй более строгие правила безопасности.&quot;</code></pre>
-<p>Например:</p>
+<p>Each level performs its own task.</p>
+<h2>65. FOR BEGINNERS</h2>
+<p>To explain the module as simply as possible:</p>
+<p>SSH Hardening is a program that tells SSH:</p>
+<pre><code>&quot;Use stricter security rules.&quot;</code></pre>
+<p>For example:</p>
 <pre><code>MaxAuthTries 3</code></pre>
-<p>означает:</p>
-<pre><code>ограничить количество попыток аутентификации
-в рамках одного SSH-соединения.</code></pre>
-<p>Параметр:</p>
+<p>means:</p>
+<pre><code>limit the number of authentication attempts
+within a single SSH connection.</code></pre>
+<p>The parameter:</p>
 <pre><code>PermitEmptyPasswords no</code></pre>
-<p>означает:</p>
-<pre><code>не использовать пустые пароли для SSH-аутентификации.</code></pre>
-<p>Параметр:</p>
+<p>means:</p>
+<pre><code>do not use empty passwords for SSH authentication.</code></pre>
+<p>The parameter:</p>
 <pre><code>X11Forwarding no</code></pre>
-<p>означает:</p>
-<pre><code>отключить X11 forwarding.</code></pre>
-<p>После изменения ServerGuard проверяет:</p>
+<p>means:</p>
+<pre><code>disable X11 forwarding.</code></pre>
+<p>After the change, ServerGuard checks:</p>
 <pre><code>sshd -t</code></pre>
-<p>а затем:</p>
+<p>and then:</p>
 <pre><code>sshd -T</code></pre>
-<h2>66. ДЛЯ ОПЫТНЫХ РАЗРАБОТЧИКОВ</h2>
-<p>С технической точки зрения ssh_hardening.py является управляющим слоем над OpenSSH.</p>
-<p>Основные принципы:</p>
+<h2>66. FOR EXPERIENCED DEVELOPERS</h2>
+<p>From a technical standpoint, ssh_hardening.py is a control layer over OpenSSH.</p>
+<p>Main principles:</p>
 <ul><li>declarative security policy;</li><li>configuration fragment;</li><li>backup before mutation;</li><li>validation before reload;</li><li>effective configuration verification;</li><li>controlled rollback;</li><li>restricted restore input.</li></ul>
-<p>Главная последовательность:</p>
+<p>The main sequence:</p>
 <pre><code>BACKUP
    |
    v
@@ -1177,25 +1177,25 @@ EFFECTIVE CONFIG
    |
    v
 VERIFY</code></pre>
-<h2>67. ПОЧЕМУ ИСПОЛЬЗУЕТСЯ CONFIGURATION FRAGMENT</h2>
-<p>Вместо полного изменения:</p>
+<h2>67. WHY A CONFIGURATION FRAGMENT IS USED</h2>
+<p>Instead of fully modifying:</p>
 <pre><code>/etc/ssh/sshd_config</code></pre>
-<p>ServerGuard создаёт:</p>
+<p>ServerGuard creates:</p>
 <pre><code>/etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>Преимущество такого подхода:</p>
-<pre><code>основной конфигурационный файл остаётся отдельно;
+<p>The advantage of this approach:</p>
+<pre><code>the main configuration file remains separate;
 
-политика ServerGuard имеет собственный файл;
+the ServerGuard policy has its own file;
 
-обновление ServerGuard не требует полного переписывания
-конфигурации администратора;
+updating ServerGuard does not require completely rewriting
+the administrator's configuration;
 
-rollback ServerGuard-конфигурации может выполняться отдельно.</code></pre>
-<h2>68. ПОЧЕМУ ИСПОЛЬЗУЕТСЯ sshd -t</h2>
-<p>Команда:</p>
+rollback of the ServerGuard configuration can be performed separately.</code></pre>
+<h2>68. WHY sshd -t IS USED</h2>
+<p>The command:</p>
 <pre><code>sshd -t</code></pre>
-<p>является барьером перед reload.</p>
-<p>Условно:</p>
+<p>is a barrier before reload.</p>
+<p>Conditionally:</p>
 <pre><code>sshd -t
    |
    +-- 0
@@ -1207,47 +1207,47 @@ rollback ServerGuard-конфигурации может выполняться 
         |
         v
       ERROR</code></pre>
-<p>Без этой проверки некорректная конфигурация могла бы быть применена без предварительного обнаружения ошибки.</p>
-<h2>69. ПОЧЕМУ ИСПОЛЬЗУЕТСЯ sshd -T</h2>
-<p>Команда:</p>
+<p>Without this check, an incorrect configuration could be applied without the error being detected in advance.</p>
+<h2>69. WHY sshd -T IS USED</h2>
+<p>The command:</p>
 <pre><code>sshd -T</code></pre>
-<p>показывает итоговую конфигурацию OpenSSH.</p>
-<p>Это особенно важно при наличии:</p>
+<p>shows the resulting OpenSSH configuration.</p>
+<p>This is especially important when the following are present:</p>
 <pre><code>/etc/ssh/sshd_config</code></pre>
-<p>и:</p>
+<p>and:</p>
 <pre><code>/etc/ssh/sshd_config.d/*.conf</code></pre>
-<p>ServerGuard проверяет не просто созданный файл, а итоговое состояние, которое видит OpenSSH.</p>
-<h2>70. ЭФФЕКТИВНАЯ КОНФИГУРАЦИЯ</h2>
-<p>Можно разделить два понятия.</p>
+<p>ServerGuard checks not merely the created file but the resulting state that OpenSSH sees.</p>
+<h2>70. EFFECTIVE CONFIGURATION</h2>
+<p>Two concepts can be distinguished.</p>
 <p>CONFIGURATION FILE:</p>
 <pre><code>99-serverguard-hardening.conf</code></pre>
-<p>и:</p>
+<p>and:</p>
 <p>EFFECTIVE CONFIGURATION:</p>
-<pre><code>результат sshd -T</code></pre>
-<p>Первое показывает:</p>
-<pre><code>что записал ServerGuard.</code></pre>
-<p>Второе показывает:</p>
-<pre><code>что фактически использует OpenSSH.</code></pre>
-<p>Поэтому:</p>
-<pre><code>файл существует</code></pre>
-<p>не обязательно означает:</p>
-<pre><code>параметр реально применяется.</code></pre>
-<h2>71. СТРУКТУРА ФУНКЦИЙ</h2>
-<p>Основные функции модуля:</p>
+<pre><code>the result of sshd -T</code></pre>
+<p>The first shows:</p>
+<pre><code>what ServerGuard wrote.</code></pre>
+<p>The second shows:</p>
+<pre><code>what OpenSSH actually uses.</code></pre>
+<p>Therefore:</p>
+<pre><code>the file exists</code></pre>
+<p>does not necessarily mean:</p>
+<pre><code>the parameter is actually applied.</code></pre>
+<h2>71. FUNCTION STRUCTURE</h2>
+<p>Main functions of the module:</p>
 <pre><code>run_command()
-    запуск Linux-команд
+    launching Linux commands
 
 check_root()
-    проверка root
+    root check
 
 create_directories()
-    создание директорий
+    creating directories
 
 get_ssh_service()
-    определение SSH service
+    determining the SSH service
 
 check_ssh_service()
-    проверка состояния SSH
+    checking the SSH state
 
 backup_main_config()
     backup sshd_config
@@ -1256,51 +1256,51 @@ backup_hardening_config()
     backup ServerGuard config
 
 create_hardening_config()
-    создание hardening config
+    creating the hardening config
 
 validate_ssh_config()
-    запуск sshd -t
+    running sshd -t
 
 reload_ssh()
     reload SSH
 
 get_effective_config()
-    получение sshd -T
+    retrieving sshd -T
 
 get_config_value()
-    получение параметра
+    retrieving a parameter
 
 value_matches()
-    сравнение значения
+    comparing the value
 
 check_hardening()
-    проверка политики
+    checking the policy
 
 remove_hardening_config()
-    удаление ServerGuard config
+    removing the ServerGuard config
 
 apply_hardening()
-    полный apply
+    full apply
 
 list_backups()
-    список backup
+    list of backups
 
 restore_configuration()
     restore
 
 command_check()
-    команда check
+    the check command
 
 command_apply()
-    команда apply
+    the apply command
 
 command_restore()
-    команда restore
+    the restore command
 
 main()
-    точка управления программой</code></pre>
-<h2>72. ЖИЗНЕННЫЙ ЦИКЛ HARDENING</h2>
-<p>Конфигурация проходит:</p>
+    program control point</code></pre>
+<h2>72. HARDENING LIFECYCLE</h2>
+<p>The configuration goes through:</p>
 <pre><code>NOT INSTALLED
       |
       v
@@ -1323,7 +1323,7 @@ main()
       |
       v
     ENABLED</code></pre>
-<p>При ошибке:</p>
+<p>On error:</p>
 <pre><code>APPLY
   |
   v
@@ -1334,7 +1334,7 @@ REMOVE / ROLLBACK
   |
   v
 CANCEL</code></pre>
-<h2>73. ЖИЗНЕННЫЙ ЦИКЛ RESTORE</h2>
+<h2>73. RESTORE LIFECYCLE</h2>
 <p>Restore:</p>
 <pre><code>SELECT BACKUP
       |
@@ -1359,74 +1359,74 @@ RELOAD  ROLLBACK
    |
    v
 SUCCESS</code></pre>
-<h2>74. ВАЖНАЯ ОСОБЕННОСТЬ RESTORE</h2>
-<p>Restore основной конфигурации изменяет:</p>
+<h2>74. IMPORTANT FEATURE OF RESTORE</h2>
+<p>Restoring the main configuration modifies:</p>
 <pre><code>/etc/ssh/sshd_config</code></pre>
-<p>Но ServerGuard hardening находится отдельно:</p>
+<p>But the ServerGuard hardening is located separately:</p>
 <pre><code>/etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>Поэтому:</p>
+<p>Therefore:</p>
 <pre><code>restore sshd_config</code></pre>
-<p>не означает автоматически:</p>
+<p>does not automatically mean:</p>
 <pre><code>remove ServerGuard hardening.</code></pre>
-<p>После восстановления итоговую конфигурацию следует проверять через:</p>
+<p>After restoration, the resulting configuration should be verified via:</p>
 <pre><code>sshd -T</code></pre>
-<p>или:</p>
+<p>or:</p>
 <pre><code>python3 ssh_hardening.py check</code></pre>
-<h2>75. ПРАВА HARDENING-КОНФИГУРАЦИИ</h2>
-<p>После создания устанавливаются права:</p>
+<h2>75. PERMISSIONS OF THE HARDENING CONFIGURATION</h2>
+<p>After creation, the permissions are set:</p>
 <pre><code>0644</code></pre>
-<p>То есть:</p>
-<pre><code>владелец:
+<p>That is:</p>
+<pre><code>owner:
     read + write
 
-группа:
+group:
     read
 
-остальные:
+others:
     read</code></pre>
-<p>SSH daemon может читать конфигурацию.</p>
-<p>Изменение файла требует соответствующих привилегий.</p>
-<h2>76. КОНСОЛЬНЫЙ ИНТЕРФЕЙС</h2>
-<p>Модуль использует ANSI-цвета:</p>
+<p>The SSH daemon can read the configuration.</p>
+<p>Modifying the file requires the appropriate privileges.</p>
+<h2>76. CONSOLE INTERFACE</h2>
+<p>The module uses ANSI colors:</p>
 <pre><code>RED
 GREEN
 YELLOW
 CYAN
 RESET</code></pre>
-<p>Назначение:</p>
+<p>Purpose:</p>
 <pre><code>GREEN
-    успешная операция
+    successful operation
 
 RED
-    ошибка
+    error
 
 YELLOW
-    предупреждение
+    warning
 
 CYAN
-    информационное сообщение</code></pre>
-<p>Это не влияет на работу OpenSSH и используется только для удобства работы администратора с консолью.</p>
-<h2>77. ПРИМЕР ИЗМЕНЕНИЯ КОНФИГУРАЦИИ</h2>
-<p>До применения hardening:</p>
+    informational message</code></pre>
+<p>This does not affect the operation of OpenSSH and is used only for the administrator's convenience when working with the console.</p>
+<h2>77. EXAMPLE OF A CONFIGURATION CHANGE</h2>
+<p>Before applying hardening:</p>
 <pre><code>PermitEmptyPasswords yes
 MaxAuthTries 6
 LoginGraceTime 120
 X11Forwarding yes</code></pre>
-<p>ServerGuard применяет:</p>
+<p>ServerGuard applies:</p>
 <pre><code>PermitEmptyPasswords no
 MaxAuthTries 3
 LoginGraceTime 30
 X11Forwarding no</code></pre>
-<p>Также:</p>
+<p>Also:</p>
 <pre><code>AllowTcpForwarding no
 AllowAgentForwarding no
 Compression no
 PermitRootLogin prohibit-password</code></pre>
-<p>После reload выполняется:</p>
+<p>After reload, the following is executed:</p>
 <pre><code>sshd -T</code></pre>
-<p>и полученные значения проверяются.</p>
-<h2>78. ПРИМЕР УСПЕШНОГО РЕЗУЛЬТАТА</h2>
-<p>Условно консоль может показать:</p>
+<p>and the obtained values are checked.</p>
+<h2>78. EXAMPLE OF A SUCCESSFUL RESULT</h2>
+<p>As an example, the console may show:</p>
 <pre><code>[OK] SSH service: ACTIVE
 
 [OK] PermitRootLogin: prohibit-password
@@ -1444,62 +1444,62 @@ PermitRootLogin prohibit-password</code></pre>
 [OK] AllowAgentForwarding: no
 
 [OK] Compression: no</code></pre>
-<p>После чего:</p>
+<p>After which:</p>
 <pre><code>ServerGuard hardening: ENABLED</code></pre>
-<h2>79. ПРИМЕР ЧАСТИЧНОГО ПРИМЕНЕНИЯ</h2>
-<p>Если часть параметров соответствует политике, а часть отличается:</p>
+<h2>79. EXAMPLE OF PARTIAL APPLICATION</h2>
+<p>If some parameters match the policy and some differ:</p>
 <pre><code>[OK] MaxAuthTries: 3
 [OK] LoginGraceTime: 30
 [FAIL] X11Forwarding: yes</code></pre>
-<p>то результат:</p>
+<p>then the result is:</p>
 <pre><code>ServerGuard hardening: PARTIALLY APPLIED</code></pre>
-<p>Это означает:</p>
-<pre><code>конфигурация ServerGuard существует,</code></pre>
-<p>но:</p>
-<pre><code>фактическая SSH-конфигурация не полностью соответствует
-политике ServerGuard.</code></pre>
-<h2>80. ПОЧЕМУ НЕОБХОДИМА ПРОВЕРКА ПОСЛЕ RELOAD</h2>
-<p>Одного:</p>
+<p>This means:</p>
+<pre><code>the ServerGuard configuration exists,</code></pre>
+<p>but:</p>
+<pre><code>the actual SSH configuration does not fully match
+the ServerGuard policy.</code></pre>
+<h2>80. WHY CHECKING AFTER RELOAD IS NECESSARY</h2>
+<p>Just:</p>
 <pre><code>systemctl reload</code></pre>
-<p>недостаточно.</p>
-<p>Правильная логика:</p>
-<pre><code>создать конфигурацию
+<p>is not enough.</p>
+<p>The correct logic:</p>
+<pre><code>create the configuration
       |
       v
-проверить синтаксис
+check the syntax
       |
       v
 reload
       |
       v
-получить effective config
+obtain the effective config
       |
       v
-проверить значения</code></pre>
-<p>Это позволяет обнаружить ситуации, когда конфигурационный файл существует, но итоговая политика OpenSSH отличается от ожидаемой.</p>
-<h2>81. ВАЖНЫЕ ОГРАНИЧЕНИЯ</h2>
-<p>Некоторые hardening-настройки уменьшают функциональность SSH.</p>
-<p>Например:</p>
+check the values</code></pre>
+<p>This makes it possible to detect situations where the configuration file exists but the resulting OpenSSH policy differs from the expected one.</p>
+<h2>81. IMPORTANT LIMITATIONS</h2>
+<p>Some hardening settings reduce SSH functionality.</p>
+<p>For example:</p>
 <pre><code>AllowTcpForwarding no</code></pre>
-<p>может отключить SSH-туннели.</p>
+<p>may disable SSH tunnels.</p>
 <pre><code>AllowAgentForwarding no</code></pre>
-<p>может нарушить Agent Forwarding.</p>
+<p>may disrupt Agent Forwarding.</p>
 <pre><code>X11Forwarding no</code></pre>
-<p>отключает X11 forwarding.</p>
+<p>disables X11 forwarding.</p>
 <pre><code>Compression no</code></pre>
-<p>отключает SSH compression.</p>
-<p>Поэтому применение hardening должно учитывать назначение сервера.</p>
-<h2>82. ВАЖНО ДЛЯ АДМИНИСТРАТОРОВ</h2>
-<p>Перед применением рекомендуется убедиться, что существует рабочий административный доступ.</p>
-<p>Особенно важно проверить:</p>
-<ul><li>SSH-ключ администратора;</li><li>пользователя администратора;</li><li>возможность входа;</li><li>root policy;</li><li>требования к forwarding;</li><li>наличие резервного или второго канала доступа.</li></ul>
-<p>Несмотря на наличие backup и rollback, администратор должен понимать, какие SSH-возможности используются конкретным сервером.</p>
-<h2>83. ОТЛИЧИЕ ОТ РУЧНОГО РЕДАКТИРОВАНИЯ</h2>
-<p>Ручной вариант:</p>
+<p>disables SSH compression.</p>
+<p>Therefore, applying hardening must take the purpose of the server into account.</p>
+<h2>82. IMPORTANT FOR ADMINISTRATORS</h2>
+<p>Before applying, it is recommended to make sure that a working administrative access exists.</p>
+<p>It is especially important to check:</p>
+<ul><li>the administrator's SSH key;</li><li>the administrator user;</li><li>the ability to log in;</li><li>root policy;</li><li>forwarding requirements;</li><li>the presence of a backup or second access channel.</li></ul>
+<p>Despite the presence of backup and rollback, the administrator must understand which SSH capabilities are used by a particular server.</p>
+<h2>83. DIFFERENCE FROM MANUAL EDITING</h2>
+<p>The manual approach:</p>
 <pre><code>nano /etc/ssh/sshd_config</code></pre>
-<p>предполагает, что администратор самостоятельно:</p>
-<ul><li>изменит настройки;</li><li>сохранит backup;</li><li>проверит синтаксис;</li><li>reload SSH;</li><li>проверит результат;</li><li>при необходимости выполнит rollback.</li></ul>
-<p>ServerGuard объединяет эти операции:</p>
+<p>assumes that the administrator independently:</p>
+<ul><li>changes the settings;</li><li>saves a backup;</li><li>checks the syntax;</li><li>reload SSH;</li><li>checks the result;</li><li>performs a rollback if necessary.</li></ul>
+<p>ServerGuard combines these operations:</p>
 <pre><code>BACKUP
    |
    v
@@ -1516,9 +1516,9 @@ VERIFY
    |
    v
 RESULT</code></pre>
-<h2>84. SERVERGUARD C++ И PYTHON</h2>
-<p>В архитектуре ServerGuard пользовательский интерфейс может находиться в C++ приложении, а Linux-логика выполняться Python-модулем.</p>
-<p>Упрощённо:</p>
+<h2>84. SERVERGUARD C++ AND PYTHON</h2>
+<p>In the ServerGuard architecture, the user interface may reside in a C++ application, while the Linux logic is performed by a Python module.</p>
+<p>Simplified:</p>
 <pre><code>ServerGuard C++
       |
       | SSH
@@ -1533,104 +1533,104 @@ ssh_hardening.py
       +---- systemd
       |
       +---- filesystem</code></pre>
-<p>C++ может отвечать за:</p>
-<ul><li>GUI;</li><li>SSH-соединение;</li><li>передачу команд;</li><li>управление модулями;</li><li>отображение результатов.</li></ul>
-<p>Python-модуль отвечает непосредственно за Linux-операции SSH Hardening.</p>
-<h2>85. ПОЛНАЯ СХЕМА</h2>
+<p>C++ may be responsible for:</p>
+<ul><li>GUI;</li><li>the SSH connection;</li><li>passing commands;</li><li>managing modules;</li><li>displaying results.</li></ul>
+<p>The Python module is directly responsible for the Linux operations of SSH Hardening.</p>
+<h2>85. COMPLETE DIAGRAM</h2>
 <pre><code>                     SERVERGUARD
-                          |
-                          v
-                   SSH CONNECTION
-                          |
-                          v
-                    LINUX SERVER
-                          |
-                          v
-                 ssh_hardening.py
-                          |
-          +---------------+---------------+
-          |               |               |
-          v               v               v
-      Filesystem       systemctl         sshd
-          |               |               |
-          v               v               v
-    /etc/ssh/         SSH service     OpenSSH
-          |
-          v
-99-serverguard-hardening.conf
-          |
-          v
-      sshd -t
-          |
-          v
-    SSH reload
-          |
-          v
-      sshd -T
-          |
-          v
-  Effective config
-          |
-          v
-     Verification</code></pre>
-<h2>86. КОМАНДЫ ДЛЯ АДМИНИСТРАТОРА</h2>
-<p>Проверить SSH Hardening:</p>
+                           |
+                           v
+                    SSH CONNECTION
+                           |
+                           v
+                     LINUX SERVER
+                           |
+                           v
+                  ssh_hardening.py
+                           |
+           +---------------+---------------+
+           |               |               |
+           v               v               v
+       Filesystem       systemctl         sshd
+           |               |               |
+           v               v               v
+     /etc/ssh/         SSH service     OpenSSH
+           |
+           v
+ 99-serverguard-hardening.conf
+           |
+           v
+       sshd -t
+           |
+           v
+     SSH reload
+           |
+           v
+       sshd -T
+           |
+           v
+   Effective config
+           |
+           v
+      Verification</code></pre>
+<h2>86. COMMANDS FOR THE ADMINISTRATOR</h2>
+<p>Check SSH Hardening:</p>
 <pre><code>sudo python3 ssh_hardening.py check</code></pre>
-<p>Применить:</p>
+<p>Apply:</p>
 <pre><code>sudo python3 ssh_hardening.py apply</code></pre>
-<p>Восстановить backup:</p>
+<p>Restore a backup:</p>
 <pre><code>sudo python3 ssh_hardening.py restore &lt;backup_file&gt;</code></pre>
-<p>Проверить синтаксис OpenSSH напрямую:</p>
+<p>Check the OpenSSH syntax directly:</p>
 <pre><code>sudo sshd -t</code></pre>
-<p>Посмотреть effective configuration:</p>
+<p>View the effective configuration:</p>
 <pre><code>sudo sshd -T</code></pre>
-<p>Проверить конкретный параметр:</p>
+<p>Check a specific parameter:</p>
 <pre><code>sudo sshd -T | grep -i permitrootlogin</code></pre>
-<p>Проверить состояние SSH:</p>
+<p>Check the SSH state:</p>
 <pre><code>sudo systemctl status ssh</code></pre>
-<p>или:</p>
+<p>or:</p>
 <pre><code>sudo systemctl status sshd</code></pre>
-<h2>87. ПРОВЕРКА ФАЙЛОВ</h2>
-<p>Основной SSH-файл:</p>
+<h2>87. FILE CHECK</h2>
+<p>The main SSH file:</p>
 <pre><code>/etc/ssh/sshd_config</code></pre>
-<p>ServerGuard-файл:</p>
+<p>The ServerGuard file:</p>
 <pre><code>/etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
 <p>Backup:</p>
 <pre><code>/opt/serverguard/backups/</code></pre>
-<p>Для просмотра ServerGuard-конфигурации:</p>
+<p>To view the ServerGuard configuration:</p>
 <pre><code>sudo cat /etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>Для просмотра backup:</p>
+<p>To view the backup:</p>
 <pre><code>sudo ls -lah /opt/serverguard/backups/</code></pre>
-<h2>88. ТИПИЧНАЯ ПОСЛЕДОВАТЕЛЬНОСТЬ ДИАГНОСТИКИ</h2>
-<p>Если hardening работает не так, как ожидается:</p>
-<pre><code>1. Проверить SSH service.
+<h2>88. TYPICAL DIAGNOSTIC SEQUENCE</h2>
+<p>If hardening does not work as expected:</p>
+<pre><code>1. Check the SSH service.
 
-2. Проверить существование:
+2. Check the existence of:
    99-serverguard-hardening.conf
 
-3. Выполнить:
+3. Run:
 
    sshd -t
 
-4. Выполнить:
+4. Run:
 
    sshd -T
 
-5. Проверить конкретный параметр.
+5. Check a specific parameter.
 
-6. Выполнить:
+6. Run:
 
    python3 ssh_hardening.py check
 
-7. При необходимости посмотреть backup.</code></pre>
-<h2>89. ЧТО ПРОВЕРЯТЬ ПРИ ПРОБЛЕМАХ</h2>
-<p>Если SSH Hardening не применяется, необходимо проверить:</p>
-<ul><li>запущен ли скрипт от root;</li><li>существует ли /etc/ssh/;</li><li>существует ли sshd;</li><li>найден ли systemd service;</li><li>доступен ли systemctl;</li><li>существует ли sshd_config;</li><li>доступна ли директория sshd_config.d;</li><li>проходит ли sshd -t;</li><li>какой результат даёт sshd -T;</li><li>существует ли backup;</li><li>не используется ли настройка, конфликтующая с политикой.</li></ul>
-<h2>90. ПРИНЦИП РЕЗЕРВНОГО ВОССТАНОВЛЕНИЯ</h2>
-<p>Основной принцип:</p>
-<pre><code>НЕЛЬЗЯ ИЗМЕНЯТЬ SSH-КОНФИГУРАЦИЮ
-БЕЗ ВОЗМОЖНОСТИ ВЕРНУТЬСЯ НАЗАД.</code></pre>
-<p>Поэтому:</p>
+7. View the backup if necessary.</code></pre>
+<h2>89. WHAT TO CHECK WHEN PROBLEMS OCCUR</h2>
+<p>If SSH Hardening is not applied, the following must be checked:</p>
+<ul><li>whether the script is run as root;</li><li>whether /etc/ssh/ exists;</li><li>whether sshd exists;</li><li>whether the systemd service is found;</li><li>whether systemctl is available;</li><li>whether sshd_config exists;</li><li>whether the sshd_config.d directory is accessible;</li><li>whether sshd -t passes;</li><li>what result sshd -T gives;</li><li>whether the backup exists;</li><li>whether a setting that conflicts with the policy is in use.</li></ul>
+<h2>90. THE PRINCIPLE OF BACKUP RECOVERY</h2>
+<p>The main principle:</p>
+<pre><code>NEVER MODIFY THE SSH CONFIGURATION
+WITHOUT THE ABILITY TO REVERT.</code></pre>
+<p>Therefore:</p>
 <pre><code>APPLY
    |
    v
@@ -1638,7 +1638,7 @@ BACKUP
    |
    v
 CHANGE</code></pre>
-<p>А для restore:</p>
+<p>And for restore:</p>
 <pre><code>CURRENT CONFIG
    |
    v
@@ -1654,8 +1654,8 @@ VALIDATE
    |
    v
 ROLLBACK</code></pre>
-<h2>91. КЛЮЧЕВОЙ ПРИНЦИП МОДУЛЯ</h2>
-<p>SSH Hardening построен вокруг последовательности:</p>
+<h2>91. KEY PRINCIPLE OF THE MODULE</h2>
+<p>SSH Hardening is built around the sequence:</p>
 <pre><code>BACKUP
    ↓
 CONFIGURE
@@ -1667,39 +1667,39 @@ RELOAD
 VERIFY
    ↓
 SUCCESS</code></pre>
-<p>При проблеме:</p>
+<p>On a problem:</p>
 <pre><code>ERROR
    ↓
 ROLLBACK</code></pre>
-<p>Именно эта последовательность является основной архитектурной идеей модуля.</p>
-<h2>92. КРАТКОЕ ОПИСАНИЕ ДЛЯ README</h2>
-<p>ServerGuard SSH Hardening — это Linux-модуль для автоматизированного усиления конфигурации OpenSSH.</p>
-<p>Модуль создаёт:</p>
+<p>It is precisely this sequence that is the main architectural idea of the module.</p>
+<h2>92. SHORT DESCRIPTION FOR THE README</h2>
+<p>ServerGuard SSH Hardening is a Linux module for automated hardening of the OpenSSH configuration.</p>
+<p>The module creates:</p>
 <pre><code>/etc/ssh/sshd_config.d/99-serverguard-hardening.conf</code></pre>
-<p>и применяет следующие ограничения:</p>
-<ul><li>запрет пустых паролей;</li><li>запрет парольного входа root;</li><li>MaxAuthTries = 3;</li><li>LoginGraceTime = 30;</li><li>отключение X11 Forwarding;</li><li>отключение TCP Forwarding;</li><li>отключение SSH Agent Forwarding;</li><li>отключение SSH Compression.</li></ul>
-<p>Перед изменением создаётся резервная копия.</p>
-<p>После создания конфигурация проверяется через:</p>
+<p>and applies the following restrictions:</p>
+<ul><li>prohibition of empty passwords;</li><li>prohibition of root password login;</li><li>MaxAuthTries = 3;</li><li>LoginGraceTime = 30;</li><li>disabling X11 Forwarding;</li><li>disabling TCP Forwarding;</li><li>disabling SSH Agent Forwarding;</li><li>disabling SSH Compression.</li></ul>
+<p>A backup is created before the change.</p>
+<p>After creation, the configuration is verified via:</p>
 <pre><code>sshd -t</code></pre>
-<p>После reload проверяется эффективная конфигурация через:</p>
+<p>After reload, the effective configuration is verified via:</p>
 <pre><code>sshd -T</code></pre>
-<p>Модуль также поддерживает:</p>
-<ul><li>backup;</li><li>restore;</li><li>emergency backup;</li><li>rollback;</li><li>проверку effective configuration;</li><li>защиту от Path Traversal.</li></ul>
-<h2>93. ИТОГ</h2>
-<p>ServerGuard SSH Hardening является отдельным уровнем безопасности ServerGuard, предназначенным непосредственно для управления политикой OpenSSH.</p>
-<p>Основная задача модуля:</p>
-<pre><code>не просто изменить SSH-конфигурацию,</code></pre>
-<p>а выполнить контролируемый процесс:</p>
-<pre><code>1. проверить права;
-2. определить SSH service;
-3. сохранить исходную конфигурацию;
-4. создать ServerGuard policy;
-5. проверить синтаксис;
-6. применить конфигурацию;
-7. проверить фактические значения;
-8. сообщить результат;
-9. при необходимости выполнить восстановление.</code></pre>
-<p>Главная архитектурная схема:</p>
+<p>The module also supports:</p>
+<ul><li>backup;</li><li>restore;</li><li>emergency backup;</li><li>rollback;</li><li>verification of the effective configuration;</li><li>protection against Path Traversal.</li></ul>
+<h2>93. CONCLUSION</h2>
+<p>ServerGuard SSH Hardening is a separate security layer of ServerGuard intended specifically for managing the OpenSSH policy.</p>
+<p>The main task of the module:</p>
+<pre><code>not just to change the SSH configuration,</code></pre>
+<p>but to perform a controlled process:</p>
+<pre><code>1. check privileges;
+2. determine the SSH service;
+3. save the original configuration;
+4. create the ServerGuard policy;
+5. check the syntax;
+6. apply the configuration;
+7. check the actual values;
+8. report the result;
+9. perform restoration if necessary.</code></pre>
+<p>The main architectural diagram:</p>
 <pre><code>BACKUP
    ↓
 CONFIGURE
@@ -1711,13 +1711,13 @@ RELOAD
 VERIFY
    ↓
 SUCCESS</code></pre>
-<p>При ошибке:</p>
+<p>On error:</p>
 <pre><code>ERROR
    ↓
 ROLLBACK</code></pre>
-<p>Таким образом SSH Hardening представляет собой не просто набор параметров OpenSSH, а автоматизированный механизм управления, проверки и восстановления SSH-конфигурации Linux-сервера.</p>
+<p>Thus, SSH Hardening is not merely a set of OpenSSH parameters but an automated mechanism for managing, verifying, and restoring the SSH configuration of a Linux server.</p>
         </article>
-        <!-- ================= КОНЕЦ ДОКУМЕНТАЦИИ ================= -->
+        <!-- ================= END OF DOCUMENTATION ================= -->
 
         <nav class="pager">
             <a href="telegram.html" class="prev"><small>← Previous</small><strong>Telegram Bot</strong></a>

@@ -19,7 +19,45 @@
 
     <meta name="theme-color" content="#080b12">
 
+    <link rel="canonical" href="https://serverguard.site/">
+
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
     <title>ServerGuard — Linux Server Security & Management</title>
+
+    <!-- =====================================================
+         OPEN GRAPH
+    ====================================================== -->
+
+    <meta property="og:type" content="website">
+
+    <meta property="og:site_name" content="ServerGuard">
+
+    <meta property="og:title" content="ServerGuard — Linux Server Security & Management">
+
+    <meta
+        property="og:description"
+        content="ServerGuard — Windows application for managing and protecting Linux servers through SSH."
+    >
+
+    <meta property="og:url" content="https://serverguard.site/">
+
+    <meta property="og:locale" content="en_US">
+
+
+    <!-- =====================================================
+         TWITTER CARD
+    ====================================================== -->
+
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:title" content="ServerGuard — Linux Server Security & Management">
+
+    <meta
+        name="twitter:description"
+        content="ServerGuard — Windows application for managing and protecting Linux servers through SSH."
+    >
 
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -83,7 +121,7 @@
             </a>
 
             <a
-                href="documentation/ssh-keys.html"
+                href="documentation/sshkeys.html"
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -104,9 +142,84 @@
             Get ServerGuard
         </a>
 
+
+        <button
+            type="button"
+            class="nav-toggle"
+            id="navToggle"
+            aria-label="Open navigation"
+            aria-expanded="false"
+            aria-controls="mobileNav"
+        >
+            ☰
+        </button>
+
     </div>
 
 </header>
+
+
+<!-- =========================================================
+     MOBILE NAVIGATION
+========================================================= -->
+
+<nav
+    class="mobile-nav"
+    id="mobileNav"
+    aria-label="Mobile navigation"
+>
+
+    <a href="#features" class="mobile-nav-link">
+        Features
+    </a>
+
+    <a href="#how-it-works" class="mobile-nav-link">
+        How it works
+    </a>
+
+    <a href="#network" class="mobile-nav-link">
+        Network
+    </a>
+
+    <a href="#security" class="mobile-nav-link">
+        Security
+    </a>
+
+    <a href="#telegram" class="mobile-nav-link">
+        Telegram
+    </a>
+
+    <a href="#news" class="mobile-nav-link">
+        News
+    </a>
+
+    <a
+        href="documentation/index.html"
+        class="mobile-nav-link"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        Documentation
+    </a>
+
+    <a
+        href="documentation/sshkeys.html"
+        class="mobile-nav-link"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        SSH Key Setup
+    </a>
+
+    <a href="#download" class="mobile-nav-link">
+        Download
+    </a>
+
+    <a href="#download" class="nav-button">
+        Get ServerGuard
+    </a>
+
+</nav>
 
 
 

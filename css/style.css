@@ -219,6 +219,111 @@ header {
 
 
 /* =========================================================
+   MOBILE NAVIGATION
+   ========================================================= */
+
+.nav-toggle {
+    display: none;
+
+    width: 42px;
+    height: 42px;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    background: rgba(255, 255, 255, 0.05);
+
+    color: #f5f7fb;
+
+    font-size: 17px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+.nav-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+.nav-toggle:focus-visible {
+    outline: 2px solid #7ea9ff;
+    outline-offset: 2px;
+}
+
+.mobile-nav {
+    display: none;
+
+    position: fixed;
+
+    top: 68px;
+    left: 0;
+    right: 0;
+
+    z-index: 999;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    padding: 14px 20px 20px;
+
+    max-height: calc(100vh - 68px);
+
+    overflow-y: auto;
+
+    background: #080b12;
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobile-nav-link {
+    padding: 12px 10px;
+
+    border-radius: 9px;
+
+    color: #9da6b8;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link:focus-visible {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-nav-link:focus-visible {
+    outline: none;
+}
+
+.mobile-nav .nav-button {
+    margin-top: 10px;
+
+    justify-content: center;
+}
+
+
+/* =========================================================
    HERO
 ========================================================= */
 
@@ -1857,6 +1962,18 @@ footer {
 
     .nav-links {
         display: none;
+    }
+
+    .nav .nav-button {
+        display: none;
+    }
+
+    .nav-toggle {
+        display: inline-flex;
+    }
+
+    .mobile-nav.open {
+        display: flex;
     }
 
     .nav-button {

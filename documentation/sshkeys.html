@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ServerGuard SSH Key Guard — module documentation.">
+    <meta name="description" content="ServerGuard SSH Key Guard — module documentation and SSH key setup guide.">
     <meta name="theme-color" content="#080b12">
     <title>ServerGuard — SSH Key Guard</title>
     <link rel="stylesheet" href="css/style.css">
@@ -51,14 +51,14 @@
         <div class="module-head">
             <div class="eyebrow">MODULE 04 / SSH KEY GUARD</div>
             <h1>SSH Key Guard</h1>
-            <p>Мониторинг SSH-ключей пользователей Linux-сервера.</p>
+            <p>Monitoring SSH keys on a Linux server, and a practical guide to setting up SSH key authentication.</p>
         </div>
 
-        <!-- ================= ВСТАВЬТЕ ДОКУМЕНТАЦИЮ НИЖЕ =================
-             Допустимые теги: h2, h3, p, ul/ol, pre>code, blockquote, table, img, hr.
-             Оглавление справа строится автоматически из h2 и h3. -->
+        <!-- ================= INSERT DOCUMENTATION BELOW =================
+             Allowed tags: h2, h3, p, ul/ol, pre>code, blockquote, table, img, hr.
+             The table of contents on the right is built automatically from h2 and h3. -->
         <article class="doc-article">
-<p><strong>SSH Key Guard</strong> — компонент ServerGuard, который следит за SSH-ключами пользователей Linux-сервера. Он обнаруживает добавление и удаление ключей в <code>authorized_keys</code> и сохраняет подробное событие.</p>
+<p><strong>SSH Key Guard</strong> — a ServerGuard component that watches the SSH keys of Linux server users. It detects the addition and removal of keys in <code>authorized_keys</code> and stores a detailed event.</p>
 <table>
 <thead>
 <tr>
@@ -68,50 +68,50 @@
 </thead>
 <tbody>
 <tr>
-<td>Версия модуля</td>
+<td>Module version</td>
 <td>1.0.1</td>
 </tr>
 <tr>
-<td>Платформа</td>
+<td>Platform</td>
 <td>Linux</td>
 </tr>
 <tr>
-<td>Язык</td>
+<td>Language</td>
 <td>Python 3</td>
 </tr>
 <tr>
-<td>Основной объект</td>
+<td>Primary object</td>
 <td><code>~/.ssh/authorized_keys</code></td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>1. Зачем нужен SSH Key Guard</h2>
-<p>Файл <code>authorized_keys</code> определяет, какие публичные ключи могут входить на сервер под конкретным пользователем:</p>
+<h2>1. Why SSH Key Guard is needed</h2>
+<p>The <code>authorized_keys</code> file determines which public keys can sign in to the server as a specific user:</p>
 <pre><code class="language-text">/home/&lt;user&gt;/.ssh/authorized_keys
 /root/.ssh/authorized_keys
 </code></pre>
-<p>Если в него без вашего ведома добавлен чужой ключ, это <strong>скрытый способ входа</strong>: он продолжит работать даже после смены пароля. SSH Key Guard позволяет быстро заметить такое изменение.</p>
-<pre><code class="language-text">обнаружить изменение → определить ключ → записать событие
+<p>If someone else's key is added to it without your knowledge, that is a <strong>hidden way to sign in</strong>: it will keep working even after the password is changed. SSH Key Guard lets you quickly notice such a change.</p>
+<pre><code class="language-text">detect a change → identify the key → record an event
 </code></pre>
 <hr />
-<h2>2. Основные возможности</h2>
+<h2>2. Key features</h2>
 <ul>
-<li>мониторинг <code>authorized_keys</code> всех пользователей;</li>
-<li>обнаружение добавленных и удалённых ключей;</li>
-<li>baseline — эталонный набор ключей;</li>
-<li>fingerprint <code>SHA256:...</code> для удобной идентификации ключа;</li>
-<li>интеграция с Linux Audit (<code>auditd</code>): процесс, пользователь, команда;</li>
-<li>сетевая информация и GeoIP для публичных IP;</li>
-<li>структурированные JSON-события и локальная история;</li>
-<li>работа как служба systemd;</li>
-<li>простой командный интерфейс.</li>
+<li>monitoring of <code>authorized_keys</code> for all users;</li>
+<li>detection of added and removed keys;</li>
+<li>baseline — a reference set of keys;</li>
+<li>fingerprint <code>SHA256:...</code> for convenient key identification;</li>
+<li>integration with Linux Audit (<code>auditd</code>): process, user, command;</li>
+<li>network information and GeoIP for public IPs;</li>
+<li>structured JSON events and local history;</li>
+<li>operation as a systemd service;</li>
+<li>a simple command interface.</li>
 </ul>
 <hr />
-<h2>3. Как это работает</h2>
-<p>Модуль сочетает два механизма:</p>
-<pre><code class="language-text">Snapshot-мониторинг   — что изменилось?
-Linux Audit           — какая операция и какой процесс это сделали?
+<h2>3. How it works</h2>
+<p>The module combines two mechanisms:</p>
+<pre><code class="language-text">Snapshot monitoring   — what changed?
+Linux Audit           — which operation and which process did it?
 </code></pre>
 <pre><code class="language-text">authorized_keys
        |
@@ -119,7 +119,7 @@ Linux Audit           — какая операция и какой процес
    snapshot
        |
        v
-  сравнение с предыдущим состоянием
+  comparison with the previous state
        |
   +----+-----------+
   |                |
@@ -129,44 +129,44 @@ key_added      key_removed
   +-------+--------+
           |
           v
-   создание события
+   creating an event
           |
           v
-    JSON-журнал
+    JSON log
 </code></pre>
 <hr />
 <h2>4. Baseline</h2>
-<p>Перед мониторингом создаётся baseline — список ключей, которые считаются известными.</p>
+<p>Before monitoring, a baseline is created — a list of keys that are considered known.</p>
 <pre><code class="language-text">baseline:   KEY-A, KEY-B
-позже:      KEY-A, KEY-B, KEY-C
-результат:  KEY-C → новый ключ (key_added)
+later:      KEY-A, KEY-B, KEY-C
+result:     KEY-C → new key (key_added)
 </code></pre>
-<p>Создать baseline вручную:</p>
+<p>Create a baseline manually:</p>
 <pre><code class="language-bash">python3 ssh_key_guard.py init
 </code></pre>
 <hr />
-<h2>5. События</h2>
+<h2>5. Events</h2>
 <table>
 <thead>
 <tr>
-<th>Событие</th>
-<th>Значение</th>
+<th>Event</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>key_added</code></td>
-<td>Обнаружен новый SSH-ключ</td>
+<td>A new SSH key detected</td>
 </tr>
 <tr>
 <td><code>key_removed</code></td>
-<td>Ранее известный ключ больше не найден</td>
+<td>A previously known key is no longer found</td>
 </tr>
 </tbody>
 </table>
-<p>Пример: было <code>KEY-A</code>, стало <code>KEY-A, KEY-B</code> — создаётся <code>key_added</code> для <code>KEY-B</code>.</p>
+<p>Example: there was <code>KEY-A</code>, now there is <code>KEY-A, KEY-B</code> — a <code>key_added</code> is created for <code>KEY-B</code>.</p>
 <hr />
-<h2>6. Что сохраняется о ключе</h2>
+<h2>6. What is stored about a key</h2>
 <pre><code class="language-json">{
   &quot;type&quot;: &quot;ssh-ed25519&quot;,
   &quot;fingerprint&quot;: &quot;SHA256:...&quot;,
@@ -174,44 +174,44 @@ key_added      key_removed
   &quot;line&quot;: 3
 }
 </code></pre>
-<p>Поддерживаются распространённые типы: <code>ssh-rsa</code>, <code>ssh-ed25519</code>, <code>ecdsa-sha2-nistp256/384/521</code>, а также security-key и сертификатные варианты OpenSSH.</p>
-<p><strong>Fingerprint</strong> позволяет идентифицировать ключ, не показывая его целиком.</p>
+<p>Common types are supported: <code>ssh-rsa</code>, <code>ssh-ed25519</code>, <code>ecdsa-sha2-nistp256/384/521</code>, as well as security-key and certificate variants of OpenSSH.</p>
+<p><strong>Fingerprint</strong> allows a key to be identified without showing it in full.</p>
 <hr />
-<h2>7. Информация о пользователе и файле</h2>
-<p>Событие связывается с аккаунтом, чей <code>authorized_keys</code> был изменён:</p>
+<h2>7. User and file information</h2>
+<p>The event is associated with the account whose <code>authorized_keys</code> was changed:</p>
 <pre><code class="language-json">{ &quot;username&quot;: &quot;admin&quot;, &quot;uid&quot;: 1000, &quot;home&quot;: &quot;/home/admin&quot;, &quot;shell&quot;: &quot;/bin/bash&quot; }
 </code></pre>
-<p>Также сохраняются путь к файлу и его метаданные (размер, права, время изменения, SHA-256).</p>
+<p>The file path and its metadata (size, permissions, modification time, SHA-256) are also stored.</p>
 <hr />
 <h2>8. Linux Audit</h2>
-<p>Если на сервере установлен <code>auditd</code>, SSH Key Guard получает дополнительный контекст операции:</p>
+<p>If <code>auditd</code> is installed on the server, SSH Key Guard receives additional context about the operation:</p>
 <pre><code class="language-text">UID, AUID, PID, PPID
-имя процесса и исполняемый файл
-команда и рабочий каталог
-результат операции, терминал
+process name and executable file
+command and working directory
+operation result, terminal
 </code></pre>
-<p>Например: ключ добавлен процессом <code>vim</code> пользователя с UID 1000, либо скриптом <code>python3</code>.</p>
-<p><strong>AUID</strong> сохраняет исходного пользователя даже после <code>sudo</code> или <code>su</code> — это помогает понять, кто именно выполнил действие.</p>
+<p>For example: the key was added by a <code>vim</code> process of a user with UID 1000, or by a <code>python3</code> script.</p>
+<p><strong>AUID</strong> preserves the original user even after <code>sudo</code> or <code>su</code> — this helps to understand exactly who performed the action.</p>
 <pre><code class="language-text">sshd → bash → sudo → vim
 </code></pre>
 <hr />
-<h2>9. Работа без auditd</h2>
-<p>Без <code>auditd</code> модуль продолжает обнаруживать изменения по сравнению snapshot-ов: какой ключ добавлен или удалён и какой пользователь затронут. Не будет только подробностей о процессе и операции, поэтому для полной картины <code>auditd</code> рекомендуется.</p>
+<h2>9. Operation without auditd</h2>
+<p>Without <code>auditd</code>, the module continues to detect changes by comparing snapshots: which key was added or removed and which user was affected. Only the details about the process and operation will be missing, so for the full picture <code>auditd</code> is recommended.</p>
 <hr />
-<h2>10. Сетевая информация и GeoIP</h2>
-<p>Модуль может определить IP-адрес, связанный с SSH-сессией (из audit или активной сессии).</p>
-<p>Для <strong>публичных</strong> IP используется внешний сервис <code>ipinfo.io</code>: страна, регион, город, организация, hostname. Для локальных и приватных адресов запрос не выполняется.</p>
+<h2>10. Network information and GeoIP</h2>
+<p>The module can determine the IP address associated with the SSH session (from audit or the active session).</p>
+<p>For <strong>public</strong> IPs, the external service <code>ipinfo.io</code> is used: country, region, city, organization, hostname. For local and private addresses, no request is made.</p>
 <blockquote>
-<p>GeoIP не определяет физическое местоположение человека. Используйте его как дополнительную подсказку. Учтите, что публичный IP передаётся стороннему сервису.</p>
+<p>GeoIP does not determine a person's physical location. Use it as an additional hint. Keep in mind that the public IP is transmitted to a third-party service.</p>
 </blockquote>
 <hr />
-<h2>11. Хранение данных</h2>
+<h2>11. Data storage</h2>
 <ul>
-<li><strong>Events</strong> — журнал <code>ssh_key_events.json</code>, до 5000 последних событий;</li>
-<li><strong>State</strong> — текущее известное состояние для сравнения.</li>
+<li><strong>Events</strong> — the <code>ssh_key_events.json</code> log, up to the last 5000 events;</li>
+<li><strong>State</strong> — the current known state for comparison.</li>
 </ul>
-<p>Запись выполняется через временный файл с последующей заменой, поэтому аварийное завершение не должно повредить журнал.</p>
-<p>Каждое событие имеет уникальный ID:</p>
+<p>Writes are performed through a temporary file followed by replacement, so an abnormal termination should not corrupt the log.</p>
+<p>Each event has a unique ID:</p>
 <pre><code class="language-json">{
   &quot;id&quot;: &quot;...&quot;, &quot;version&quot;: &quot;1.0.1&quot;, &quot;timestamp&quot;: &quot;...&quot;,
   &quot;action&quot;: &quot;key_added&quot;,
@@ -220,138 +220,335 @@ key_added      key_removed
 }
 </code></pre>
 <hr />
-<h2>12. Запуск и интервал проверки</h2>
-<p>По умолчанию проверка выполняется каждые <strong>5 секунд</strong>:</p>
+<h2>12. Launch and check interval</h2>
+<p>By default, the check is performed every <strong>5 seconds</strong>:</p>
 <pre><code class="language-bash">python3 ssh_key_guard.py monitor
 </code></pre>
-<p>Другой интервал:</p>
+<p>A different interval:</p>
 <pre><code class="language-bash">python3 ssh_key_guard.py monitor --interval 10
 </code></pre>
-<p>Для постоянной работы модуль запускается как служба systemd и после перезагрузки сервера стартует автоматически.</p>
+<p>For continuous operation, the module is launched as a systemd service and starts automatically after the server reboots.</p>
 <hr />
-<h2>13. Команды</h2>
+<h2>13. Commands</h2>
 <table>
 <thead>
 <tr>
-<th>Команда</th>
-<th>Назначение</th>
+<th>Command</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>monitor</code></td>
-<td>Постоянный мониторинг</td>
+<td>Continuous monitoring</td>
 </tr>
 <tr>
 <td><code>monitor --interval N</code></td>
-<td>Мониторинг с интервалом N секунд</td>
+<td>Monitoring with an interval of N seconds</td>
 </tr>
 <tr>
 <td><code>init</code></td>
-<td>Создание baseline</td>
+<td>Creating a baseline</td>
 </tr>
 <tr>
 <td><code>scan</code></td>
-<td>Однократное сканирование</td>
+<td>One-time scan</td>
 </tr>
 <tr>
 <td><code>events</code></td>
-<td>Последние события</td>
+<td>Recent events</td>
 </tr>
 <tr>
 <td><code>events N</code></td>
-<td>Последние N событий</td>
+<td>Last N events</td>
 </tr>
 <tr>
 <td><code>audit</code></td>
-<td>Проверка Linux Audit</td>
+<td>Linux Audit check</td>
 </tr>
 <tr>
 <td><code>audit-remove</code></td>
-<td>Удаление audit-правил ServerGuard</td>
+<td>Removing ServerGuard audit rules</td>
 </tr>
 <tr>
 <td><code>version</code></td>
-<td>Версия модуля</td>
+<td>Module version</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>14. Служба systemd</h2>
+<h2>14. systemd service</h2>
 <pre><code class="language-bash">systemctl status serverguard-ssh-key.service
 systemctl start serverguard-ssh-key.service
 systemctl stop serverguard-ssh-key.service
 systemctl restart serverguard-ssh-key.service
 </code></pre>
-<p>Журнал службы:</p>
+<p>Service log:</p>
 <pre><code class="language-bash">journalctl -u serverguard-ssh-key.service -n 50
 journalctl -u serverguard-ssh-key.service -f
 </code></pre>
 <hr />
-<h2>15. Требования и права</h2>
-<p>Нужны Linux, Python 3 и OpenSSH. Для расширенного аудита рекомендуются <code>auditd</code>, <code>auditctl</code>, <code>ausearch</code>; для сетевой информации используются <code>ss</code> и <code>curl</code>.</p>
-<p>Часть функций требует прав администратора: чтение файлов других пользователей, работа с auditd, анализ процессов. Поэтому постоянный мониторинг обычно запускают от root.</p>
+<h2>15. Requirements and permissions</h2>
+<p>Linux, Python 3, and OpenSSH are required. For extended auditing, <code>auditd</code>, <code>auditctl</code>, and <code>ausearch</code> are recommended; for network information, <code>ss</code> and <code>curl</code> are used.</p>
+<p>Some functions require administrator permissions: reading other users' files, working with auditd, analyzing processes. Therefore, continuous monitoring is usually run as root.</p>
 <hr />
-<h2>16. Конфиденциальность</h2>
-<p>События могут содержать имя пользователя, UID, путь к <code>authorized_keys</code>, fingerprint, IP-адрес, команду и информацию о процессе. Это чувствительные данные: ограничьте доступ к журналам и файлам состояния только доверенными администраторами.</p>
+<h2>16. Privacy</h2>
+<p>Events may contain the username, UID, the path to <code>authorized_keys</code>, fingerprint, IP address, command, and process information. This is sensitive data: restrict access to the logs and state files to trusted administrators only.</p>
 <hr />
-<h2>17. Что SSH Key Guard не делает</h2>
-<p>Это система <strong>мониторинга, обнаружения, аудита и логирования</strong>. Она не:</p>
+<h2>17. What SSH Key Guard does not do</h2>
+<p>This is a system for <strong>monitoring, detection, auditing, and logging</strong>. It does not:</p>
 <ul>
-<li>удаляет подозрительные ключи;</li>
-<li>блокирует IP-адреса;</li>
-<li>удаляет пользователей и меняет пароли;</li>
-<li>останавливает SSH-сервер;</li>
-<li>заменяет firewall и защиту от brute-force.</li>
+<li>remove suspicious keys;</li>
+<li>block IP addresses;</li>
+<li>delete users or change passwords;</li>
+<li>stop the SSH server;</li>
+<li>replace a firewall or brute-force protection.</li>
 </ul>
-<p>Решение о дальнейших действиях принимает администратор или другие компоненты безопасности.</p>
+<p>The decision on further actions is made by the administrator or other security components.</p>
 <table>
 <thead>
 <tr>
 <th></th>
 <th>SSH Key Guard</th>
 <th>Firewall</th>
-<th>Brute-force защита</th>
+<th>Brute-force protection</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Что контролирует</td>
-<td>Ключи в <code>authorized_keys</code></td>
-<td>Соединения, порты, IP</td>
-<td>Неудачные попытки входа</td>
+<td>What it controls</td>
+<td>Keys in <code>authorized_keys</code></td>
+<td>Connections, ports, IP</td>
+<td>Failed login attempts</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>18. Ограничения</h2>
+<h2>18. Limitations</h2>
 <ul>
-<li>Модуль анализирует распознанные SSH-ключи, поэтому изменение только комментария не всегда создаёт событие.</li>
-<li>Проверка периодическая: изменение, которое вернули обратно между двумя проверками, может не попасть в snapshot. <code>auditd</code> снижает этот риск.</li>
-<li>Недоступность GeoIP или другого дополнительного источника не останавливает основной мониторинг.</li>
+<li>The module analyzes recognized SSH keys, so changing only a comment does not always create an event.</li>
+<li>The check is periodic: a change that was reverted between two checks may not make it into the snapshot. <code>auditd</code> reduces this risk.</li>
+<li>Unavailability of GeoIP or another additional source does not stop the main monitoring.</li>
 </ul>
 <hr />
-<h2>19. Рекомендации</h2>
+<h2>19. Recommendations</h2>
 <ul>
-<li>создавайте baseline на заведомо «чистом» сервере;</li>
-<li>устанавливайте и используйте <code>auditd</code>;</li>
-<li>не изменяйте файлы состояния вручную;</li>
-<li>ограничьте доступ к журналам;</li>
-<li>следите за состоянием службы systemd;</li>
-<li>регулярно разбирайте события и проверяйте незнакомые ключи;</li>
-<li>используйте SSH Key Guard вместе с SSH Hardening, Security и FileGuard.</li>
+<li>create the baseline on a known-clean server;</li>
+<li>install and use <code>auditd</code>;</li>
+<li>do not modify the state files manually;</li>
+<li>restrict access to the logs;</li>
+<li>monitor the state of the systemd service;</li>
+<li>regularly review events and check unfamiliar keys;</li>
+<li>use SSH Key Guard together with SSH Hardening, Security, and FileGuard.</li>
 </ul>
 <hr />
-<h2>20. Итог</h2>
-<pre><code class="language-text">определяет пользователей → находит authorized_keys → создаёт baseline
-→ сравнивает snapshot-ы → обнаруживает добавленные и удалённые ключи
-→ добавляет контекст из auditd → сохраняет структурированное событие
+<h2>20. SSH key setup guide</h2>
+<p>This guide explains how to create an SSH key, install the public key on a Linux server, and connect to the server using ServerGuard.</p>
+<h3>Overview</h3>
+<p>ServerGuard can authenticate with Linux servers using an SSH private key instead of an account password.</p>
+<p>SSH key authentication uses a pair of cryptographic keys: a private key stored on your computer and a public key installed on the Linux server.</p>
+<blockquote>
+<p><strong>Note:</strong> The private key stays on your computer. Only the public key should be installed on the server.</p>
+</blockquote>
+<h3>Requirements</h3>
+<p>Before starting, make sure you have:</p>
+<ul>
+<li>Windows 10 or Windows 11.</li>
+<li>OpenSSH Client installed on Windows.</li>
+<li>Access to a Linux server.</li>
+<li>The server IP address or hostname.</li>
+<li>A Linux account that can log in through SSH.</li>
+<li>The account password for the initial key installation.</li>
+</ul>
+<h3>Creating an SSH key</h3>
+<p>Open PowerShell on Windows.</p>
+<p>Check that OpenSSH is available:</p>
+<pre><code>ssh -V</code></pre>
+<p>Create an Ed25519 SSH key:</p>
+<pre><code>ssh-keygen -t ed25519</code></pre>
+<p>When Windows asks where to save the key, press <strong>Enter</strong> to use the default location.</p>
+<p>The default location is:</p>
+<pre><code>C:\Users\YOUR_USERNAME\.ssh\id_ed25519</code></pre>
+<p>You will then be asked to enter a passphrase. You can leave it empty or use an additional passphrase to protect the private key.</p>
+<h3>Private and public keys</h3>
+<p>After creating the key, Windows normally creates two files:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_ed25519</code></td>
+<td>Private key. Must remain private and should never be uploaded to the server or shared with other people.</td>
+</tr>
+<tr>
+<td><code>id_ed25519.pub</code></td>
+<td>Public key. This key can be installed on the Linux server.</td>
+</tr>
+</tbody>
+</table>
+<p>To display your public key:</p>
+<pre><code>Get-Content "$env:USERPROFILE\.ssh\id_ed25519.pub"</code></pre>
+<p>The output should look similar to:</p>
+<pre><code>ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA... ServerGuard</code></pre>
+<h3>Installing the public key on the Linux server</h3>
+<p>First connect to your Linux server using the normal SSH password:</p>
+<pre><code>ssh root@SERVER_IP</code></pre>
+<p>Replace <code>SERVER_IP</code> with the address of your server.</p>
+<p>Create the SSH directory:</p>
+<pre><code>mkdir -p ~/.ssh
+chmod 700 ~/.ssh</code></pre>
+<p>Open the authorized keys file:</p>
+<pre><code>nano ~/.ssh/authorized_keys</code></pre>
+<p>Paste the complete contents of your <code>id_ed25519.pub</code> file into this file.</p>
+<p>Each public key must occupy its own line.</p>
+<p>Save the file in nano:</p>
+<pre><code>Ctrl + O
+Enter
+Ctrl + X</code></pre>
+<h3>Configuring SSH key permissions</h3>
+<p>Set the recommended permissions:</p>
+<pre><code>chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys</code></pre>
+<p>You can verify the file:</p>
+<pre><code>ls -la ~/.ssh</code></pre>
+<p>The <code>authorized_keys</code> file should not be writable by other users.</p>
+<h3>Testing SSH key authentication</h3>
+<p>Exit the current SSH session:</p>
+<pre><code>exit</code></pre>
+<p>From Windows, connect using the private key:</p>
+<pre><code>ssh -i "$env:USERPROFILE\.ssh\id_ed25519" root@SERVER_IP</code></pre>
+<p>If the key has no passphrase and everything is configured correctly, the Linux account password should not be requested.</p>
+<blockquote>
+<p><strong>Note:</strong> If your SSH key has a passphrase, SSH may ask for the passphrase protecting the private key. This is different from the Linux account password.</p>
+</blockquote>
+<h3>Testing password authentication</h3>
+<p>You can test password authentication without deleting the SSH key.</p>
+<p>Use:</p>
+<pre><code>ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password root@SERVER_IP</code></pre>
+<p>SSH will attempt password authentication for this connection only.</p>
+<blockquote>
+<p><strong>Warning:</strong> This command does not remove or modify your SSH key. It only tells the SSH client not to use public-key authentication for this connection.</p>
+</blockquote>
+<h3>Connecting to the server using ServerGuard</h3>
+<p>Start ServerGuard and create or edit a server connection.</p>
+<p>Enter the normal server connection information:</p>
+<ul>
+<li>Server IP address or hostname.</li>
+<li>SSH port, normally <code>22</code>.</li>
+<li>Linux username.</li>
+</ul>
+<p>For authentication, select:</p>
+<pre><code>Auth: Private key</code></pre>
+<p>Select your private key. For example:</p>
+<pre><code>C:\Users\YOUR_USERNAME\.ssh\id_ed25519</code></pre>
+<p>If the private key has a passphrase, enter it in the corresponding field.</p>
+<p>In ServerGuard, complete the following connection steps:</p>
+<ol>
+<li>Authentication method — select <strong>Private key</strong> instead of password authentication.</li>
+<li>Private key path — select the private key stored on your Windows computer, for example <code>C:\Users\YOUR_USERNAME\.ssh\id_ed25519</code>.</li>
+<li>Verify the connection — after connecting, ServerGuard should indicate that the server was authenticated using the private key.</li>
+</ol>
+<h3>SSH key passphrase</h3>
+<p>A passphrase is an additional password that protects the private key file.</p>
+<p>There are two different credentials:</p>
+<ul>
+<li><strong>Linux password</strong> — password of the server account.</li>
+<li><strong>SSH key passphrase</strong> — protects the private key on your computer.</li>
+</ul>
+<p>If the private key was created without a passphrase, leave the ServerGuard key passphrase field empty.</p>
+<h3>SSH Hardening</h3>
+<p>SSH key authentication is especially important when using ServerGuard SSH Hardening.</p>
+<p>Hardening can change SSH authentication settings. Losing access to a server after changing SSH settings can be difficult to recover from.</p>
+<p>ServerGuard therefore checks the authentication method before applying SSH Hardening.</p>
+<blockquote>
+<p><strong>Note:</strong> ServerGuard allows SSH Hardening to continue when the current ServerGuard connection uses SSH public-key authentication.</p>
+</blockquote>
+<blockquote>
+<p><strong>Important:</strong> If ServerGuard is connected using password authentication, SSH Hardening is blocked for safety. This prevents password authentication from being disabled while the current connection depends on that password.</p>
+</blockquote>
+<p>Before using SSH Hardening, make sure that:</p>
+<ol>
+<li>The public key is installed on the server.</li>
+<li>SSH key authentication works.</li>
+<li>ServerGuard is connected using <strong>Private key</strong>.</li>
+<li>You can reconnect to the server using the private key.</li>
+</ol>
+<h3>Troubleshooting</h3>
+<h4>Permission denied (publickey)</h4>
+<p>Check that the public key is present:</p>
+<pre><code>cat ~/.ssh/authorized_keys</code></pre>
+<p>Check the permissions:</p>
+<pre><code>chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys</code></pre>
+<p>Check whether public-key authentication is enabled:</p>
+<pre><code>sshd -T | grep pubkeyauthentication</code></pre>
+<p>The expected result is:</p>
+<pre><code>pubkeyauthentication yes</code></pre>
+<h4>ServerGuard cannot authenticate using the key</h4>
+<p>Verify that the selected key is the private key:</p>
+<pre><code>id_ed25519</code></pre>
+<p>Do not select:</p>
+<pre><code>id_ed25519.pub</code></pre>
+<p>The <code>.pub</code> file is the public key and should not be used as the private key in ServerGuard.</p>
+<h4>SSH asks for a password</h4>
+<p>Test the connection manually:</p>
+<pre><code>ssh -v -i "$env:USERPROFILE\.ssh\id_ed25519" root@SERVER_IP</code></pre>
+<p>The verbose output can show whether the client is actually attempting to use the selected key.</p>
+<h4>Test the key with maximum SSH debugging</h4>
+<pre><code>ssh -vvv -i "$env:USERPROFILE\.ssh\id_ed25519" root@SERVER_IP</code></pre>
+<h3>Security recommendations</h3>
+<p>Protect your private SSH key carefully.</p>
+<ul>
+<li>Never publish the private key.</li>
+<li>Never upload the private key to GitHub.</li>
+<li>Never send the private key through Telegram, email or other messaging services.</li>
+<li>Do not copy the private key to the Linux server unless there is a specific security reason.</li>
+<li>Consider using a passphrase to protect important private keys.</li>
+<li>Keep a secure backup of important keys.</li>
+</ul>
+<blockquote>
+<p><strong>Important:</strong> If someone obtains your private SSH key and can use it, they may be able to authenticate to servers where the corresponding public key is authorized. Treat a leaked private key as compromised and replace it.</p>
+</blockquote>
+<h3>Summary</h3>
+<p>The complete ServerGuard SSH key workflow is:</p>
+<pre><code>Windows
+   │
+   ├── id_ed25519
+   │      └── Private key
+   │
+   └── id_ed25519.pub
+          │
+          ▼
+Linux Server
+   │
+   └── ~/.ssh/authorized_keys
+          │
+          ▼
+SSH key authentication
+          │
+          ▼
+ServerGuard
+   │
+   └── Auth: Private key
+          │
+          ▼
+SSH Hardening and server management</code></pre>
+<p>Once key authentication has been tested successfully, ServerGuard can use the private key to establish a secure SSH connection to the Linux server.</p>
+<hr />
+<h2>21. Conclusion</h2>
+<pre><code class="language-text">identifies users → finds authorized_keys → creates a baseline
+→ compares snapshots → detects added and removed keys
+→ adds context from auditd → stores a structured event
 </code></pre>
-<p>SSH Key Guard отвечает за отдельный уровень безопасности — <strong>контроль SSH-ключей и связанных с ними событий</strong>.</p>
+<p>SSH Key Guard is responsible for a distinct security layer — <strong>control of SSH keys and the events related to them</strong>.</p>
 <hr />
-<p><em>Документация описывает назначение и принцип работы SSH Key Guard на пользовательском уровне.</em></p>
+<p><em>This documentation describes the purpose and operating principle of SSH Key Guard at the user level.</em></p>
         </article>
-        <!-- ================= КОНЕЦ ДОКУМЕНТАЦИИ ================= -->
+        <!-- ================= END OF DOCUMENTATION ================= -->
 
         <nav class="pager">
             <a href="hardening.html" class="prev"><small>← Previous</small><strong>SSH Hardening</strong></a>
