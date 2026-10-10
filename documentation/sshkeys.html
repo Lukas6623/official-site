@@ -86,21 +86,29 @@
 
 <div class="module-layout">
 
-    <aside class="sidebar" id="sidebar">
+        <aside class="sidebar" id="sidebar">
+
         <div class="sidebar-header">
             <div class="sidebar-label">SERVERGUARD</div>
-            <div class="sidebar-title">Modules</div>
+            <div class="sidebar-title">Documentation</div>
         </div>
-        <nav class="sidebar-nav">
-            <a href="index.html"><span>←</span>Test Guide</a>
-            <div class="sidebar-group">MODULES</div>
-            <a href="security.html"><span>01</span>Security</a>
-            <a href="telegram.html"><span>02</span>Telegram Bot</a>
-            <a href="hardening.html"><span>03</span>SSH Hardening</a>
-            <a href="sshkeys.html" class="current"><span>04</span>SSH Key Guard</a>
-            <a href="fileguard.html"><span>05</span>FileGuard</a>
+
+        <nav class="sidebar-nav" aria-label="Documentation">
+            <div class="sidebar-group">Start</div>
+            <a href="index.html"><span><svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg></span>Testing Guide</a>
+            <div class="sidebar-group">Modules</div>
+            <a href="security.html"><span><svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg></span>Security</a>
+            <a href="telegram.html"><span><svg class="icon" aria-hidden="true"><use href="#i-send"></use></svg></span>Telegram Bot</a>
+            <a href="hardening.html"><span><svg class="icon" aria-hidden="true"><use href="#i-sliders"></use></svg></span>SSH Hardening</a>
+            <a href="sshkeys.html" class="active" aria-current="page"><span><svg class="icon" aria-hidden="true"><use href="#i-key"></use></svg></span>SSH Key Guard</a>
+            <a href="fileguard.html"><span><svg class="icon" aria-hidden="true"><use href="#i-file"></use></svg></span>FileGuard</a>
         </nav>
-        <div class="sidebar-footer"><div class="status-dot"></div>ServerGuard Documentation</div>
+
+        <div class="sidebar-footer">
+            <div class="status-dot"></div>
+            ServerGuard Documentation
+        </div>
+
     </aside>
 
     <main class="module-content" id="docsMain">
