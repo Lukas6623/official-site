@@ -28,7 +28,8 @@
     var TOC_ID = "pageToc";
     var MOBILE_BREAKPOINT = 820;
 
-    var tocObserver = null;
+    var activeTocLink = null;
+    var tocRafId = null;
     var navToken = 0;
     var searchIndex = [];
     var currentPath = window.location.pathname;
@@ -61,6 +62,12 @@
     function currentDocsDir() {
         var path = window.location.pathname;
         return path.slice(0, path.lastIndexOf("/") + 1);
+    }
+
+    function scrollToElement(node, options) {
+        if (node && typeof node.scrollIntoView === "function") {
+            node.scrollIntoView(options || true);
+        }
     }
 
 
@@ -122,6 +129,7 @@
         }
 
         toc.innerHTML = "";
+        toc.classList.remove("is-open", "is-compact");
 
         var article = $(".doc-article");
         var items = [];
@@ -154,10 +162,28 @@
 
         toc.hidden = false;
 
-        var title = document.createElement("div");
-        title.className = "page-toc-title";
-        title.textContent = "ON THIS PAGE";
-        toc.appendChild(title);
+        var toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "page-toc-toggle";
+        toggle.setAttribute("aria-controls", "pageTocList");
+        toggle.setAttribute("aria-expanded", "false");
+
+        var toggleLabel = document.createElement("span");
+        toggleLabel.textContent = "On this page";
+
+        var chevron = document.createElement("span");
+        chevron.className = "page-toc-chevron";
+        chevron.setAttribute("aria-hidden", "true");
+
+        toggle.appendChild(toggleLabel);
+        toggle.appendChild(chevron);
+
+        var list = document.createElement("div");
+        list.className = "page-toc-list";
+        list.id = "pageTocList";
+
+        toc.appendChild(toggle);
+        toc.appendChild(list);
 
         var used = {};
         $$("[id]").forEach(function (node) {
@@ -176,64 +202,211 @@
                 link.classList.add("toc-h3");
             }
 
-            toc.appendChild(link);
+            list.appendChild(link);
         });
 
-        observeSections();
+        toggle.addEventListener("click", function () {
+            if (toc.classList.contains("is-compact")) {
+                setTocExpanded(!toc.classList.contains("is-open"));
+            }
+        });
+
+        updateTocMode();
+        trackActiveSection();
     }
 
-    function observeSections() {
-        if (tocObserver) {
-            tocObserver.disconnect();
-            tocObserver = null;
+
+    /* =====================================================
+       TOC DISPLAY MODE (expanded column vs collapsible)
+       ===================================================== */
+
+    var COMPACT_TOC_QUERY = "(max-width: 1250px)";
+
+    function tocIsCompact() {
+        return !!(window.matchMedia && window.matchMedia(COMPACT_TOC_QUERY).matches);
+    }
+
+    function updateTocMode() {
+        var toc = document.getElementById(TOC_ID);
+        var toggle = toc ? $(".page-toc-toggle", toc) : null;
+
+        if (!toc || !toggle) {
+            return;
+        }
+
+        if (tocIsCompact()) {
+            toc.classList.add("is-compact");
+            toggle.tabIndex = 0;
+            toggle.removeAttribute("aria-hidden");
+            setTocExpanded(toc.classList.contains("is-open"));
+        } else {
+            toc.classList.remove("is-compact", "is-open");
+            toggle.tabIndex = -1;
+            toggle.setAttribute("aria-hidden", "true");
+            toggle.setAttribute("aria-expanded", "true");
+        }
+    }
+
+    function setTocExpanded(open) {
+        var toc = document.getElementById(TOC_ID);
+        var toggle = toc ? $(".page-toc-toggle", toc) : null;
+
+        if (!toc || !toggle) {
+            return;
+        }
+
+        toc.classList.toggle("is-open", open);
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    function collapseTocIfCompact() {
+        var toc = document.getElementById(TOC_ID);
+
+        if (toc && toc.classList.contains("is-compact")) {
+            setTocExpanded(false);
+        }
+    }
+
+    /* Keep the active link visible by scrolling only the TOC's own
+       scroll container, never the page. */
+    function keepActiveVisible(link) {
+        if (!link) {
+            return;
+        }
+
+        var toc = document.getElementById(TOC_ID);
+        var list = document.getElementById("pageTocList");
+        var container = null;
+
+        if (list && list.scrollHeight > list.clientHeight + 1) {
+            container = list;
+        } else if (toc && toc.scrollHeight > toc.clientHeight + 1) {
+            container = toc;
+        }
+
+        if (!container) {
+            return;
+        }
+
+        var containerRect = container.getBoundingClientRect();
+        var linkRect = link.getBoundingClientRect();
+
+        if (linkRect.top < containerRect.top || linkRect.bottom > containerRect.bottom) {
+            container.scrollTop +=
+                (linkRect.top - containerRect.top) -
+                (container.clientHeight / 2 - link.offsetHeight / 2);
+        }
+    }
+
+    /* Force a specific heading's link to be the active entry. Used
+       when navigation jumps straight to a section (direct URL,
+       refresh or a table-of-contents click) so the highlight is
+       correct immediately, before the next scroll update runs. */
+    function activateTocTarget(id) {
+        if (!id) {
+            return;
         }
 
         var toc = document.getElementById(TOC_ID);
 
-        if (!toc || !("IntersectionObserver" in window)) {
+        if (!toc) {
             return;
         }
 
-        var links = $$("a", toc);
+        var target = null;
+
+        $$("a[data-target]", toc).forEach(function (link) {
+            var match = link.getAttribute("data-target") === id;
+
+            link.classList.toggle("active", match);
+
+            if (match) {
+                target = link;
+            }
+        });
+
+        activeTocLink = target;
+        keepActiveVisible(target);
+    }
+
+    /* Active-section tracking.
+
+       An IntersectionObserver alone only reacts while a heading is
+       crossing a thin band, so an instant jump (scrollbar drag, direct
+       URL, refresh, Back/Forward) could leave the highlight stale or
+       empty. The active entry is therefore derived from the heading
+       closest to, and above, a reading line just below the fixed
+       topbar. Updates are throttled with requestAnimationFrame and the
+       scroll listener is attached once, globally. */
+
+    function trackActiveSection() {
+        activeTocLink = null;
+        updateActiveToc();
+    }
+
+    function scheduleActiveTocUpdate() {
+        if (tocRafId !== null) {
+            return;
+        }
+
+        tocRafId = window.requestAnimationFrame(function () {
+            tocRafId = null;
+            updateActiveToc();
+        });
+    }
+
+    function updateActiveToc() {
+        var toc = document.getElementById(TOC_ID);
+
+        if (!toc) {
+            return;
+        }
+
+        var links = $$("a[data-target]", toc);
+
         if (!links.length) {
             return;
         }
 
-        var byId = {};
-
-        links.forEach(function (link) {
-            byId[link.getAttribute("data-target")] = link;
-        });
-
-        tocObserver = new IntersectionObserver(
-            function (entries) {
-                entries.forEach(function (entry) {
-                    if (!entry.isIntersecting) {
-                        return;
-                    }
-
-                    links.forEach(function (link) {
-                        link.classList.remove("active");
-                    });
-
-                    var link = byId[entry.target.id];
-                    if (link) {
-                        link.classList.add("active");
-                    }
-                });
-            },
-            {
-                rootMargin: "-20% 0px -65% 0px",
-                threshold: 0
-            }
+        var header = parseInt(
+            getComputedStyle(document.documentElement).getPropertyValue("--header-h"),
+            10
         );
 
-        Object.keys(byId).forEach(function (id) {
-            var el = document.getElementById(id);
-            if (el) {
-                tocObserver.observe(el);
+        if (!header) {
+            header = 64;
+        }
+
+        // Reading line: just below the header, biased up so the active
+        // entry changes as a heading reaches the top of the article.
+        var line = header + Math.max(24, window.innerHeight * 0.28);
+        var current = links[0];
+
+        for (var i = 0; i < links.length; i++) {
+            var el = document.getElementById(links[i].getAttribute("data-target"));
+
+            if (!el) {
+                continue;
             }
+
+            if (el.getBoundingClientRect().top <= line) {
+                current = links[i];
+            } else {
+                break;
+            }
+        }
+
+        if (current === activeTocLink) {
+            return;
+        }
+
+        links.forEach(function (link) {
+            link.classList.remove("active");
         });
+
+        current.classList.add("active");
+        activeTocLink = current;
+        keepActiveVisible(current);
     }
 
 
@@ -599,9 +772,8 @@
         if (target.pathname === currentPath) {
             if (target.hash) {
                 var node = document.getElementById(target.hash.slice(1));
-                if (node) {
-                    node.scrollIntoView({ behavior: "smooth", block: "start" });
-                }
+                scrollToElement(node, { behavior: "smooth", block: "start" });
+                activateTocTarget(target.hash.slice(1));
                 history.replaceState(null, "", target.hash);
             } else {
                 window.scrollTo({ top: 0, behavior: "smooth" });
@@ -653,9 +825,8 @@
 
                 if (target.hash) {
                     var node = document.getElementById(target.hash.slice(1));
-                    if (node) {
-                        node.scrollIntoView();
-                    }
+                    scrollToElement(node);
+                    activateTocTarget(target.hash.slice(1));
                 } else {
                     window.scrollTo(0, 0);
                 }
@@ -692,8 +863,10 @@
 
     function render() {
         addCopyButtons();
-        buildSearchIndex();
+        // buildToc() assigns ids to headings; buildSearchIndex() needs
+        // those ids to index section titles and body text.
         buildToc();
+        buildSearchIndex();
     }
 
 
@@ -770,7 +943,11 @@
             var node = document.getElementById(href.slice(1));
             if (node) {
                 event.preventDefault();
-                node.scrollIntoView({ behavior: "smooth", block: "start" });
+                // Collapse first on mobile so the smooth scroll targets
+                // the final position instead of jumping afterwards.
+                collapseTocIfCompact();
+                scrollToElement(node, { behavior: "smooth", block: "start" });
+                activateTocTarget(href.slice(1));
                 history.replaceState(null, "", href);
             }
             return;
@@ -837,7 +1014,12 @@
             if (window.innerWidth > MOBILE_BREAKPOINT) {
                 setSidebarOpen(false);
             }
+
+            updateTocMode();
+            scheduleActiveTocUpdate();
         });
+
+        window.addEventListener("scroll", scheduleActiveTocUpdate, { passive: true });
 
         window.addEventListener("popstate", function () {
             loadDoc(window.location.href, false);
@@ -890,7 +1072,8 @@
             var node = document.getElementById(window.location.hash.slice(1));
             if (node) {
                 window.setTimeout(function () {
-                    node.scrollIntoView();
+                    scrollToElement(node);
+                    activateTocTarget(window.location.hash.slice(1));
                 }, 60);
             }
         }

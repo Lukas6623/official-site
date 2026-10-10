@@ -292,6 +292,8 @@
     align-self: start;
 
     height: calc(100vh - var(--header-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
 
     display: flex;
     flex-direction: column;
