@@ -132,7 +132,7 @@
         W = r.width; H = r.height;
         canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        cx = W / 2; cy = H / 2; R = Math.min(W, H) * .36;
+        cx = W / 2; cy = H / 2; R = Math.min(W, H) * .30;
         if (!running) draw(performance.now());
     }
 
