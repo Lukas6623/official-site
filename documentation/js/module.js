@@ -32,10 +32,10 @@ if (mobileMenuButton && sidebar) {
 
             sidebar.classList.toggle("open");
 
-            mobileMenuButton.textContent =
+            mobileMenuButton.classList.toggle(
+                "is-open",
                 sidebar.classList.contains("open")
-                    ? "×"
-                    : "☰";
+            );
 
         }
     );
@@ -52,8 +52,9 @@ if (mobileMenuButton && sidebar) {
 
                 sidebar.classList.remove("open");
 
-                mobileMenuButton.textContent =
-                    "☰";
+                mobileMenuButton.classList.remove(
+                    "is-open"
+                );
 
             }
         );

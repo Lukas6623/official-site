@@ -21,10 +21,46 @@
 
     <title>ServerGuard — Documentation</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    >
+
+    <link rel="stylesheet" href="../css/tokens.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+
+<a class="skip-link" href="#introduction">
+    Skip to content
+</a>
+
+
+<!-- =========================================================
+     ICON SPRITE
+========================================================= -->
+
+<svg class="sr-only" aria-hidden="true" focusable="false">
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.4-3 7.5-7 9-4-1.5-7-4.6-7-9V6z"/></symbol>
+    <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.4-3 7.5-7 9-4-1.5-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.4 2.3c-.8.4-1.1.9-1.1 1.7M12 16.5h.01"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-8 8M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3L10.5 13.5"/><path d="M21 3l-7 18-3.5-7.5L3 10z"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M5 8h6M15 8h4M5 16h4M13 16h6"/><circle cx="13" cy="8" r="2"/><circle cx="11" cy="16" r="2"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="16.5" r="3.5"/><path d="M10 14L20 4M17 4h3v3"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+</svg>
+
 
 <!-- =========================================================
      HEADER
@@ -32,22 +68,28 @@
 
 <header class="topbar">
 
-        <div class="topbar-inner">
+    <div class="topbar-inner">
 
-        <a href="../index.html" class="brand">
-
-            <div class="brand-icon">
-                🛡
-            </div>
-
-            <div>
-                Server<span>Guard</span>
-            </div>
-
+        <a href="../index.html" class="brand" aria-label="ServerGuard home">
+            <span class="brand-icon">
+                <svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>
+            </span>
+            <span class="brand-word">Server<span>Guard</span></span>
         </a>
 
-        <div class="topbar-title">
-            Documentation
+        <div class="doc-search" role="search">
+            <svg class="icon doc-search-icon" aria-hidden="true"><use href="#i-search"></use></svg>
+            <input
+                id="docSearch"
+                class="doc-search-input"
+                type="search"
+                placeholder="Search documentation"
+                aria-label="Search documentation"
+                autocomplete="off"
+                spellcheck="false"
+            >
+            <kbd class="doc-search-kbd" aria-hidden="true">/</kbd>
+            <div class="doc-search-results" id="docSearchResults" hidden></div>
         </div>
 
         <div class="topbar-actions">
@@ -58,34 +100,29 @@
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                ? Help
+                <svg class="icon" aria-hidden="true"><use href="#i-help"></use></svg>
+                Help
             </a>
 
-            <a
-                href="../index.html"
-                class="back-button"
-            >
-                ← Main website
+            <a href="../index.html" class="back-button">
+                <svg class="icon" aria-hidden="true"><use href="#i-external"></use></svg>
+                Main website
             </a>
+
+            <button
+                class="mobile-menu-button"
+                id="mobileMenuButton"
+                aria-label="Open documentation menu"
+            >
+                <svg class="icon icon-menu" aria-hidden="true"><use href="#i-menu"></use></svg>
+                <svg class="icon icon-close" aria-hidden="true"><use href="#i-x"></use></svg>
+            </button>
 
         </div>
 
     </div>
 
 </header>
-
-
-<!-- =========================================================
-     MOBILE MENU BUTTON
-========================================================= -->
-
-<button
-    class="mobile-menu-button"
-    id="mobileMenuButton"
-    aria-label="Open documentation menu"
->
-    ☰
-</button>
 
 
 <!-- =========================================================
@@ -111,18 +148,19 @@
             </div>
 
             <div class="sidebar-title">
-                Test Guide
+                Documentation
             </div>
 
         </div>
 
 
-        <nav class="sidebar-nav">
+        <nav class="sidebar-nav" aria-label="Documentation sections">
 
-            <a
-                href="#introduction"
-                class="active"
-            >
+            <div class="sidebar-group">
+                Guide
+            </div>
+
+            <a href="#introduction" class="active">
                 <span>01</span>
                 Introduction
             </a>
@@ -146,6 +184,10 @@
                 <span>05</span>
                 Main Terminal
             </a>
+
+            <div class="sidebar-group">
+                Modules
+            </div>
 
             <a href="#security">
                 <span>06</span>
@@ -172,6 +214,10 @@
                 FileGuard
             </a>
 
+            <div class="sidebar-group">
+                Reference
+            </div>
+
             <a href="#testing">
                 <span>11</span>
                 Testing
@@ -181,35 +227,36 @@
                 <span>12</span>
                 Troubleshooting
             </a>
-            
+
             <div class="sidebar-group">
-                MODULE DOCS
+                Module docs
             </div>
 
             <a href="security.html">
-                <span>↗</span>
+                <span><svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg></span>
                 Security
             </a>
 
             <a href="telegram.html">
-                <span>↗</span>
+                <span><svg class="icon" aria-hidden="true"><use href="#i-send"></use></svg></span>
                 Telegram Bot
             </a>
 
             <a href="hardening.html">
-                <span>↗</span>
+                <span><svg class="icon" aria-hidden="true"><use href="#i-sliders"></use></svg></span>
                 SSH Hardening
             </a>
 
             <a href="sshkeys.html">
-                <span>↗</span>
+                <span><svg class="icon" aria-hidden="true"><use href="#i-key"></use></svg></span>
                 SSH Key Guard
             </a>
 
             <a href="fileguard.html">
-                <span>↗</span>
+                <span><svg class="icon" aria-hidden="true"><use href="#i-file"></use></svg></span>
                 FileGuard
             </a>
+
         </nav>
 
 
@@ -257,7 +304,7 @@
             <div class="info-card">
 
                 <div class="info-icon">
-                    🛡
+                    <svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>
                 </div>
 
                 <div>
@@ -1464,7 +1511,7 @@ Telegram bot: ACTIVE
             <div class="info-card">
 
                 <div class="info-icon">
-                    📁
+                    <svg class="icon" aria-hidden="true"><use href="#i-folder"></use></svg>
                 </div>
 
                 <div>
@@ -1809,7 +1856,7 @@ Telegram bot: ACTIVE
             <div class="final-card">
 
                 <div class="final-icon">
-                    🛡
+                    <svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>
                 </div>
 
                 <div>
@@ -1839,7 +1886,7 @@ Telegram bot: ACTIVE
      FOOTER
 ========================================================= -->
 
-<footer>
+<footer class="docs-footer">
 
     <div class="footer-inner">
 
@@ -1861,6 +1908,8 @@ Telegram bot: ACTIVE
 
 
 <script src="js/main.js"></script>
+
+<script src="js/ui.js"></script>
 
 </body>
 
