@@ -104,10 +104,6 @@ async function loadServerGuardManifest() {
                 );
 
 
-                button.textContent =
-                    "↓ Download ServerGuard";
-
-
             });
 
 
@@ -294,6 +290,11 @@ async function loadServerGuardManifest() {
                     "download-unavailable"
                 );
 
+                button.setAttribute(
+                    "aria-disabled",
+                    "true"
+                );
+
                 button.textContent =
                     "Download unavailable";
 
@@ -465,8 +466,13 @@ if (navToggle && mobileNav) {
                 : "Open navigation"
         );
 
-        navToggle.textContent =
-            open ? "×" : "☰";
+        /* Toggle the icon via a class so the inline SVG sprite
+           is preserved (the button markup holds both icons). */
+
+        navToggle.classList.toggle(
+            "is-open",
+            open
+        );
 
     };
 
