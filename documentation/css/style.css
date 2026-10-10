@@ -281,20 +281,6 @@
    LAYOUT
    ========================================================= */
 
-.documentation-layout {
-    width: 100%;
-
-    margin: 0 auto;
-    padding-inline: var(--page-gutter);
-
-    display: grid;
-    grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
-    gap: clamp(40px, 4vw, 72px);
-
-    padding-top: var(--header-h);
-}
-
-
 /* =========================================================
    SIDEBAR
    ========================================================= */
@@ -494,11 +480,6 @@
 /* =========================================================
    CONTENT — SHARED
    ========================================================= */
-
-.documentation-content {
-    min-width: 0;
-    padding: 56px 0 96px;
-}
 
 .doc-section {
     padding: 56px 0;
@@ -1511,11 +1492,6 @@
 
 @media (max-width: 1100px) {
 
-    .documentation-layout {
-        grid-template-columns: 204px minmax(0, 1fr);
-        gap: var(--sp-7);
-    }
-
     .module-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1550,11 +1526,6 @@
 
 @media (max-width: 820px) {
 
-    .documentation-layout {
-        display: block;
-        width: 100%;
-    }
-
     .sidebar {
         position: fixed;
 
@@ -1581,10 +1552,6 @@
 
     .mobile-menu-button {
         display: inline-flex;
-    }
-
-    .documentation-content {
-        padding-top: var(--sp-8);
     }
 
     .requirements-grid,
