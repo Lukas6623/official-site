@@ -8,6 +8,13 @@
 
     const ctx = canvas.getContext("2d");
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Lightweight profile for small screens / low-core devices: fewer
+    // particles and a lower device-pixel ratio keep the canvas cheap.
+    const liteMode =
+        window.innerWidth < 720 ||
+        (navigator.hardwareConcurrency || 8) <= 4;
+    const DOT_COUNT = liteMode ? 7000 : 15000;
+    const MAX_DPR = liteMode ? 1.5 : 2;
     const TAU = Math.PI * 2;
 
     /* ---------- DATA ---------- */
@@ -85,7 +92,7 @@
             const lat = Math.asin(y) * 180 / Math.PI, lon = Math.atan2(x, z) * 180 / Math.PI;
             (isLand(lat, lon) ? landPts : seaPts).push(x, y, z);
         }
-    })(15000);
+    })(DOT_COUNT);
     const LAND = new Float32Array(landPts);
     const SEA = new Float32Array(seaPts.filter((_, i) => Math.floor(i / 3) % 3 === 0 ? true : false));
 
@@ -122,13 +129,13 @@
     let W, H, R, cx, cy, dpr;
     let yaw = rad(20), tilt = .38;
     let dragging = false, lastX = 0, lastY = 0, velYaw = 0;
-    let running = false, last = 0, nextAttack = 900;
+    let running = false, last = 0, lastDraw = 0, nextAttack = 900;
     let cyw, syw, ct, st;
     const out = [0, 0, 0];
 
     function resize() {
         const r = canvas.getBoundingClientRect();
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
         W = r.width; H = r.height;
         canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -393,7 +400,12 @@
             yaw += velYaw + (reduceMotion ? 0 : .00011 * dt);
         }
         if (!reduceMotion) tickEvents(now);
-        draw(now);
+        // On low-power devices, redraw at roughly 30 fps to halve the
+        // canvas cost while keeping the motion smooth enough.
+        if (!liteMode || now - lastDraw >= 32) {
+            draw(now);
+            lastDraw = now;
+        }
         requestAnimationFrame(frame);
     }
 
@@ -418,7 +430,7 @@
     canvas.addEventListener("pointercancel", release);
 
     let inView = false;
-    const sync = () => (inView && !document.hidden ? start() : stop());
+    const sync = () => (inView && !document.hidden && !reduceMotion ? start() : stop());
     new IntersectionObserver(([en]) => { inView = en.isIntersecting; sync(); }, { threshold: .05 }).observe(canvas);
     document.addEventListener("visibilitychange", sync);
     new ResizeObserver(resize).observe(canvas);

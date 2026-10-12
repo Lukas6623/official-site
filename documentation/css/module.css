@@ -229,6 +229,11 @@
     color: var(--accent-text);
 
     font-size: 0.86em;
+
+    /* Long unbreakable strings (for example Windows paths such as
+       C:\Users\NAME\.ssh\id_ed25519) must not overflow the page on
+       narrow screens; break them only when there is no other option. */
+    overflow-wrap: anywhere;
 }
 
 

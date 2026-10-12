@@ -1757,6 +1757,22 @@ html.js .reveal.visible {
 
 
 /* =========================================================
+   PERFORMANCE — SMALL SCREENS
+   A blurred fixed header is expensive to repaint while the page
+   scrolls. On phones use a near-opaque background instead.
+   ========================================================= */
+
+@media (max-width: 720px) {
+
+    .site-header {
+        background: rgba(8, 11, 18, 0.96);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
+
+
+/* =========================================================
    REDUCED MOTION
    ========================================================= */
 
