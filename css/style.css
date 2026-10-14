@@ -600,11 +600,11 @@ body::after {
 .feature-prime {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
-    gap: clamp(28px, 4vw, 56px);
-    align-items: center;
+    gap: clamp(var(--sp-6), 4vw, var(--sp-9));
+    align-items: start;
 
-    margin-bottom: 48px;
-    padding-bottom: 48px;
+    margin-bottom: var(--sp-7);
+    padding: var(--sp-6);
 
     border-bottom: 1px solid var(--border);
 }
@@ -1914,9 +1914,9 @@ html.js .reveal.visible {
 .pipeline-node span { font-size: 12px; }
 .pipeline-arrow { display: none; }
 
-.feature-prime { border: 1px solid var(--border-strong); border-radius: 18px; background: linear-gradient(135deg, rgba(19,16,34,.96), rgba(13,11,24,.82)); box-shadow: 0 22px 55px rgba(0,0,0,.22); }
-.feature-grid { gap: 12px; }
-.feature-card { min-height: 214px; padding: 22px; border-color: rgba(167,139,250,.13); background: linear-gradient(145deg, rgba(26,21,48,.74), rgba(13,11,24,.9)); }
+.feature-prime { border: 1px solid var(--border-strong); border-radius: var(--r-2xl); background: linear-gradient(135deg, rgba(19,16,34,.96), rgba(13,11,24,.82)); box-shadow: 0 22px 55px rgba(0,0,0,.22); }
+.feature-grid { gap: var(--sp-3); }
+.feature-card { padding: var(--sp-5); border-color: rgba(167,139,250,.13); background: linear-gradient(145deg, rgba(26,21,48,.74), rgba(13,11,24,.9)); }
 .feature-card:hover { transform: translateY(-3px); border-color: var(--border-accent-strong); box-shadow: 0 16px 35px rgba(0,0,0,.25); }
 .feature-card h3 { font-size: 16px; }
 .feature-card p { color: #bdb5cf; }
@@ -1945,7 +1945,6 @@ html.js .reveal.visible {
     .pipeline { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
     .pipeline-node { min-height: 104px; }
     .pipeline-node:not(:last-of-type)::after { display: none; }
-    .feature-card { min-height: 0; }
     .globe-wrap { min-height: 340px; }
 }
 
@@ -1983,4 +1982,14 @@ html.js .reveal.visible {
 
 @media (max-width: 720px) {
     .container { width: calc(100% - 32px); max-width: none; padding-inline: 0; }
+}
+
+/* Targeted density correction for the existing landing composition. */
+@media (min-width: 721px) {
+    .section { padding-block: 72px; }
+    .section-head { margin-bottom: 32px; }
+    #features .section-head { margin-bottom: 24px; }
+    #features .feature-prime-copy { align-self: start; }
+    #features .feature-prime .code-panel pre { padding: 14px 16px; }
+    #features .feature-prime .code-panel pre code { line-height: 1.55; }
 }
