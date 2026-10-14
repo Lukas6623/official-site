@@ -8,6 +8,13 @@
 
     const ctx = canvas.getContext("2d");
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Lightweight profile for small screens / low-core devices: fewer
+    // particles and a lower device-pixel ratio keep the canvas cheap.
+    const liteMode =
+        window.innerWidth < 720 ||
+        (navigator.hardwareConcurrency || 8) <= 4;
+    const DOT_COUNT = liteMode ? 7000 : 15000;
+    const MAX_DPR = liteMode ? 1.5 : 2;
     const TAU = Math.PI * 2;
 
     /* ---------- DATA ---------- */
@@ -85,7 +92,7 @@
             const lat = Math.asin(y) * 180 / Math.PI, lon = Math.atan2(x, z) * 180 / Math.PI;
             (isLand(lat, lon) ? landPts : seaPts).push(x, y, z);
         }
-    })(15000);
+    })(DOT_COUNT);
     const LAND = new Float32Array(landPts);
     const SEA = new Float32Array(seaPts.filter((_, i) => Math.floor(i / 3) % 3 === 0 ? true : false));
 
@@ -122,17 +129,17 @@
     let W, H, R, cx, cy, dpr;
     let yaw = rad(20), tilt = .38;
     let dragging = false, lastX = 0, lastY = 0, velYaw = 0;
-    let running = false, last = 0, nextAttack = 900;
+    let running = false, last = 0, lastDraw = 0, nextAttack = 900;
     let cyw, syw, ct, st;
     const out = [0, 0, 0];
 
     function resize() {
         const r = canvas.getBoundingClientRect();
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
         W = r.width; H = r.height;
         canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        cx = W / 2; cy = H / 2; R = Math.min(W, H) * .36;
+        cx = W / 2; cy = H / 2; R = Math.min(W, H) * .30;
         if (!running) draw(performance.now());
     }
 
@@ -219,16 +226,16 @@
 
         // atmosphere
         let g = ctx.createRadialGradient(cx, cy, R * .92, cx, cy, R * 1.55);
-        g.addColorStop(0, "rgba(90,140,255,.34)"); g.addColorStop(.25, "rgba(80,110,255,.12)"); g.addColorStop(1, "rgba(60,90,255,0)");
+        g.addColorStop(0, "rgba(139,92,246,.34)"); g.addColorStop(.25, "rgba(124,58,237,.14)"); g.addColorStop(1, "rgba(109,40,217,0)");
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 1.55, 0, TAU); ctx.fill();
 
         // sphere body
         g = ctx.createRadialGradient(cx - R * .35, cy - R * .4, R * .1, cx, cy, R);
-        g.addColorStop(0, "#182848"); g.addColorStop(.6, "#0b1222"); g.addColorStop(1, "#070a13");
+        g.addColorStop(0, "#1c1734"); g.addColorStop(.6, "#0b1222"); g.addColorStop(1, "#070a13");
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.fill();
 
         // graticule
-        ctx.lineWidth = .6; ctx.strokeStyle = "rgba(120,160,255,.09)";
+        ctx.lineWidth = .6; ctx.strokeStyle = "rgba(167,139,250,.10)";
         ctx.beginPath();
         for (const line of grat) {
             let pen = false;
@@ -242,23 +249,23 @@
         ctx.stroke();
 
         // dots
-        drawDots(SEA, ["rgba(90,125,210,.10)", "rgba(90,125,210,.14)", "rgba(90,125,210,.18)"], 1.2);
-        drawDots(LAND, ["rgba(110,150,255,.30)", "rgba(120,165,255,.55)", "rgba(140,182,255,.80)", "rgba(190,215,255,.98)"], 1.9);
+        drawDots(SEA, ["rgba(139,120,220,.10)", "rgba(139,120,220,.14)", "rgba(139,120,220,.18)"], 1.2);
+        drawDots(LAND, ["rgba(150,120,255,.30)", "rgba(160,135,255,.55)", "rgba(175,155,255,.80)", "rgba(205,190,255,.98)"], 1.9);
 
         // fresnel rim
         g = ctx.createRadialGradient(cx, cy, R * .78, cx, cy, R);
-        g.addColorStop(0, "rgba(90,140,255,0)"); g.addColorStop(1, "rgba(110,160,255,.28)");
+        g.addColorStop(0, "rgba(139,92,246,0)"); g.addColorStop(1, "rgba(167,139,250,.28)");
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.fill();
-        ctx.strokeStyle = "rgba(150,190,255,.38)"; ctx.lineWidth = 1.1;
+        ctx.strokeStyle = "rgba(180,160,255,.38)"; ctx.lineWidth = 1.1;
         ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke();
 
         // secure tunnels
         for (const l of links) {
             l.sp = screenArc(l.arc);
-            strokeArc(l.sp, 0, 64, "#6f9eff", 1, .2);
+            strokeArc(l.sp, 0, 64, "#a78bfa", 1, .2);
             let t = ((now * l.speed + l.ph) % 1);
             if (l.dir < 0) t = 1 - t;
-            pulse(l.sp, t, l.dir > 0 ? "#7ea9ff" : "#58d68d", .16);
+            pulse(l.sp, t, l.dir > 0 ? "#a78bfa" : "#58d68d", .16);
         }
 
         // hostile attempts, stopped by the shield
@@ -292,7 +299,7 @@
             const ph = ((now / 1900) + s.ph) % 1;
             s.flash *= .94;
             const shieldR = 9 + s.flash * 5;
-            ctx.strokeStyle = `rgba(126,169,255,${(.35 + s.flash * .6) * k})`; ctx.lineWidth = 1 + s.flash;
+            ctx.strokeStyle = `rgba(167,139,250,${(.35 + s.flash * .6) * k})`; ctx.lineWidth = 1 + s.flash;
             ctx.beginPath();
             for (let i = 0; i < 6; i++) {
                 const a = -Math.PI / 2 + i * TAU / 6;
@@ -300,12 +307,12 @@
                 i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
             }
             ctx.closePath(); ctx.stroke();
-            if (s.flash > .05) { ctx.fillStyle = `rgba(126,169,255,${s.flash * .18})`; ctx.fill(); }
-            ctx.strokeStyle = `rgba(126,169,255,${(1 - ph) * .45 * k})`; ctx.lineWidth = 1;
+            if (s.flash > .05) { ctx.fillStyle = `rgba(167,139,250,${s.flash * .18})`; ctx.fill(); }
+            ctx.strokeStyle = `rgba(167,139,250,${(1 - ph) * .45 * k})`; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.arc(p.x, p.y, 8 + ph * 18, 0, TAU); ctx.stroke();
-            glowDot(p.x, p.y, 3 * k + .5, "126,169,255", k);
+            glowDot(p.x, p.y, 3 * k + .5, "167,139,250", k);
             if (p.z > .25) {
-                ctx.fillStyle = `rgba(205,220,255,${clamp((p.z - .25) * 1.6, 0, .9)})`;
+                ctx.fillStyle = `rgba(228,220,255,${clamp((p.z - .25) * 1.6, 0, .9)})`;
                 ctx.textAlign = "left";
                 ctx.fillText(s.name.toUpperCase(), p.x + 15, p.y - 1);
             }
@@ -317,7 +324,7 @@
             if (age >= 1) continue;
             const p = project(r.v);
             if (p.z <= 0) continue;
-            ctx.strokeStyle = `rgba(126,190,255,${(1 - age) * .9})`; ctx.lineWidth = 2 * (1 - age) + .5;
+            ctx.strokeStyle = `rgba(170,150,255,${(1 - age) * .9})`; ctx.lineWidth = 2 * (1 - age) + .5;
             ctx.beginPath(); ctx.arc(p.x, p.y, 8 + age * 34, 0, TAU); ctx.stroke();
         }
         for (const b of bursts) {
@@ -393,7 +400,12 @@
             yaw += velYaw + (reduceMotion ? 0 : .00011 * dt);
         }
         if (!reduceMotion) tickEvents(now);
-        draw(now);
+        // On low-power devices, redraw at roughly 30 fps to halve the
+        // canvas cost while keeping the motion smooth enough.
+        if (!liteMode || now - lastDraw >= 32) {
+            draw(now);
+            lastDraw = now;
+        }
         requestAnimationFrame(frame);
     }
 
@@ -418,7 +430,7 @@
     canvas.addEventListener("pointercancel", release);
 
     let inView = false;
-    const sync = () => (inView && !document.hidden ? start() : stop());
+    const sync = () => (inView && !document.hidden && !reduceMotion ? start() : stop());
     new IntersectionObserver(([en]) => { inView = en.isIntersecting; sync(); }, { threshold: .05 }).observe(canvas);
     document.addEventListener("visibilitychange", sync);
     new ResizeObserver(resize).observe(canvas);
