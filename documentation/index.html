@@ -30,6 +30,7 @@
     >
 
     <link rel="stylesheet" href="../css/tokens.css">
+    <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/module.css">
 </head>
@@ -61,6 +62,12 @@
     <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M5 8h6M15 8h4M5 16h4M13 16h6"/><circle cx="13" cy="8" r="2"/><circle cx="11" cy="16" r="2"/></symbol>
     <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="16.5" r="3.5"/><path d="M10 14L20 4M17 4h3v3"/></symbol>
     <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 20h16"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49v-1.7c-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.94.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.35 4.8-4.58 5.05.36.32.68.94.68 1.9v2.82c0 .27.18.59.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></symbol>
 </svg>
 
 
@@ -76,8 +83,15 @@
             <span class="brand-icon">
                 <svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>
             </span>
-            <span class="brand-word">Server<span>Guard</span></span>
+            <span class="brand-copy"><span class="brand-word">Server<span>Guard</span></span><small>Secure · Manage · Protect</small></span>
         </a>
+
+        <nav class="topbar-nav" aria-label="Primary">
+            <a href="../index.html#overview">Overview</a>
+            <a href="index.html" class="is-active" aria-current="page">Documentation</a>
+            <a href="security.html">Security</a>
+            <a href="../index.html#news">Changelog <i class="nav-notice" aria-label="New updates"></i></a>
+        </nav>
 
         <div class="doc-search" role="search">
             <svg class="icon doc-search-icon" aria-hidden="true"><use href="#i-search"></use></svg>
@@ -85,7 +99,7 @@
                 id="docSearch"
                 class="doc-search-input"
                 type="search"
-                placeholder="Search documentation"
+                placeholder="Search documentation…"
                 aria-label="Search documentation"
                 autocomplete="off"
                 spellcheck="false"
@@ -97,24 +111,26 @@
         <div class="topbar-actions">
 
             <a
-                href="https://t.me/ServerGuardSupport"
+                href="https://github.com/Lukas6623/ServerGuardCode"
                 class="help-button"
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                <svg class="icon" aria-hidden="true"><use href="#i-help"></use></svg>
-                Help
+                <svg class="icon" aria-hidden="true"><use href="#i-github"></use></svg>
+                GitHub
             </a>
 
-            <a href="../index.html" class="back-button">
-                <svg class="icon" aria-hidden="true"><use href="#i-external"></use></svg>
-                Main website
+            <a href="../index.html#download" class="btn btn-primary topbar-download download-installer">
+                <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>
+                Download
             </a>
 
             <button
                 class="mobile-menu-button"
                 id="mobileMenuButton"
                 aria-label="Open documentation menu"
+                aria-controls="sidebar"
+                aria-expanded="false"
             >
                 <svg class="icon icon-menu" aria-hidden="true"><use href="#i-menu"></use></svg>
                 <svg class="icon icon-close" aria-hidden="true"><use href="#i-x"></use></svg>
@@ -133,10 +149,21 @@
 
 <div class="module-layout">
 
+    <nav class="icon-rail" aria-label="Documentation areas">
+        <a href="../index.html" aria-label="Home"><svg class="icon" aria-hidden="true"><use href="#i-external"></use></svg></a>
+        <a href="index.html" class="is-active" aria-label="Documentation" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg></a>
+        <a href="security.html" aria-label="Security"><svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg></a>
+        <a href="#terminal" aria-label="Terminal"><svg class="icon" aria-hidden="true"><use href="#i-terminal"></use></svg></a>
+        <a href="../index.html#news" aria-label="Updates"><svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg></a>
+        <a href="index.html#troubleshooting" aria-label="Troubleshooting"><svg class="icon" aria-hidden="true"><use href="#i-sliders"></use></svg></a>
+        <a href="index.html#requirements" aria-label="Information"><svg class="icon" aria-hidden="true"><use href="#i-help"></use></svg></a>
+    </nav>
+
 
     <!-- =====================================================
          SIDEBAR
     ====================================================== -->
+
 
         <aside class="sidebar" id="sidebar">
 
@@ -146,14 +173,35 @@
         </div>
 
         <nav class="sidebar-nav" aria-label="Documentation">
-            <div class="sidebar-group">Start</div>
-            <a href="index.html" class="active" aria-current="page"><span><svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg></span>Testing Guide</a>
-            <div class="sidebar-group">Modules</div>
-            <a href="security.html"><span><svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg></span>Security</a>
-            <a href="telegram.html"><span><svg class="icon" aria-hidden="true"><use href="#i-send"></use></svg></span>Telegram Bot</a>
-            <a href="hardening.html"><span><svg class="icon" aria-hidden="true"><use href="#i-sliders"></use></svg></span>SSH Hardening</a>
-            <a href="sshkeys.html"><span><svg class="icon" aria-hidden="true"><use href="#i-key"></use></svg></span>SSH Key Guard</a>
-            <a href="fileguard.html"><span><svg class="icon" aria-hidden="true"><use href="#i-file"></use></svg></span>FileGuard</a>
+            <div class="sidebar-group">
+                <span class="sidebar-group-title">Getting started</span>
+                <div class="sidebar-links">
+                    <a class="active" aria-current="page" href="index.html"><span><svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg></span>Testing Guide</a>
+                </div>
+            </div>
+            <div class="sidebar-group">
+                <span class="sidebar-group-title">Security</span>
+                <div class="sidebar-links">
+                    <a href="security.html"><span><svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg></span>Security</a>
+                    <a href="hardening.html"><span><svg class="icon" aria-hidden="true"><use href="#i-sliders"></use></svg></span>SSH Hardening</a>
+                    <a href="sshkeys.html"><span><svg class="icon" aria-hidden="true"><use href="#i-key"></use></svg></span>SSH Key Guard</a>
+                    <a href="fileguard.html"><span><svg class="icon" aria-hidden="true"><use href="#i-file"></use></svg></span>FileGuard</a>
+                </div>
+            </div>
+            <div class="sidebar-group">
+                <span class="sidebar-group-title">Integrations</span>
+                <div class="sidebar-links">
+                    <a href="telegram.html"><span><svg class="icon" aria-hidden="true"><use href="#i-send"></use></svg></span>Telegram Bot</a>
+                </div>
+            </div>
+            <div class="sidebar-group">
+                <span class="sidebar-group-title">Reference</span>
+                <div class="sidebar-links">
+                    <a href="../index.html"><span><svg class="icon" aria-hidden="true"><use href="#i-external"></use></svg></span>Main website</a>
+                    <a href="https://github.com/Lukas6623/ServerGuardCode" target="_blank" rel="noopener noreferrer"><span><svg class="icon icon-fill" aria-hidden="true"><use href="#i-github"></use></svg></span>GitHub</a>
+                    <a href="https://t.me/ServerGuardSupport" target="_blank" rel="noopener noreferrer"><span><svg class="icon" aria-hidden="true"><use href="#i-help"></use></svg></span>Support</a>
+                </div>
+            </div>
         </nav>
 
         <div class="sidebar-footer">
@@ -177,43 +225,103 @@
 
         <section
             id="introduction"
-            class="doc-section"
+            class="doc-section doc-intro"
         >
 
-            <div class="eyebrow">
-                01 / INTRODUCTION
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="../index.html">ServerGuard</a>
+                <span class="sep" aria-hidden="true">/</span>
+                <span aria-current="page">Documentation</span>
+            </nav>
+
+            <div class="intro-top-grid">
+
+            <div class="doc-hero">
+
+                <span class="eyebrow">Documentation</span>
+
+                <h1>
+                    ServerGuard
+                    <span>Documentation</span>
+                </h1>
+
+                <p class="doc-hero-lead">
+                    ServerGuard is a Windows desktop application for managing,
+                    monitoring and protecting Linux servers over SSH. It combines
+                    security tools, best practices and a convenient interface in
+                    a single solution.
+                </p>
+
+                <div class="doc-hero-actions">
+                    <a href="../index.html#download" class="btn btn-primary">
+                        <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>
+                        Download ServerGuard
+                    </a>
+                    <a href="security.html" class="btn btn-secondary">
+                        <svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg>
+                        Security module
+                    </a>
+                </div>
+
             </div>
 
-            <h1>
-                ServerGuard
-                <span>Testing Guide</span>
-            </h1>
 
-            <p class="lead">
-                This documentation provides a step-by-step guide
-                for testing ServerGuard on a Linux server.
-            </p>
-
-            <div class="info-card">
-
-                <div class="info-icon">
-                    <svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>
+            <div class="intro-card">
+                <div class="panel-icon">
+                    <svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>
                 </div>
-
                 <div>
-
-                    <h3>
-                        About ServerGuard
-                    </h3>
-
+                    <h3>Security-first server management</h3>
                     <p>
-                        ServerGuard is a Windows application designed
-                        to manage and protect Linux servers through SSH.
-                        It provides security modules for monitoring,
-                        protection and server administration.
+                        Harden your servers, prevent attacks and manage
+                        configuration with ease.
                     </p>
-
+                    <ul class="intro-meta">
+                        <li class="chip">
+                            <svg class="icon" aria-hidden="true"><use href="#i-monitor"></use></svg>
+                            Windows client
+                        </li>
+                        <li class="chip">
+                            <svg class="icon" aria-hidden="true"><use href="#i-server"></use></svg>
+                            Linux server
+                        </li>
+                        <li class="chip">
+                            <svg class="icon" aria-hidden="true"><use href="#i-terminal"></use></svg>
+                            SSH management
+                        </li>
+                    </ul>
                 </div>
+            </div>
+
+            </div>
+
+
+            <div class="feature-cards">
+
+                <article class="feature-card">
+                    <div class="panel-icon">
+                        <svg class="icon" aria-hidden="true"><use href="#i-server"></use></svg>
+                    </div>
+                    <h3>Protection runs on the server</h3>
+                    <p>
+                        Modules are installed on the Linux server and
+                        operate independently of the client, so detection
+                        and response keep running whether or not your
+                        computer is switched on.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="panel-icon">
+                        <svg class="icon" aria-hidden="true"><use href="#i-terminal"></use></svg>
+                    </div>
+                    <h3>Managed over one SSH connection</h3>
+                    <p>
+                        Connect once over SSH, then open and manage every
+                        module from the ServerGuard terminal — Security,
+                        Hardening, key and file monitoring and Telegram.
+                    </p>
+                </article>
 
             </div>
 
@@ -247,6 +355,174 @@
                     </span>
 
                 </div>
+
+            </div>
+
+
+            <div class="intro-workbench">
+
+            <div class="feature-panel">
+
+                <div class="feature-panel-copy">
+
+                    <span class="eyebrow">Module / SSH Hardening</span>
+
+                    <h3>Review and apply an SSH security policy</h3>
+
+                    <p>
+                        SSH Hardening reviews and manages security-related
+                        OpenSSH configuration. The policy is written to a
+                        separate configuration fragment, validated and
+                        backed up before it is applied.
+                    </p>
+
+                    <ul class="mini-list">
+                        <li>
+                            <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>
+                            Applies a controlled policy without rewriting the
+                            administrator's configuration
+                        </li>
+                        <li>
+                            <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>
+                            Validates the configuration and reloads the SSH service
+                        </li>
+                        <li>
+                            <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>
+                            Creates a backup and supports restoration
+                        </li>
+                    </ul>
+
+                    <a href="hardening.html" class="inline-button">
+                        Open SSH Hardening ↗
+                    </a>
+
+                </div>
+
+                <div class="code-panel">
+
+                    <div class="code-panel-head">
+                        <span class="path">/etc/ssh/sshd_config (recommended)</span>
+                        <span>policy</span>
+                    </div>
+
+                    <pre><code>Protocol 2
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+KexAlgorithms curve25519-sha256,ecdh-sha2-nistp256
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+MACs hmac-sha2-512,hmac-sha2-256</code></pre>
+
+                </div>
+
+            </div>
+
+
+            <section class="panel" aria-labelledby="protection-modules">
+
+                <div class="panel-head">
+                    <div class="panel-icon">
+                        <svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>
+                    </div>
+                    <div class="panel-head-text">
+                        <h3 id="protection-modules">Protection modules</h3>
+                        <p>Each module targets one class of events and is managed from the same SSH connection.</p>
+                    </div>
+                </div>
+
+                <div class="module-links">
+
+                    <a class="module-link" href="security.html">
+                        <svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg>
+                        <strong>Security</strong>
+                        <span>SSH brute-force detection with automatic restrictions.</span>
+                        <span class="module-link-go">Read module →</span>
+                    </a>
+
+                    <a class="module-link" href="hardening.html">
+                        <svg class="icon" aria-hidden="true"><use href="#i-sliders"></use></svg>
+                        <strong>SSH Hardening</strong>
+                        <span>Review and apply a controlled OpenSSH security policy.</span>
+                        <span class="module-link-go">Read module →</span>
+                    </a>
+
+                    <a class="module-link" href="sshkeys.html">
+                        <svg class="icon" aria-hidden="true"><use href="#i-key"></use></svg>
+                        <strong>SSH Key Guard</strong>
+                        <span>Monitor authorized_keys and raise events on changes.</span>
+                        <span class="module-link-go">Read module →</span>
+                    </a>
+
+                    <a class="module-link" href="fileguard.html">
+                        <svg class="icon" aria-hidden="true"><use href="#i-file"></use></svg>
+                        <strong>FileGuard</strong>
+                        <span>File integrity monitoring with baselines, scans and logs.</span>
+                        <span class="module-link-go">Read module →</span>
+                    </a>
+
+                    <a class="module-link" href="telegram.html">
+                        <svg class="icon" aria-hidden="true"><use href="#i-send"></use></svg>
+                        <strong>Telegram Bot</strong>
+                        <span>Security notifications and remote management on Telegram.</span>
+                        <span class="module-link-go">Read module →</span>
+                    </a>
+
+                </div>
+
+            </section>
+
+            </div>
+
+
+            <section class="quickstart" aria-labelledby="quick-start-heading">
+
+                <span class="eyebrow" id="quick-start-heading">Quick start</span>
+
+                <div class="qs-steps">
+
+                    <div class="qs-step">
+                        <span class="qs-index">01</span>
+                        <h3>Install ServerGuard</h3>
+                        <p>
+                            Download the installer and run the setup wizard
+                            on your Windows computer.
+                            <a href="#installation">Installation →</a>
+                        </p>
+                    </div>
+
+                    <div class="qs-step">
+                        <span class="qs-index">02</span>
+                        <h3>Connect over SSH</h3>
+                        <p>
+                            Enter the server IP, SSH port, username and
+                            password, then connect.
+                            <a href="#connection">Connection →</a>
+                        </p>
+                    </div>
+
+                    <div class="qs-step">
+                        <span class="qs-index">03</span>
+                        <h3>Enable protection</h3>
+                        <p>
+                            Open a module from the terminal and enable the
+                            protection you need on the server.
+                            <a href="#security">Modules →</a>
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <div class="code-panel">
+
+                <div class="code-panel-head">
+                    <span>Download latest version (PowerShell)</span>
+                    <span>Windows</span>
+                </div>
+
+                <pre><code>Invoke-WebRequest -Uri "https://serverguard.dev/download/latest" -OutFile "ServerGuardSetup.exe"</code></pre>
 
             </div>
 
@@ -657,15 +933,73 @@
 ls
 pwd
 cd &lt;directory&gt;
+nano &lt;file&gt;
 
 security
 telegram
 hardening
 sshkeys
 fileguard
+ports
+web install
 
 exit</code></pre>
 
+            </div>
+
+            <div class="terminal-reference" aria-label="ServerGuard command reference">
+                <div class="terminal-reference-nav">
+                    <div class="terminal-reference-label">Command reference</div>
+                    <div class="terminal-ref-category">General navigation</div>
+                    <button type="button" class="command-ref-item is-active" data-command="help">
+                        <code>help</code><span>General help and module overview</span>
+                    </button>
+                    <button type="button" class="command-ref-item" data-command="ls">
+                        <code>ls</code><span>List remote files</span>
+                    </button>
+                    <button type="button" class="command-ref-item" data-command="cd &lt;directory&gt;">
+                        <code>cd &lt;directory&gt;</code><span>Change remote directory</span>
+                    </button>
+                    <div class="terminal-ref-category">Security</div>
+                    <button type="button" class="command-ref-item" data-command="security">
+                        <code>security</code><span>Brute-force protection menu</span>
+                    </button>
+                    <div class="terminal-ref-category">SSH Hardening</div>
+                    <button type="button" class="command-ref-item" data-command="hardening">
+                        <code>hardening</code><span>SSH hardening menu</span>
+                    </button>
+                    <div class="terminal-ref-category">SSH Key Guard</div>
+                    <button type="button" class="command-ref-item" data-command="sshkeys">
+                        <code>sshkeys</code><span>SSH Key Guard menu</span>
+                    </button>
+                    <div class="terminal-ref-category">FileGuard</div>
+                    <button type="button" class="command-ref-item" data-command="fileguard">
+                        <code>fileguard</code><span>FileGuard menu</span>
+                    </button>
+                    <div class="terminal-ref-category">Integrations</div>
+                    <button type="button" class="command-ref-item" data-command="telegram">
+                        <code>telegram</code><span>Telegram Bot menu</span>
+                    </button>
+                    <div class="terminal-ref-category">Diagnostics and maintenance</div>
+                    <button type="button" class="command-ref-item" data-command="ports">
+                        <code>ports</code><span>Firewall and protected ports</span>
+                    </button>
+                    <button type="button" class="command-ref-item" data-command="web install">
+                        <code>web install</code><span>Install the local web interface</span>
+                    </button>
+                </div>
+                <div class="terminal-reference-detail">
+                    <div class="terminal-detail-head">
+                        <span class="terminal-detail-kicker">ServerGuard terminal / reference</span>
+                        <button type="button" class="copy-btn terminal-copy" aria-label="Copy selected command">Copy</button>
+                    </div>
+                    <div class="terminal-detail-command"><span class="prompt">root@server:~$</span> <code id="commandReferenceCommand">help</code></div>
+                    <p id="commandReferenceDescription">Show the complete ServerGuard help page, including general commands, modules, Port Manager and troubleshooting.</p>
+                    <div class="terminal-detail-meta">
+                        <span id="commandReferenceCategory">General navigation</span>
+                        <span>Reference only · does not execute commands</span>
+                    </div>
+                </div>
             </div>
 
 
@@ -692,6 +1026,11 @@ exit</code></pre>
                 </div>
 
                 <div class="command-card">
+                    <code>nano &lt;file&gt;</code>
+                    <span>Edit a remote file with the ServerGuard editor.</span>
+                </div>
+
+                <div class="command-card">
                     <code>security</code>
                     <span>Open the Security module.</span>
                 </div>
@@ -714,6 +1053,16 @@ exit</code></pre>
                 <div class="command-card">
                     <code>fileguard</code>
                     <span>Open FileGuard.</span>
+                </div>
+
+                <div class="command-card">
+                    <code>ports</code>
+                    <span>Open the firewall and protected-port manager.</span>
+                </div>
+
+                <div class="command-card">
+                    <code>web install</code>
+                    <span>Install the local web interface on the server.</span>
                 </div>
 
                 <div class="command-card">
@@ -1800,6 +2149,7 @@ Telegram bot: ACTIVE
     </div>
 
 </footer>
+<script src="../js/main.js"></script>
 <script src="js/docs.js"></script>
 
 

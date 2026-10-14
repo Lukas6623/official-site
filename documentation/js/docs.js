@@ -32,6 +32,8 @@
     var tocRafId = null;
     var navToken = 0;
     var searchIndex = [];
+    var searchReady = false;
+    var searchBuildToken = 0;
     var currentPath = window.location.pathname;
 
     var closeSearchPanel = function () {};
@@ -79,6 +81,60 @@
         return document.getElementById("sidebar");
     }
 
+    function initDocumentationShell() {
+        var layout = $(".module-layout");
+        if (!layout) return;
+
+        if (!$(".icon-rail", layout)) {
+            var rail = document.createElement("nav");
+            rail.className = "icon-rail";
+            rail.setAttribute("aria-label", "Documentation areas");
+            rail.innerHTML =
+                '<a href="../index.html" aria-label="Home"><svg class="icon" aria-hidden="true"><use href="#i-external"></use></svg></a>' +
+                '<a href="index.html" class="is-active" aria-label="Documentation" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg></a>' +
+                '<a href="security.html" aria-label="Security"><svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg></a>' +
+                '<a href="index.html#terminal" aria-label="Terminal"><svg class="icon" aria-hidden="true"><use href="#i-terminal"></use></svg></a>' +
+                '<a href="../index.html#news" aria-label="Updates"><svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg></a>' +
+                '<a href="index.html#troubleshooting" aria-label="Troubleshooting"><svg class="icon" aria-hidden="true"><use href="#i-sliders"></use></svg></a>' +
+                '<a href="index.html#requirements" aria-label="Information"><svg class="icon" aria-hidden="true"><use href="#i-help"></use></svg></a>';
+            layout.insertBefore(rail, layout.firstElementChild);
+        }
+
+        var brand = $(".brand", document);
+        if (brand && !$(".brand-copy", brand)) {
+            var word = $(".brand-word", brand);
+            if (word) {
+                var copy = document.createElement("span");
+                copy.className = "brand-copy";
+                copy.appendChild(word.cloneNode(true));
+                var tagline = document.createElement("small");
+                tagline.textContent = "Secure · Manage · Protect";
+                copy.appendChild(tagline);
+                word.replaceWith(copy);
+            }
+        }
+
+        var search = document.getElementById("docSearch");
+        if (search) search.placeholder = "Search documentation…";
+        var primary = $(".topbar-nav");
+        if (primary) {
+            primary.innerHTML =
+                '<a href="../index.html#overview">Overview</a>' +
+                '<a href="index.html" class="is-active" aria-current="page">Documentation</a>' +
+                '<a href="security.html">Security</a>' +
+                '<a href="../index.html#news">Changelog <i class="nav-notice" aria-label="New updates"></i></a>';
+        }
+        var help = $(".help-button");
+        if (help) {
+            help.href = "https://github.com/Lukas6623/ServerGuardCode";
+            help.target = "_blank";
+            help.rel = "noopener noreferrer";
+            help.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-github"></use></svg>GitHub';
+        }
+        var download = $(".topbar-download");
+        if (download) download.classList.add("download-installer");
+    }
+
     function setSidebarOpen(open) {
         var sidebar = sidebarEl();
         var button = document.getElementById("mobileMenuButton");
@@ -94,6 +150,130 @@
             "aria-label",
             open ? "Close documentation menu" : "Open documentation menu"
         );
+
+        var backdrop = document.getElementById("sidebarBackdrop");
+        if (backdrop) {
+            backdrop.classList.toggle("is-visible", open);
+            backdrop.setAttribute("aria-hidden", open ? "false" : "true");
+        }
+
+        document.body.classList.toggle("sidebar-is-open", open);
+    }
+
+    function initSidebar() {
+        var sidebar = sidebarEl();
+        if (!sidebar) return;
+
+        var backdrop = document.getElementById("sidebarBackdrop");
+        if (!backdrop) {
+            backdrop = document.createElement("button");
+            backdrop.type = "button";
+            backdrop.id = "sidebarBackdrop";
+            backdrop.className = "sidebar-backdrop";
+            backdrop.setAttribute("aria-label", "Close documentation menu");
+            backdrop.setAttribute("aria-hidden", "true");
+            document.body.appendChild(backdrop);
+            backdrop.addEventListener("click", function () { setSidebarOpen(false); });
+        }
+
+        $$(".sidebar-group", sidebar).forEach(function (group, index) {
+            if (group.dataset.enhanced === "true") return;
+
+            var title = $(".sidebar-group-title", group);
+            var links = $(".sidebar-links", group);
+            if (!title || !links) return;
+
+            var button = document.createElement("button");
+            button.type = "button";
+            button.className = "sidebar-group-title";
+            button.textContent = title.textContent;
+            button.setAttribute("aria-controls", "sidebar-group-" + index);
+            button.setAttribute("aria-expanded", "true");
+            links.id = "sidebar-group-" + index;
+
+            title.replaceWith(button);
+            group.dataset.enhanced = "true";
+            group.classList.toggle("is-collapsed", button.getAttribute("aria-expanded") !== "true");
+
+            button.addEventListener("click", function () {
+                var expanded = button.getAttribute("aria-expanded") === "true";
+                setSidebarGroupExpanded(group, button, !expanded);
+            });
+        });
+
+        // These are real anchors on the introduction page, not invented routes.
+        var started = $(".sidebar-group", sidebar);
+        if (started && !started.dataset.anchorsAdded) {
+            var links = $(".sidebar-links", started);
+            var guide = links.querySelector('a[href="index.html"]');
+            if (guide) {
+                Array.prototype.slice.call(guide.childNodes).forEach(function (node) {
+                    if (node.nodeType === 3 && node.nodeValue.trim()) {
+                        node.nodeValue = "Introduction / Testing Guide";
+                    }
+                });
+            }
+            var items = [
+                ["#installation", "Installation", "i-download"],
+                ["#connection", "Connecting to a Linux server", "i-server"],
+                ["#terminal", "ServerGuard terminal", "i-terminal"],
+                ["#troubleshooting", "Troubleshooting", "i-help"]
+            ];
+            items.forEach(function (item) {
+                var anchor = document.createElement("a");
+                anchor.href = "index.html" + item[0];
+                anchor.innerHTML = '<span><svg class="icon" aria-hidden="true"><use href="#' + item[2] + '"></use></svg></span>' + item[1];
+                links.appendChild(anchor);
+            });
+            started.dataset.anchorsAdded = "true";
+        }
+
+        var reference = $$(".sidebar-group", sidebar).find(function (group) {
+            return /reference/i.test(group.textContent);
+        });
+        if (reference && !reference.dataset.anchorsAdded) {
+            var referenceLinks = $(".sidebar-links", reference);
+            var command = document.createElement("a");
+            command.href = "index.html#terminal";
+            command.innerHTML = '<span><svg class="icon" aria-hidden="true"><use href="#i-terminal"></use></svg></span>Command reference';
+            referenceLinks.insertBefore(command, referenceLinks.firstChild);
+            reference.dataset.anchorsAdded = "true";
+        }
+    }
+
+    function setSidebarGroupExpanded(group, button, expanded) {
+        var links = $(".sidebar-links", group);
+        if (!links) return;
+
+        button.setAttribute("aria-expanded", expanded ? "true" : "false");
+
+        var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduced) {
+            group.classList.toggle("is-collapsed", !expanded);
+            links.style.height = expanded ? "" : "0px";
+            return;
+        }
+
+        if (expanded) {
+            group.classList.remove("is-collapsed");
+            links.style.height = "0px";
+            requestAnimationFrame(function () {
+                links.style.height = links.scrollHeight + "px";
+            });
+        } else {
+            links.style.height = links.scrollHeight + "px";
+            void links.offsetHeight;
+            requestAnimationFrame(function () {
+                links.style.height = "0px";
+            });
+        }
+
+        var clearHeight = function () {
+            links.removeEventListener("transitionend", clearHeight);
+            if (expanded) links.style.height = "";
+            else group.classList.add("is-collapsed");
+        };
+        links.addEventListener("transitionend", clearHeight);
     }
 
 
@@ -212,6 +392,7 @@
         });
 
         updateTocMode();
+        measureTocTargets();
         trackActiveSection();
     }
 
@@ -336,8 +517,48 @@
        URL, refresh, Back/Forward) could leave the highlight stale or
        empty. The active entry is therefore derived from the heading
        closest to, and above, a reading line just below the fixed
-       topbar. Updates are throttled with requestAnimationFrame and the
-       scroll listener is attached once, globally. */
+       topbar.
+
+       Heading positions are measured once per navigation/resize and
+       cached, so the scroll handler only does arithmetic. Reading
+       getBoundingClientRect for every heading on every scroll frame
+       forced a synchronous layout on long modules and was the main
+       cause of scroll jank on low-powered phones. */
+
+    var tocTargets = [];
+    var tocHeaderOffset = 64;
+
+    function readHeaderOffset() {
+        var header = parseInt(
+            getComputedStyle(document.documentElement).getPropertyValue("--header-h"),
+            10
+        );
+
+        tocHeaderOffset = header || 64;
+    }
+
+    function measureTocTargets() {
+        var toc = document.getElementById(TOC_ID);
+
+        if (!toc) {
+            tocTargets = [];
+            return;
+        }
+
+        readHeaderOffset();
+
+        var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+
+        tocTargets = $$("a[data-target]", toc)
+            .map(function (link) {
+                var el = document.getElementById(link.getAttribute("data-target"));
+
+                return el
+                    ? { link: link, top: el.getBoundingClientRect().top + scrollY }
+                    : null;
+            })
+            .filter(Boolean);
+    }
 
     function trackActiveSection() {
         activeTocLink = null;
@@ -356,41 +577,20 @@
     }
 
     function updateActiveToc() {
-        var toc = document.getElementById(TOC_ID);
-
-        if (!toc) {
+        if (!tocTargets.length) {
             return;
         }
 
-        var links = $$("a[data-target]", toc);
-
-        if (!links.length) {
-            return;
-        }
-
-        var header = parseInt(
-            getComputedStyle(document.documentElement).getPropertyValue("--header-h"),
-            10
-        );
-
-        if (!header) {
-            header = 64;
-        }
+        var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
 
         // Reading line: just below the header, biased up so the active
         // entry changes as a heading reaches the top of the article.
-        var line = header + Math.max(24, window.innerHeight * 0.28);
-        var current = links[0];
+        var line = scrollY + tocHeaderOffset + Math.max(24, window.innerHeight * 0.28);
+        var current = tocTargets[0].link;
 
-        for (var i = 0; i < links.length; i++) {
-            var el = document.getElementById(links[i].getAttribute("data-target"));
-
-            if (!el) {
-                continue;
-            }
-
-            if (el.getBoundingClientRect().top <= line) {
-                current = links[i];
+        for (var i = 0; i < tocTargets.length; i++) {
+            if (tocTargets[i].top <= line) {
+                current = tocTargets[i].link;
             } else {
                 break;
             }
@@ -400,8 +600,8 @@
             return;
         }
 
-        links.forEach(function (link) {
-            link.classList.remove("active");
+        tocTargets.forEach(function (item) {
+            item.link.classList.remove("active");
         });
 
         current.classList.add("active");
@@ -449,24 +649,74 @@
         return copied;
     }
 
-    function addCopyButtons() {
+    function makeCopyButton() {
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "copy-btn";
+        button.textContent = "Copy";
+        button.setAttribute("aria-label", "Copy code");
+        return button;
+    }
+
+    // Use the nearest preceding heading as the configuration/command
+    // context shown in the block header.
+    function codeLabel(pre) {
+        var node = pre.previousElementSibling;
+
+        while (node) {
+            if (/^H[1-6]$/.test(node.tagName)) {
+                return node.textContent.replace(/\s+/g, " ").trim().slice(0, 64);
+            }
+            node = node.previousElementSibling;
+        }
+
+        var first = (pre.textContent || "").trim().split("\n")[0];
+        return first.length > 40 ? "Code" : (first || "Code");
+    }
+
+    /* Every code block gets a working Copy control. Article blocks are
+       wrapped in a bordered frame with a compact context header; blocks
+       that already live in a terminal or code panel reuse that header
+       instead of nesting a second one. */
+    function decorateCodeBlocks() {
         $$("pre").forEach(function (pre) {
-            if ($(".copy-btn", pre)) {
+            if (!pre.querySelector("code") || pre.closest(".code-frame")) {
                 return;
             }
 
-            var code = $("code", pre);
-            if (!code) {
+            var panel = pre.closest(".code-panel");
+
+            if (panel) {
+                var panelHead = $(".code-panel-head", panel);
+                if (panelHead && !$(".copy-btn", panelHead)) {
+                    panelHead.appendChild(makeCopyButton());
+                }
                 return;
             }
 
-            var button = document.createElement("button");
-            button.type = "button";
-            button.className = "copy-btn";
-            button.textContent = "Copy";
-            button.setAttribute("aria-label", "Copy code");
+            if (pre.closest(".terminal")) {
+                if (!$(".copy-btn", pre)) {
+                    pre.appendChild(makeCopyButton());
+                }
+                return;
+            }
 
-            pre.appendChild(button);
+            var frame = document.createElement("div");
+            frame.className = "code-frame";
+
+            var head = document.createElement("div");
+            head.className = "code-frame-head";
+
+            var label = document.createElement("span");
+            label.className = "code-frame-label";
+            label.textContent = codeLabel(pre);
+
+            head.appendChild(label);
+            head.appendChild(makeCopyButton());
+
+            pre.parentNode.insertBefore(frame, pre);
+            frame.appendChild(head);
+            frame.appendChild(pre);
         });
     }
 
@@ -476,74 +726,73 @@
        ===================================================== */
 
     function buildSearchIndex() {
+        var token = ++searchBuildToken;
+        searchReady = false;
         searchIndex = [];
-
         var seen = {};
+        var pages = ["index.html", "security.html", "hardening.html", "sshkeys.html", "fileguard.html", "telegram.html"];
 
-        function add(label, href, context, body) {
-            if (!label || !href || seen[href]) {
-                return;
-            }
+        function clean(text) {
+            return String(text || "").replace(/\s+/g, " ").trim();
+        }
 
+        function add(label, href, context, body, pageTitle) {
+            if (!label || !href || seen[href]) return;
             seen[href] = true;
-
+            var excerpt = clean(body).slice(0, 180);
             searchIndex.push({
-                label: label,
+                label: clean(label),
                 href: href,
-                context: context,
-                search: (
-                    label + " " + context + " " + (body || "")
-                ).toLowerCase()
+                context: clean(context),
+                pageTitle: clean(pageTitle),
+                excerpt: excerpt,
+                search: (label + " " + context + " " + pageTitle + " " + (body || "")).toLowerCase()
             });
         }
 
-        // Text of the block after a heading, up to the next heading,
-        // so body-only terms (for example "firewall") are found too.
         function sectionText(heading) {
             var text = "";
             var node = heading.nextElementSibling;
-
             while (node && !/^H[1-6]$/.test(node.tagName)) {
                 text += " " + node.textContent;
                 node = node.nextElementSibling;
             }
-
             return text;
         }
 
-        $$("#sidebar .sidebar-nav a").forEach(function (link) {
-            add(
-                link.textContent.replace(/\s+/g, " ").trim(),
-                link.getAttribute("href"),
-                "Documentation"
-            );
-        });
-
-        var article = $(".doc-article");
-
-        if (article) {
-            $$(".doc-article h2[id], .doc-article h3[id]", article)
-                .forEach(function (heading) {
-                    add(
-                        heading.textContent.trim(),
-                        "#" + heading.id,
-                        "On this page",
-                        sectionText(heading)
-                    );
-                });
-        } else {
-            $$("#" + MAIN_ID + " .doc-section[id]").forEach(function (section) {
-                var heading = section.querySelector("h1, h2");
+        function indexDocument(doc, page) {
+            var main = doc.getElementById(MAIN_ID);
+            if (!main) return;
+            var title = (doc.title || page).replace(/^ServerGuard\s*[—-]\s*/i, "");
+            var firstHeading = main.querySelector("h1, h2");
+            add(title, page, "Documentation page", main.textContent, title);
+            $$("h1[id], h2[id], h3[id]", main).forEach(function (heading) {
                 add(
-                    heading
-                        ? heading.textContent.replace(/\s+/g, " ").trim()
-                        : section.id,
-                    "#" + section.id,
-                    "On this page",
-                    section.textContent
+                    heading.textContent,
+                    page + "#" + heading.id,
+                    title,
+                    sectionText(heading),
+                    title
                 );
             });
+            if (!firstHeading && main.textContent) add(page, page, "Documentation", main.textContent, title);
         }
+
+        // Index the currently rendered document immediately, then hydrate the
+        // same client-side index with every real documentation page.
+        indexDocument(document, currentPath.slice(currentPath.lastIndexOf("/") + 1) || "index.html");
+        Promise.all(pages.map(function (page) {
+            return fetch(page, { credentials: "same-origin" })
+                .then(function (response) { return response.ok ? response.text() : ""; })
+                .then(function (html) {
+                    if (!html) return;
+                    var doc = new DOMParser().parseFromString(html, "text/html");
+                    indexDocument(doc, page);
+                })
+                .catch(function () {});
+        })).then(function () {
+            if (token === searchBuildToken) searchReady = true;
+        });
     }
 
 
@@ -591,6 +840,12 @@
                 return;
             }
 
+            if (!searchReady && !searchIndex.length) {
+                panel.innerHTML = '<div class="doc-search-empty">Indexing documentation…</div>';
+                panel.hidden = false;
+                return;
+            }
+
             matches = searchIndex
                 .filter(function (item) {
                     return item.search.indexOf(q) !== -1;
@@ -617,10 +872,14 @@
                 strong.textContent = item.label;
 
                 var context = document.createElement("span");
-                context.textContent = item.context;
+                context.textContent = item.pageTitle + " · " + item.context;
+
+                var excerpt = document.createElement("small");
+                excerpt.textContent = item.excerpt || "Open this documentation section";
 
                 link.appendChild(strong);
                 link.appendChild(context);
+                link.appendChild(excerpt);
 
                 link.addEventListener("mouseenter", function () {
                     activeIndex = i;
@@ -662,8 +921,43 @@
                 }
             } else if (event.key === "Escape") {
                 close();
+                input.blur();
             }
         });
+
+        input.setAttribute("aria-controls", "docSearchResults");
+        input.setAttribute("aria-haspopup", "listbox");
+    }
+
+    function initCommandReference() {
+        var root = $(".terminal-reference");
+        if (!root || root.dataset.ready === "true") return;
+        root.dataset.ready = "true";
+
+        var data = {
+            "help": ["General navigation", "Show the complete ServerGuard help page, including general commands, modules, Port Manager and troubleshooting."],
+            "ls": ["General navigation", "List files and directories in the current remote directory on the Linux server."],
+            "cd <directory>": ["General navigation", "Change the current remote directory. Supported examples include /, .., /opt and /var/log."],
+            "security": ["Security", "Open the Security module. Its verified menu covers installation, start, stop, automatic startup, status, logs and updates."],
+            "hardening": ["SSH Hardening", "Open SSH Hardening. The verified menu provides apply, status/configuration, validation, backups, restore and update actions."],
+            "sshkeys": ["SSH Key Guard", "Open SSH Key Guard. The module provides install, start, stop, restart, status, baseline, scan, events, logs, audit and update actions."],
+            "fileguard": ["FileGuard", "Open FileGuard. The verified help describes install, start, stop, automatic startup, status, logs, baseline rebuild and update actions."],
+            "telegram": ["Telegram Bot", "Open the Telegram Bot module for ServerGuard notifications and protection management."],
+            "ports": ["Diagnostics and maintenance", "Open Port Manager for firewall status, listening ports, rules, protected ports and safe port operations."],
+            "web install": ["Diagnostics and maintenance", "Install the local web interface on the connected server. The terminal also supports web status, web url and web remove."],
+        };
+        var command = $("#commandReferenceCommand");
+        var description = $("#commandReferenceDescription");
+        var category = $("#commandReferenceCategory");
+
+        function select(button) {
+            $$(".command-ref-item", root).forEach(function (item) { item.classList.toggle("is-active", item === button); });
+            var value = button.dataset.command;
+            command.textContent = value;
+            description.textContent = data[value] ? data[value][1] : "Verified ServerGuard terminal command.";
+            category.textContent = data[value] ? data[value][0] : "Command reference";
+        }
+        $$(".command-ref-item", root).forEach(function (button) { button.addEventListener("click", function () { select(button); }); });
     }
 
 
@@ -751,10 +1045,14 @@
 
     function updateSidebarActive(url) {
         var page = url.pathname.slice(url.pathname.lastIndexOf("/") + 1);
+        var hash = url.hash || "";
 
         $$("#sidebar .sidebar-nav a").forEach(function (link) {
-            var href = (link.getAttribute("href") || "").split("#")[0];
-            var active = href === page;
+            var rawHref = link.getAttribute("href") || "";
+            var parts = rawHref.split("#");
+            var href = parts[0];
+            var linkHash = parts[1] ? "#" + parts[1] : "";
+            var active = href === page && (hash ? linkHash === hash : !linkHash);
 
             link.classList.toggle("active", active);
 
@@ -764,12 +1062,22 @@
                 link.removeAttribute("aria-current");
             }
         });
+
+        var active = $("#sidebar .sidebar-nav a.active");
+        var group = active ? active.closest(".sidebar-group") : null;
+        if (group) {
+            var button = $(".sidebar-group-title", group);
+            if (button && button.getAttribute("aria-expanded") !== "true") {
+                setSidebarGroupExpanded(group, button, true);
+            }
+        }
     }
 
     function loadDoc(url, push) {
         var target = new URL(url, window.location.href);
 
         if (target.pathname === currentPath) {
+            updateSidebarActive(target);
             if (target.hash) {
                 var node = document.getElementById(target.hash.slice(1));
                 scrollToElement(node, { behavior: "smooth", block: "start" });
@@ -862,7 +1170,9 @@
        ===================================================== */
 
     function render() {
-        addCopyButtons();
+        initSidebar();
+        decorateCodeBlocks();
+        initCommandReference();
         // buildToc() assigns ids to headings; buildSearchIndex() needs
         // those ids to index section titles and body text.
         buildToc();
@@ -881,8 +1191,8 @@
         if (copyButton) {
             event.preventDefault();
 
-            var pre = copyButton.closest("pre");
-            var code = pre ? pre.querySelector("code") : null;
+            var container = copyButton.closest(".code-frame, .code-panel, .terminal, .terminal-reference-detail, pre");
+            var code = container ? container.querySelector("code") : null;
 
             copyText(code ? code.textContent : "").then(function (copied) {
                 copyButton.textContent = copied ? "Copied" : "Copy failed";
@@ -993,12 +1303,22 @@
                 input.select();
             }
         }
+
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+            var search = document.getElementById("docSearch");
+            if (search) {
+                event.preventDefault();
+                search.focus();
+                search.select();
+            }
+        }
     }
 
     function bindGlobalEvents() {
         document.addEventListener("click", onDocumentClick);
         document.addEventListener("keydown", onDocumentKeydown);
 
+        var resizeTimer = null;
         var button = document.getElementById("mobileMenuButton");
 
         if (button) {
@@ -1016,10 +1336,24 @@
             }
 
             updateTocMode();
-            scheduleActiveTocUpdate();
+
+            // Re-measure heading positions after the layout settles so
+            // the cached offsets stay correct without measuring on scroll.
+            window.clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(function () {
+                measureTocTargets();
+                updateActiveToc();
+            }, 140);
         });
 
         window.addEventListener("scroll", scheduleActiveTocUpdate, { passive: true });
+
+        // Images/text can change the document height after first paint;
+        // refresh the cached heading offsets once the page is complete.
+        window.addEventListener("load", function () {
+            measureTocTargets();
+            updateActiveToc();
+        });
 
         window.addEventListener("popstate", function () {
             loadDoc(window.location.href, false);
@@ -1063,6 +1397,8 @@
     function init() {
         lightbox = initLightbox();
 
+        initDocumentationShell();
+        initSidebar();
         bindGlobalEvents();
         initSearch();
         render();
