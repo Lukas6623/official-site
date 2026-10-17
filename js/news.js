@@ -8,6 +8,11 @@
    CONFIGURATION
 ========================================================= */
 
+/* FastAPI is populated by the Telegram administration bot. */
+const NEWS_API_URL = window.SERVERGUARD_NEWS_API ||
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:8000"
+        : "https://api.serverguard.site");
 const NEWS_URL = "news/news.json";
 
 
@@ -72,9 +77,10 @@ async function loadServerGuardNews() {
          */
 
         const response = await fetch(
-            `${NEWS_URL}?t=${Date.now()}`,
+            `${NEWS_API_URL.replace(/\/$/, "")}/api/news?limit=100&t=${Date.now()}`,
             {
                 method: "GET",
+                headers: { Accept: "application/json" },
                 cache: "no-store"
             }
         );
@@ -96,21 +102,14 @@ async function loadServerGuardNews() {
          * Parse JSON.
          */
 
-        const news =
-            await response.json();
+        const payload = await response.json();
+        const news = (Array.isArray(payload) ? payload : payload.posts || [])
+            .map(normalizeApiNews);
 
 
         /*
          * Validate response.
          */
-
-        if (!Array.isArray(news)) {
-
-            throw new Error(
-                "news.json must contain an array."
-            );
-        }
-
 
         /*
          * No news.
@@ -187,10 +186,25 @@ async function loadServerGuardNews() {
 
     } catch (error) {
 
-        console.error(
-            "ServerGuard News error:",
-            error
-        );
+        console.warn("ServerGuard News API unavailable; using local JSON.", error);
+
+        /* Keep the static site usable while the API is being deployed. */
+        try {
+            const fallbackResponse = await fetch(`${NEWS_URL}?t=${Date.now()}`, {
+                cache: "no-store"
+            });
+            if (!fallbackResponse.ok) throw new Error("Local news request failed");
+            const fallbackNews = await fallbackResponse.json();
+            if (!Array.isArray(fallbackNews)) throw new Error("Invalid local news format");
+            container.innerHTML = fallbackNews
+                .sort((a, b) => new Date(b.dateISO || b.date || 0) - new Date(a.dateISO || a.date || 0))
+                .map(createServerGuardNewsCard)
+                .join("");
+            initializeNewsReveal();
+            return;
+        } catch (fallbackError) {
+            console.error("ServerGuard News error:", fallbackError);
+        }
 
 
         /*
@@ -211,6 +225,26 @@ async function loadServerGuardNews() {
 
     }
 
+}
+
+
+/* Convert the FastAPI/SQLite shape to the shape used by the existing cards. */
+function normalizeApiNews(post) {
+    const published = post.published_at || post.created_at || "";
+    return {
+        id: post.id,
+        title: post.title,
+        text: post.content ?? post.text ?? "",
+        date: published
+            ? new Date(published).toLocaleDateString(undefined, {
+                year: "numeric", month: "long", day: "numeric"
+            })
+            : "Unknown date",
+        dateISO: published,
+        category: post.category,
+        image: post.image_url || post.image || "",
+        link: post.link || ""
+    };
 }
 
 

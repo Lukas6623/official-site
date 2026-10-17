@@ -13,7 +13,7 @@ index.html                     Landing page
 css/tokens.css                 Shared design tokens, base styles, icon system
 css/style.css                  Landing page styles
 js/main.js                     Download/version wiring, navigation
-js/news.js                     News feed (news/news.json)
+js/news.js                     News feed (FastAPI, with local JSON fallback)
 js/globe.js                    Animated "protected network" canvas
 js/land-data.js                Land-mask data for the canvas
 documentation/index.html       Documentation: testing guide
@@ -60,6 +60,9 @@ python -m http.server 8000
   If it is unreachable, the download buttons show *"Download unavailable"* and
   the version shows *"Unavailable"*.
 - The **Inter** font is loaded from Google Fonts, with system-font fallbacks.
+- News is loaded from `https://api.serverguard.site/api/news`, served by the
+  FastAPI service in `/home/kr1m12/Desktop/bots` and populated by Telegram.
+  Set `window.SERVERGUARD_NEWS_API` before `js/news.js` for another API host.
 
 ## Notes
 
