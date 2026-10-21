@@ -215,6 +215,7 @@
             }
             var items = [
                 ["#installation", "Installation", "i-download"],
+                ["#linux-installation", "Installing ServerGuard on Linux", "i-download"],
                 ["#connection", "Connecting to a Linux server", "i-server"],
                 ["#terminal", "ServerGuard terminal", "i-terminal"],
                 ["#troubleshooting", "Troubleshooting", "i-help"]

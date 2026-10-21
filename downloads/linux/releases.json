@@ -1,0 +1,30 @@
+{
+  "version": "1.1.8",
+  "architecture": "x86_64 / AMD64",
+  "packages": [
+    {
+      "distribution": "Ubuntu / Debian",
+      "format": "DEB",
+      "architecture": "x86_64 / AMD64",
+      "filename": "serverguard_1.1.8-1_amd64.deb",
+      "url": "https://serverguard.site/downloads/linux/1.1.8/serverguard_1.1.8-1_amd64.deb",
+      "command": "sudo apt install ./serverguard_1.1.8-1_amd64.deb"
+    },
+    {
+      "distribution": "Fedora / RHEL",
+      "format": "RPM",
+      "architecture": "x86_64 / AMD64",
+      "filename": "serverguard-1.1.8-1.x86_64.rpm",
+      "url": "https://serverguard.site/downloads/linux/1.1.8/serverguard-1.1.8-1.x86_64.rpm",
+      "command": "sudo dnf install ./serverguard-1.1.8-1.x86_64.rpm"
+    },
+    {
+      "distribution": "Arch Linux",
+      "format": "TAR.ZST",
+      "architecture": "x86_64 / AMD64",
+      "filename": "serverguard-1.1.8-1-x86_64.pkg.tar.zst",
+      "url": "https://serverguard.site/downloads/linux/1.1.8/serverguard-1.1.8-1-x86_64.pkg.tar.zst",
+      "command": "sudo pacman -U ./serverguard-1.1.8-1-x86_64.pkg.tar.zst"
+    }
+  ]
+}

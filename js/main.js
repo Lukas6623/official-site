@@ -28,12 +28,15 @@ const MANIFEST_URL =
 
 async function loadServerGuardManifest() {
 
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
     try {
 
         const response = await fetch(
             `${MANIFEST_URL}?t=${Date.now()}`,
             {
-                cache: "no-store"
+                cache: "no-store",
+                signal: controller.signal
             }
         );
 
@@ -106,6 +109,8 @@ async function loadServerGuardManifest() {
                 button.href = installerUrl;
 
                 button.target = "_blank";
+                button.removeAttribute("aria-disabled");
+                button.querySelector("[data-windows-label]").textContent = "Download for Windows";
 
                 button.rel =
                     "noopener noreferrer";
@@ -117,6 +122,8 @@ async function loadServerGuardManifest() {
 
             });
 
+
+        document.getElementById("windowsDownloadStatus").textContent = "";
 
         /* =================================================
            LATEST INSTALLER VERSION
@@ -306,11 +313,14 @@ async function loadServerGuardManifest() {
                     "true"
                 );
 
-                button.textContent =
+                button.querySelector("[data-windows-label]").textContent =
                     "Download unavailable";
 
             });
 
+
+        document.getElementById("windowsDownloadStatus").textContent =
+            "Windows download is temporarily unavailable. Please try again later. Linux downloads are available.";
 
         /* =================================================
            VERSION FALLBACK
@@ -343,6 +353,8 @@ async function loadServerGuardManifest() {
 
             });
 
+    } finally {
+        clearTimeout(timeout);
     }
 
 }
