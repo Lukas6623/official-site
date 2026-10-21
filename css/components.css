@@ -624,9 +624,9 @@
     letter-spacing: 0.06em;
 }
 
-.layer-tag--block { color: var(--danger); border-color: rgba(240, 115, 110, 0.35); }
-.layer-tag--harden { color: var(--warning); border-color: rgba(230, 180, 90, 0.35); }
-.layer-tag--monitor { color: var(--accent-text); border-color: var(--border-accent); }
+.layer .layer-tag--block { color: var(--danger); border-color: rgba(240, 115, 110, 0.35); }
+.layer .layer-tag--harden { color: var(--warning); border-color: rgba(230, 180, 90, 0.35); }
+.layer .layer-tag--monitor { color: var(--accent-text); border-color: var(--border-accent); }
 
 
 /* =========================================================

@@ -5,16 +5,19 @@
     if (!dialog) return;
     let trigger;
     const close = () => dialog.close();
-    document.querySelectorAll("[data-download-dialog]").forEach(button => {
-        button.addEventListener("click", () => {
-            trigger = button;
-            const mobileNav = document.getElementById("mobileNav");
-            const navToggle = document.getElementById("navToggle");
-            if (mobileNav?.classList.contains("open")) navToggle.click();
-            dialog.showModal();
-            document.documentElement.classList.add("download-dialog-open");
-            dialog.querySelector("[data-dialog-close]").focus();
-        });
+    // Delegate clicks so buttons in dynamically loaded documentation also work.
+    document.addEventListener("click", event => {
+        const button = event.target.closest("[data-download-dialog]");
+        if (!button || event.defaultPrevented || event.button !== 0 ||
+            event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        trigger = button;
+        const mobileNav = document.getElementById("mobileNav");
+        const navToggle = document.getElementById("navToggle");
+        if (mobileNav?.classList.contains("open")) navToggle?.click();
+        dialog.showModal();
+        document.documentElement.classList.add("download-dialog-open");
+        dialog.querySelector("[data-dialog-close]").focus();
     });
     dialog.querySelector("[data-dialog-close]").addEventListener("click", close);
     let backdropPress = false;

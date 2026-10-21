@@ -936,7 +936,7 @@
 .intro-workbench .module-links { grid-template-columns: 1fr; gap: 8px; padding: 0 13px 13px; }
 .intro-workbench .module-link { min-height: 54px; display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 9px; padding: 10px 12px; }
 .intro-workbench .module-link-go { padding: 0; font-size: 0; }
-.intro-workbench .module-link-go::after { content: "→"; font-size: 17px; color: var(--accent-soft); }
+.intro-workbench .module-link-go::after { content: "→"; font-size: 17px; color: var(--accent-text); }
 .intro-workbench .module-link:nth-child(2), .intro-workbench .module-link:nth-child(5) { display: none; }
 .intro-workbench .module-link:nth-child(1) { order: 3; }
 .intro-workbench .module-link:nth-child(3) { order: 1; }
