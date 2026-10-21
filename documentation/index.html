@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/module.css">
+    <link rel="stylesheet" href="../css/downloads.css">
 </head>
 
 <body>
@@ -120,7 +121,7 @@
                 GitHub
             </a>
 
-            <a href="../index.html#download" class="btn btn-primary topbar-download download-installer">
+            <a href="../index.html#download" class="btn btn-primary topbar-download" data-download-dialog aria-haspopup="dialog" aria-controls="downloadDialog">
                 <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>
                 Download
             </a>
@@ -253,7 +254,7 @@
                 </p>
 
                 <div class="doc-hero-actions">
-                    <a href="../index.html#download" class="btn btn-primary">
+                    <a href="../index.html#download" class="btn btn-primary" data-download-dialog aria-haspopup="dialog" aria-controls="downloadDialog">
                         <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>
                         Download ServerGuard
                     </a>
@@ -673,7 +674,7 @@ MACs hmac-sha2-512,hmac-sha2-256</code></pre>
                         <a
                             href="../index.html#download"
                             class="inline-button"
-                        >
+                         data-download-dialog aria-haspopup="dialog" aria-controls="downloadDialog">
                             Download ServerGuard ↗
                         </a>
 
@@ -2180,6 +2181,25 @@ Telegram bot: ACTIVE
     </div>
 
 </footer>
+<dialog class="download-dialog" id="downloadDialog" aria-labelledby="downloadDialogTitle" aria-describedby="downloadDialogDescription">
+    <button class="dialog-close btn btn-secondary" type="button" data-dialog-close aria-label="Close platform selection">×</button>
+    <span class="eyebrow">Get started</span>
+    <h2 id="downloadDialogTitle">Choose your platform</h2>
+    <p id="downloadDialogDescription">Download ServerGuard for your desktop.</p>
+    <div class="platform-grid">
+        <a class="platform-card download-installer" aria-disabled="true" aria-describedby="windowsDownloadStatus">
+            <svg class="platform-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 4.5 11 3v8H2zm11-1.8L22 1v10h-9zM2 13h9v8l-9-1.5zm11 0h9v10l-9-1.7z"/></svg>
+            <strong>Windows</strong><span data-windows-label>Download for Windows</span>
+        </a>
+        <a class="platform-card" href="/downloads/linux/">
+            <svg class="platform-icon icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 10V7a4 4 0 0 1 8 0v3l3 7-3 3H8l-3-3zM9 20l-3 2m9-2 3 2M10 8h.01M14 8h.01M10 11l2 1 2-1"/></svg>
+            <strong>Linux</strong><span>Ubuntu, Fedora, Arch &amp; more</span>
+        </a>
+    </div>
+    <p class="download-status" id="windowsDownloadStatus" role="status">Checking Windows download…</p>
+</dialog>
+
+<script src="../js/download-dialog.js"></script>
 <script src="../js/main.js"></script>
 <script src="js/docs.js"></script>
 
